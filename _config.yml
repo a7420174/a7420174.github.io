@@ -13,16 +13,18 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: MM
-email:
+title: Spark with Genomics
+email: a7420174@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Write an awesome description for your new site here. You can edit this
-  line in _config.yml. It will appear in your document head meta (for
-  Google search results) and in your feed.xml site description.
-twitter_username: username
-github_username: username
-minimal_mistakes_skin: default
+  Genomics와 Spark에 관심이 많은 코린이입니다.
+url: 'https://a7420174.github.io/'
+twitter_username: a7420174
+github_username: a7420174
+minimal_mistakes_skin: dirt
 search: true
+locale: 'ko'
+date_format: "%Y-%m-%d"
+
 
 # Build settings
 markdown: kramdown
@@ -58,22 +60,22 @@ plugins:
   - jekyll-include-cache
 
 author:
-  name   : "First Lastname"
-  avatar : "/assets/images/bio-photo.jpg"
-  bio    : "My awesome biography constrained to a sentence or two goes here."
+  name   : "JaeHyun Kim"
+  avatar : "/assets/images/orange.jpg"
+  bio    : "Genomics와 Spark에 관심이 많은 코린이입니다."
   links:
     - label: "Website"
       icon: "fas fa-fw fa-link"
-      url: "https://"
+      url: "https://a7420174.github.io/"
     - label: "Twitter"
       icon: "fab fa-fw fa-twitter-square"
       url: "https://twitter.com/"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      url: "https://github.com/"
+      url: "https://github.com/a7420174"
     - label: "Instagram"
       icon: "fab fa-fw fa-instagram"
-      url: "https://instagram.com/"
+      url: "https://instagram.com/hail.korea"
 
 footer:
   links:
@@ -82,10 +84,10 @@ footer:
       url: "https://twitter.com/"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
-      url: "https://github.com/"
+      url: "https://github.com/a7420174"
     - label: "Instagram"
       icon: "fab fa-fw fa-instagram"
-      url: "https://instagram.com/"
+      url: "https://instagram.com/hail.korea"
 
 defaults:
   # _posts
@@ -99,6 +101,7 @@ defaults:
       comments: true
       share: true
       related: true
+      show_date: true
   # _pages
   - scope:
       path: "_pages"
@@ -113,3 +116,8 @@ category_archive:
 tag_archive:
   type: liquid
   path: /tags/
+
+comments:
+  provider: "disqus"
+  disqus:
+    shortname: "a7420174"

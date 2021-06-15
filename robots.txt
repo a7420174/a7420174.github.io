@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /about.html
+Sitemap: http://a7420174.github.io/sitemap.xml

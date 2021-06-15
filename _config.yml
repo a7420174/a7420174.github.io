@@ -121,3 +121,6 @@ comments:
   provider: "disqus"
   disqus:
     shortname: "a7420174"
+
+google:
+  search_engine_id: YOUR_SEARCH_ENGINE_ID

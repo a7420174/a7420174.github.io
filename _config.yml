@@ -60,9 +60,9 @@ plugins:
   - jekyll-include-cache
 
 author:
-  name   : "JaeHyun Kim"
+  name   : "현실적 낙관주의자"
   avatar : "/assets/images/orange.jpg"
-  bio    : "Genomics와 Spark에 관심이 많은 코린이입니다."
+  bio    : "Genomics와 Spark에 관심이 많은 미래 지향형 인간"
   links:
     - label: "Website"
       icon: "fas fa-fw fa-link"

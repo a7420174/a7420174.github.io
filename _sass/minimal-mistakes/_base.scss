@@ -140,6 +140,11 @@ a {
   }
 }
 
+.archive a {
+  color: inherit;
+  text-decoration: none;
+}
+
 /* buttons */
 
 button:focus {

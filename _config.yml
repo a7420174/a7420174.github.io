@@ -25,7 +25,7 @@ search: true
 locale: 'ko'
 date_format: "%Y-%m-%d"
 og_image: "/assets/images/orange.jpg"
-
+repository: a7420174/a7420174.github.io
 
 # Build settings
 markdown: kramdown
@@ -122,9 +122,10 @@ tag_archive:
   path: /tags/
 
 comments:
-  provider: "disqus"
-  disqus:
-    shortname: "a7420174"
+  provider: "utterances"
+  utterances:
+    theme: "github-light" # "github-dark"
+    issue_term: "pathname"
 
 google:
   search_engine_id: "002af1359f8280c0b"

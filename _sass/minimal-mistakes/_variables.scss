@@ -28,9 +28,10 @@ $times: Times, serif !default;
 $bodoni: "Bodoni MT", serif !default;
 $calisto: "Calisto MT", serif !default;
 $garamond: Garamond, serif !default;
+$noto-sans-kr: "Noto Sans KR", serif !default;
 
-$global-font-family: $sans-serif !default;
-$header-font-family: $sans-serif !default;
+$global-font-family: $noto-sans-kr !default;
+$header-font-family: $noto-sans-kr !default;
 $caption-font-family: $serif !default;
 
 /* type scale */

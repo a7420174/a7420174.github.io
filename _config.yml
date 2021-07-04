@@ -106,7 +106,7 @@ defaults:
       toc: true
       toc_label: "Table of Contents"
       toc_sticky: true
-      # font-size: 14px
+      font-size: 15px
   # _pages
   - scope:
       path: "_pages"

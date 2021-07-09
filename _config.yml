@@ -16,7 +16,7 @@
 title: Spark with Genomics
 email: a7420174@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Genomics와 Spark에 관심이 많은 코린이입니다.
+  Genomics와 Spark에 관심이 많은 ENFP
 url: 'https://a7420174.github.io'
 twitter_username: a7420174
 github_username: a7420174
@@ -61,7 +61,7 @@ plugins:
   - jekyll-include-cache
 
 author:
-  name   : "현실적 낙관주의자"
+  name   : "지적인 낙관주의자"
   avatar : "/assets/images/orange.jpg"
   bio    : "Genomics와 Spark에 관심이 많은 ENFP"
   links:
@@ -88,7 +88,7 @@ footer:
       url: "https://github.com/a7420174"
     - label: "Instagram"
       icon: "fab fa-fw fa-instagram"
-      url: "https://instagram.com/hail.korea"
+      url: "https://instagram.com/hail.korean"
 
 defaults:
   # _posts

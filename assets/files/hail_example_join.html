@@ -14534,7 +14534,7 @@ Key: [&#39;geneid&#39;]
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[8]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[61]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">## Join the Tables (Inner Join)</span>
@@ -14549,7 +14549,7 @@ Key: [&#39;geneid&#39;]
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[9]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[62]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">join_table</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
@@ -14597,28 +14597,16 @@ Key: [&#39;id&#39;]
 
 </div>
 
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs  ">
-<div class="jp-Cell-inputWrapper">
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[10]:</div>
-<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-     <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">## Annotate a Field (chr) from gene_loc Table</span>
-<span class="n">annot_table</span> <span class="o">=</span> <span class="n">gene_expr</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="nb">chr</span> <span class="o">=</span> <span class="n">gene_loc</span><span class="p">[</span><span class="n">gene_expr</span><span class="o">.</span><span class="n">id</span><span class="p">]</span><span class="o">.</span><span class="n">chr</span><span class="p">)</span>
-</pre></div>
-
-     </div>
-</div>
-</div>
-</div>
-
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[11]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[58]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">annot_table</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">## Annotate a Field (chr) from gene_loc Table</span>
+<span class="n">gene_expr</span> <span class="o">=</span> <span class="n">gene_expr</span><span class="o">.</span><span class="n">key_by</span><span class="p">()</span>
+<span class="n">annot_table</span> <span class="o">=</span> <span class="n">gene_expr</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="nb">chr</span> <span class="o">=</span> <span class="n">gene_loc</span><span class="p">[</span><span class="n">gene_expr</span><span class="o">.</span><span class="n">id</span><span class="p">]</span><span class="o">.</span><span class="n">chr</span><span class="p">)</span>
+<span class="n">annot_table</span><span class="o">.</span><span class="n">describe</span><span class="p">()</span>
 </pre></div>
 
      </div>
@@ -14651,7 +14639,7 @@ Row fields:
     &#39;Sam_05&#39;: float64 
     &#39;chr&#39;: str 
 ----------------------------------------
-Key: [&#39;id&#39;]
+Key: []
 ----------------------------------------
 </pre>
 </div>
@@ -14719,10 +14707,11 @@ Key: [&#39;id&#39;]
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[37]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[59]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="c1">## Filter gene_expr Table through key in filtered_gene_loc Table</span>
+<span class="n">gene_expr</span> <span class="o">=</span> <span class="n">gene_expr</span><span class="o">.</span><span class="n">key_by</span><span class="p">(</span><span class="n">gene_expr</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
 <span class="n">filtered_gene_expr</span> <span class="o">=</span> <span class="n">gene_expr</span><span class="o">.</span><span class="n">semi_join</span><span class="p">(</span><span class="n">filtered_gene_loc</span><span class="p">)</span>
 <span class="n">filtered_gene_expr</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -14744,8 +14733,8 @@ Key: [&#39;id&#39;]
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>2021-07-10 20:59:53 Hail: INFO: Coerced sorted dataset
-2021-07-10 20:59:53 Hail: INFO: Coerced sorted dataset
+<pre>2021-07-11 01:04:21 Hail: INFO: Coerced sorted dataset
+2021-07-11 01:04:22 Hail: INFO: Coerced sorted dataset
 </pre>
 </div>
 </div>
@@ -14775,11 +14764,12 @@ Key: [&#39;id&#39;]
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
 <div class="jp-Cell-inputWrapper">
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[50]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[56]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
      <div class="CodeMirror cm-s-jupyter">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Export the Table</span>
-<span class="n">join_table</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s1">&#39;join_table.tsv.bgz&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">gene_expr</span> <span class="o">=</span> <span class="n">gene_expr</span><span class="o">.</span><span class="n">key_by</span><span class="p">()</span>
+<span class="n">filtered_gene_expr</span> <span class="o">=</span> <span class="n">gene_expr</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">hl</span><span class="o">.</span><span class="n">is_defined</span><span class="p">(</span><span class="n">filtered_gene_loc</span><span class="p">[</span><span class="n">gene_expr</span><span class="o">.</span><span class="n">id</span><span class="p">]))</span>
+<span class="n">filtered_gene_expr</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 
      </div>
@@ -14799,10 +14789,67 @@ Key: [&#39;id&#39;]
 
 
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
-<pre>2021-07-10 21:18:18 Hail: INFO: merging 1 files totalling 357...
-2021-07-10 21:18:18 Hail: INFO: while writing:
-    join_table.tsv.bgz
-  merge time: 32.190ms
+<pre>2021-07-11 01:01:48 Hail: INFO: Coerced sorted dataset
+2021-07-11 01:01:48 Hail: INFO: Coerced sorted dataset
+</pre>
+</div>
+</div>
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+
+<div class="jp-RenderedHTMLCommon jp-RenderedHTML jp-OutputArea-output " data-mime-type="text/html">
+<table><thead><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;"></div></td></tr><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">id</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">Sam_01</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">Sam_02</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">Sam_03</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">Sam_04</div></td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; " colspan="1"><div style="text-align: left;border-bottom: solid 2px #000; padding-bottom: 5px">Sam_05</div></td></tr><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">str</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">float64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">float64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">float64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">float64</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; text-align: left;">float64</td></tr>
+</thead><tbody><tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">&quot;Gene_01&quot;</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">4.91e+00</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">4.63e+00</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">5.18e+00</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">5.07e+00</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">5.74e+00</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">&quot;Gene_02&quot;</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1.38e+01</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1.31e+01</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1.32e+01</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1.30e+01</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1.29e+01</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">&quot;Gene_06&quot;</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1.23e+01</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1.22e+01</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1.25e+01</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1.32e+01</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1.26e+01</td></tr>
+<tr><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">&quot;Gene_07&quot;</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1.26e+01</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1.27e+01</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1.25e+01</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1.34e+01</td><td style="white-space: nowrap; max-width: 500px; overflow: hidden; text-overflow: ellipsis; ">1.36e+01</td></tr>
+</tbody></table>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[63]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Export the Table</span>
+<span class="n">join_table</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="s1">&#39;join_table.tsv&#39;</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="application/vnd.jupyter.stderr">
+<pre>2021-07-11 01:05:24 Hail: INFO: Coerced sorted dataset
+2021-07-11 01:05:24 Hail: INFO: Coerced sorted dataset
+2021-07-11 01:05:25 Hail: INFO: merging 1 files totalling 874...
+2021-07-11 01:05:25 Hail: INFO: while writing:
+    join_table.tsv
+  merge time: 55.756ms
 </pre>
 </div>
 </div>

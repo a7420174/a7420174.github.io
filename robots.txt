@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: http://a7420174.github.io/sitemap.xml
+Sitemap: https://a7420174.github.io/sitemap.xml
 #DaumWebMasterTool:14b0b28308a71ae04b9f9129c23807f1211c3c8c68040ec123b7c3cf46e5a495:21oMAbKJ8yT5ne6tgzNZXQ==

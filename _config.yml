@@ -20,7 +20,7 @@ description: >- # this means to ignore newlines until "baseurl:"
 url: 'https://a7420174.github.io'
 twitter_username: a7420174
 github_username: a7420174
-minimal_mistakes_skin: dirt
+minimal_mistakes_skin: "dirt"
 search: true
 locale: 'ko'
 date_format: "%Y-%m-%d"

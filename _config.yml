@@ -132,3 +132,13 @@ google:
 
 google_site_verification: "VIq0jo72Wq4qsYDINXGyrt-aIYnZmiyGJe_MdnWHd0A"
 naver_site_verification: '66845c8a16eb57bb7f92fa8ce757fe6cca1d9a2c'
+
+analytics:
+  provider: "google-gtag"
+  google:
+    tracking_id: "G-2EFXZE61HF"
+    anonymize_ip: false # default
+
+atom_feed:
+  path: "https://a7420174.github.io/feed.xml"
+  

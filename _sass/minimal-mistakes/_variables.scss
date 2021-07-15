@@ -14,7 +14,7 @@ $indent-var: 1.3em !default;
 
 /* system typefaces */
 $serif: Georgia, Times, serif !default;
-$sans-serif: -apple-system, BlinkMacSystemFont, "Noto Sans KR", "Roboto", "Segoe UI",
+$sans-serif: -apple-system, BlinkMacSystemFont, "Roboto", "Segoe UI",
   "Helvetica Neue", "Lucida Grande", Arial, sans-serif !default;
 $monospace: Monaco, Consolas, "Lucida Console", monospace !default;
 
@@ -30,8 +30,8 @@ $calisto: "Calisto MT", serif !default;
 $garamond: Garamond, serif !default;
 $noto-sans-kr: "Noto Sans KR", serif !default;
 
-$global-font-family: $noto-sans-kr !default;
-$header-font-family: $noto-sans-kr !default;
+$global-font-family: $sans-serif !default;
+$header-font-family: $sans-serif !default;
 $caption-font-family: $serif !default;
 
 /* type scale */

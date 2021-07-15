@@ -8,3 +8,5 @@
 @import "minimal-mistakes"; // main partials
 
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+
+$link-color: mix(#000, $info-color, 20%) !default;

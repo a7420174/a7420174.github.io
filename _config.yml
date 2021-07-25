@@ -59,6 +59,7 @@ plugins:
   # - jekyll-feed
   - jemoji
   - jekyll-include-cache
+  - jekyll-redirect-from
 
 author:
   name   : "지적인 낙관주의자"

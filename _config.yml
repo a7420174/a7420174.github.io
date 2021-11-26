@@ -64,7 +64,7 @@ plugins:
 author:
   name   : "지적인 낙관주의자"
   avatar : "/assets/images/orange.jpg"
-  bio    : "Genomics와 Spark에 관심이 많은 ENFP"
+  bio    : "Genomics와 Spark에 관심이 많은 자"
   links:
     - label: "Website"
       icon: "fas fa-fw fa-link"

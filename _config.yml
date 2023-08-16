@@ -13,10 +13,10 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: Spark with Genomics
+title: Hello, genomics!
 email: a7420174@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Genomics와 Spark에 관심이 많은 ENFP
+  Genomics에 진심인 블로그입니다.
 url: 'https://a7420174.github.io'
 twitter_username: a7420174
 github_username: a7420174
@@ -64,7 +64,7 @@ plugins:
 author:
   name   : "지적인 낙관주의자"
   avatar : "/assets/images/orange.jpg"
-  bio    : "Genomics와 Spark에 관심이 많은 ENFP"
+  bio    : "Genomics에 진심인 하고잡이"
   links:
     - label: "Website"
       icon: "fas fa-fw fa-link"

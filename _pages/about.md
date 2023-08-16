@@ -22,3 +22,5 @@ Genomics의 황무지 대한민국에서 떡상을 노리는 그는 무사히 �
   - R
   - SQL
   - Golang
+- Cloud Computing
+  - AWS

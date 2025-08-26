@@ -60,6 +60,7 @@ plugins:
   - jemoji
   - jekyll-include-cache
   - jekyll-redirect-from
+  - jekyll-remote-theme
 
 author:
   name   : "지적인 낙관주의자"
@@ -89,7 +90,7 @@ footer:
       url: "https://github.com/a7420174"
     - label: "Instagram"
       icon: "fab fa-fw fa-instagram"
-      url: "https://instagram.com/hail.korean"
+      url: "https://instagram.com/hail.korea"
 
 defaults:
   # _posts
@@ -132,7 +133,7 @@ google:
   search_engine_id: 002af1359f8280c0b
 
 # google_site_verification: "VIq0jo72Wq4qsYDINXGyrt-aIYnZmiyGJe_MdnWHd0A"
-google-site-verification: 'naTbEU34Au3P9nZf0TzuWgx9zpkCXp2YR5Skt5UlUIk'
+google_site_verification: 'naTbEU34Au3P9nZf0TzuWgx9zpkCXp2YR5Skt5UlUIk'
 naver_site_verification: '66845c8a16eb57bb7f92fa8ce757fe6cca1d9a2c'
 
 analytics:

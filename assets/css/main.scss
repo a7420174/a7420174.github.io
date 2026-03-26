@@ -191,11 +191,12 @@ a {
 
   // Mobile hamburger menu button
   .greedy-nav__toggle {
-    background: var(--color-teal);
-    transition: background 0.3s ease;
+    background: transparent;
+    color: var(--color-warm-gray);
+    transition: color 0.3s ease;
 
     &:hover {
-      background: var(--color-teal-dark);
+      color: var(--color-teal);
     }
   }
 

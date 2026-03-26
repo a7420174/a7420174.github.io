@@ -122,7 +122,7 @@ MCP Server를 통해 가능한 작업:
 - 연구 펀딩 소스별 검색
 
 
-# 조합의 힘: Multi-Tool Workflows
+# Multi-Tool Workflows
 
 개별 MCP Server도 유용하지만, 여러 서버를 조합하면 진정한 위력을 발휘합니다.
 

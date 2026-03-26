@@ -106,28 +106,28 @@ claude schedule create \
 
 ## 출력 예시 (news-log.md)
 
+아래는 2026년 3월 26일에 STAT News, Endpoints News RSS 피드에서 실제 가져온 결과입니다.
+
 ```markdown
 ## 2026-03-26 (수)
-> 소스: 5개 피드 / 전체: 34건 / 선별: 7건
+> 소스: STAT News, Endpoints News RSS
 
-### FDA / 규제
-- **[FDA Approves First AI-Guided Companion Diagnostic for NSCLC](https://...)**
-  - FDA | AI 기반 동반진단 최초 승인, 비소세포폐암 바이오마커 분석
+### 신약개발 / 임상
+- **[Allogene's off-the-shelf CAR-T is nearing an early but pivotal study readout](https://www.statnews.com/2026/03/26/allogene-car-t-lymphoma-treatment-study/)**
+  - STAT News | Allogene의 기성품(off-the-shelf) CAR-T 세포치료제, 림프종 대상 핵심 임상 결과 임박
 
-### 신약개발
-- **[Lilly's Obesity Drug Shows Promise in Phase 3 Heart Failure Trial](https://...)**
-  - STAT News | 릴리 비만 약물, 심부전 3상에서 유의미한 결과
+- **[FDA gives Denali accelerated approval for rare disease drug](https://endpoints.news/fda-gives-denali-accelerated-approval-for-rare-disease-drug/)**
+  - Endpoints | Denali Therapeutics 희귀질환 약물 FDA 가속 승인 획득
 
-- **[Small Biotech Lands $200M for AI-Driven Antibody Platform](https://...)**
-  - Endpoints | AI 항체 플랫폼 스타트업 2억 달러 투자 유치
+- **[Oral peptides biotech Pinnacle Medicines gets $89M from US, China investors](https://endpoints.news/oral-peptides-biotech-pinnacle-medicines-gets-89m-from-us-china-investors/)**
+  - Endpoints | 경구 펩타이드 바이오텍 Pinnacle Medicines, 미·중 투자자로부터 8,900만 달러 유치
 
-### AI + Bio
-- **[DeepMind Releases Open-Source Protein Interaction Model](https://...)**
-  - FierceBiotech | AlphaFold 후속 모델, 단백질 상호작용 예측 오픈소스 공개
+### AI + 헬스케어
+- **[Data show people racing to chatbots for health advice](https://www.statnews.com/2026/03/26/data-show-people-racing-to-chatbots-health-tech/)**
+  - STAT News | 건강 상담 목적 챗봇 사용 급증 추세 데이터 공개
 
-### 학술
-- **[Spatial multi-omics reveals drug resistance mechanisms in solid tumors](https://...)**
-  - Nature Drug Discovery | 공간 멀티오믹스로 고형암 약물 내성 기전 규명
+- **[Limbic aims to show AI beats humans in delivering therapy](https://endpoints.news/limbic-aims-to-show-ai-beats-humans-in-delivering-therapy/)**
+  - Endpoints | AI 치료 전달이 인간 치료사를 능가할 수 있는지 검증 시도
 ```
 
 

@@ -1,8 +1,8 @@
 ---
 title: "AI Agent Skill: scRNA-seq QC 전처리 자동화"
 header:
-  teaser: https://opengraph.githubassets.com/1/anthropics/claude-code
-  og_image: https://opengraph.githubassets.com/1/anthropics/claude-code
+  teaser: /assets/images/ai-agent-skill-teaser.svg
+  og_image: /assets/images/orange.jpg
 date: 2026-03-26T21:00:00+09:00
 categories:
   - AI

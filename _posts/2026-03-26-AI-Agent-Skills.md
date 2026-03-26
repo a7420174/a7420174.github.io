@@ -47,11 +47,11 @@ Single-cell RNA-seq(scRNA-seq) 분석의 첫 번째 단계는 항상 **Quality C
 이 Skill은 [**scverse**][1] 생태계의 best practice를 따르며, **Scanpy**를 기반으로 QC 워크플로우를 자동화합니다.
 
 
-## QC 메트릭
+## QC metric
 
 QC에서 확인하는 주요 지표는 다음과 같습니다:
 
-| 메트릭 | 설명 | 정상 범위 |
+| metric | 설명 | 정상 범위 |
 |--------|------|-----------|
 | **Total counts** | 세포당 총 UMI 수 | 500 ~ 50,000 |
 | **Genes detected** | 발현된 유전자 수 | 200 ~ 5,000 |
@@ -116,7 +116,7 @@ python3 scripts/qc_analysis.py brain_data.h5ad \
 ```
 1. 데이터 로드 (.h5ad / .h5 자동 감지)
        ↓
-2. QC 메트릭 계산 (scanpy.pp.calculate_qc_metrics)
+2. QC metric 계산 (scanpy.pp.calculate_qc_metrics)
        ↓
 3. 필터링 전 시각화 생성
        ↓
@@ -140,9 +140,9 @@ python3 scripts/qc_analysis.py brain_data.h5ad \
 
 | 파일 | 설명 |
 |------|------|
-| `qc_metrics_before_filtering.png` | 필터링 전 QC 메트릭 분포 |
+| `qc_metrics_before_filtering.png` | 필터링 전 QC metric 분포 |
 | `qc_filtering_thresholds.png` | MAD threshold 시각화 (pass/fail) |
-| `qc_metrics_after_filtering.png` | 필터링 후 QC 메트릭 분포 |
+| `qc_metrics_after_filtering.png` | 필터링 후 QC metric 분포 |
 | `*_filtered.h5ad` | 필터링된 clean 데이터셋 |
 | `*_with_qc.h5ad` | QC annotation이 추가된 원본 데이터 |
 
@@ -159,7 +159,7 @@ from qc_plotting import plot_qc_distributions
 # 데이터 로드
 adata = ad.read_h5ad("pbmc_10k.h5ad")
 
-# QC 메트릭 계산
+# QC metric 계산
 calculate_qc_metrics(adata, mt_pattern="^MT-", inplace=True)
 
 # 필터링 전 시각화

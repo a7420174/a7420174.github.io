@@ -1,7 +1,7 @@
 ---
 title: "AI 시대 생물정보학자의 논문 브리핑 자동화"
 header:
-  teaser: /assets/images/ai-agent-skill-teaser.svg
+  teaser: /assets/images/daily-briefing-teaser.svg
   og_image: /assets/images/orange.jpg
 date: 2026-03-26T22:00:00+09:00
 categories:

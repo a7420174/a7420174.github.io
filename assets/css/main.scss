@@ -147,7 +147,8 @@ a {
 .greedy-nav {
   background: transparent;
 
-  a {
+  // Only style nav links, not search/hamburger buttons
+  .visible-links a {
     font-family: var(--font-body);
     font-weight: 500;
     font-size: 0.85em;
@@ -177,15 +178,15 @@ a {
         width: 80%;
       }
     }
-  }
 
-  .visible-links a:first-child {
-    font-family: var(--font-display) !important;
-    font-weight: 900;
-    font-size: 1.1em;
-    text-transform: none;
-    letter-spacing: -0.02em;
-    color: var(--color-charcoal);
+    &:first-child {
+      font-family: var(--font-display) !important;
+      font-weight: 900;
+      font-size: 1.1em;
+      text-transform: none;
+      letter-spacing: -0.02em;
+      color: var(--color-charcoal);
+    }
   }
 
   // Mobile hamburger menu button

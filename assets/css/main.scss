@@ -908,6 +908,20 @@ blockquote {
 }
 
 // ============================================================
+// PAGE VIEW COUNTER (Busuanzi)
+// ============================================================
+.page__meta-item {
+  font-family: var(--font-mono);
+  font-size: 0.78em;
+  color: var(--color-warm-gray);
+
+  .fa-eye {
+    margin-right: 0.3em;
+    color: var(--color-teal);
+  }
+}
+
+// ============================================================
 // SELECTION
 // ============================================================
 ::selection {

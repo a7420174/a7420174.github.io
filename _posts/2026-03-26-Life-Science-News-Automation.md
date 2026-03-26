@@ -1,5 +1,5 @@
 ---
-title: "신약개발 뉴스 자동화: RSS + MCP로 매일 브리핑 받기"
+title: "신약개발 뉴스 자동화: RSS로 매일 브리핑 받기"
 header:
   teaser: /assets/images/daily-briefing-teaser.svg
   og_image: /assets/images/orange.jpg
@@ -11,7 +11,7 @@ tags:
   - Automation
   - Drug Discovery
   - RSS
-  - MCP
+  - Claude Code
 ---
 
 # 왜 웹검색이 아닌 RSS인가
@@ -71,14 +71,9 @@ Nature에서는 분야별 RSS를 제공합니다:
 
 
 
-# RSS를 MCP로 읽기
-
-RSS 피드를 직접 파싱할 수도 있지만, **RSS MCP Server**를 사용하면 Claude가 자연어로 피드를 읽을 수 있습니다.
-
-아직 공식 RSS MCP Server는 없지만, Claude Code의 Scheduled Trigger에서 `curl`로 RSS를 직접 가져온 뒤 LLM이 파싱하는 방식으로 충분히 동작합니다.
-
-
 # 자동화 파이프라인
+
+RSS는 별도의 MCP Server 없이 `curl`만으로 가져올 수 있습니다. Scheduled Trigger 프롬프트 안에서 RSS URL을 지정하면 Claude가 알아서 피드를 읽고 파싱합니다.
 
 논문 브리핑 포스트에서 다룬 Scheduled Trigger를 그대로 활용합니다.
 

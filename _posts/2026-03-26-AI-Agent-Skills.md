@@ -1,8 +1,8 @@
 ---
 title: "AI Agent Skill: scRNA-seq QC 전처리 자동화"
 header:
-  teaser: https://avatars.githubusercontent.com/u/28143683
-  og_image: https://avatars.githubusercontent.com/u/28143683
+  teaser: https://opengraph.githubassets.com/1/anthropics/claude-code
+  og_image: https://opengraph.githubassets.com/1/anthropics/claude-code
 date: 2026-03-26T21:00:00+09:00
 categories:
   - AI

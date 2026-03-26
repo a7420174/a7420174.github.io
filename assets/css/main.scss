@@ -922,6 +922,205 @@ blockquote {
 }
 
 // ============================================================
+// POST CARDS WITH TEASER IMAGES
+// ============================================================
+.list__item {
+  .archive__item {
+    display: flex;
+    gap: 1.5em;
+    align-items: flex-start;
+  }
+
+  .archive__item-teaser {
+    flex-shrink: 0;
+    width: 160px;
+    height: 100px;
+    border-radius: 8px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s var(--ease-out-expo);
+    }
+
+    a {
+      display: block;
+      height: 100%;
+    }
+  }
+
+  .archive__item:hover .archive__item-teaser img {
+    transform: scale(1.06);
+  }
+
+  .archive__item-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  @media (max-width: 500px) {
+    .archive__item {
+      flex-direction: column;
+    }
+
+    .archive__item-teaser {
+      width: 100%;
+      height: 160px;
+    }
+  }
+}
+
+// ============================================================
+// 404 PAGE
+// ============================================================
+.error404 {
+  text-align: center;
+  padding: 3em 1em;
+}
+
+.error404__dna {
+  display: flex;
+  justify-content: center;
+  gap: 0.3em;
+  margin-bottom: 1.5em;
+}
+
+.error404__base {
+  font-family: var(--font-mono);
+  font-size: 3em;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 12px;
+  animation: base404Pop 0.5s var(--ease-out-expo) both;
+
+  &:nth-child(1) { background: rgba(74, 155, 142, 0.15); color: var(--color-dna-a); animation-delay: 0.05s; }
+  &:nth-child(2) { background: rgba(201, 168, 76, 0.15); color: var(--color-dna-t); animation-delay: 0.1s; }
+  &:nth-child(3) { background: rgba(199, 92, 58, 0.15); color: var(--color-accent-coral); animation-delay: 0.2s; }
+  &:nth-child(4) { background: rgba(26, 107, 90, 0.12); color: var(--color-teal); animation-delay: 0.3s; }
+  &:nth-child(5) { background: rgba(199, 92, 58, 0.15); color: var(--color-accent-coral); animation-delay: 0.4s; }
+  &:nth-child(6) { background: rgba(107, 91, 138, 0.12); color: var(--color-dna-c); animation-delay: 0.5s; }
+  &:nth-child(7) { background: rgba(74, 155, 142, 0.15); color: var(--color-dna-a); animation-delay: 0.55s; }
+
+  @media (max-width: 500px) {
+    font-size: 2em;
+  }
+}
+
+@keyframes base404Pop {
+  from {
+    opacity: 0;
+    transform: scale(0.5) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.error404__title {
+  font-family: var(--font-display) !important;
+  font-size: 1.8em;
+  font-weight: 900;
+  color: var(--color-charcoal);
+  margin-bottom: 0.5em;
+}
+
+.error404__desc {
+  font-size: 1em;
+  color: var(--color-warm-gray);
+  line-height: 1.8;
+  margin-bottom: 2em;
+}
+
+.error404__actions {
+  display: flex;
+  gap: 1em;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+// ============================================================
+// TAG / CATEGORY ARCHIVE PAGES
+// ============================================================
+.taxonomy__section {
+  margin-bottom: 2.5em;
+
+  .archive__subtitle {
+    font-family: var(--font-display);
+    font-size: 1.3em;
+    font-weight: 700;
+    color: var(--color-teal-dark);
+    border-bottom: 2px solid var(--color-sand);
+    padding-bottom: 0.4em;
+    margin-bottom: 1em;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 4px;
+      height: 1em;
+      background: linear-gradient(180deg, var(--color-teal), var(--color-accent-gold));
+      border-radius: 2px;
+    }
+  }
+
+  .archive__item {
+    background: #fff;
+    border: 1px solid var(--color-sand);
+    border-radius: 8px;
+    padding: 1.2em 1.5em;
+    margin-bottom: 0.8em;
+    transition: all 0.3s var(--ease-out-expo);
+
+    &:hover {
+      transform: translateX(4px);
+      border-color: rgba(26, 107, 90, 0.25);
+      box-shadow: 0 4px 16px rgba(26, 107, 90, 0.06);
+    }
+  }
+
+  .archive__item-title {
+    font-size: 1.05em !important;
+    margin: 0 0 0.2em;
+  }
+
+  .archive__item-excerpt {
+    font-size: 0.85em;
+    color: var(--color-warm-gray);
+    margin: 0;
+  }
+}
+
+// Tag badges on taxonomy pages
+.taxonomy__index {
+  .taxonomy__count {
+    background: rgba(26, 107, 90, 0.08);
+    color: var(--color-teal-dark);
+    font-family: var(--font-mono);
+    font-size: 0.75em;
+    padding: 0.2em 0.6em;
+    border-radius: 4px;
+  }
+
+  a {
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--color-teal);
+    }
+  }
+}
+
+// ============================================================
 // SELECTION
 // ============================================================
 ::selection {

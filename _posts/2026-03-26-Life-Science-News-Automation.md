@@ -144,12 +144,6 @@ claude schedule create \
 
 정리하면:
 
-| 정보 유형 | 소스 | 접근 방법 |
-|-----------|------|-----------|
-| **논문** | bioRxiv, PubMed, arXiv | MCP Server |
-| **뉴스** | STAT, Fierce, Endpoints, FDA | RSS 피드 |
-| **나머지** | GenomeWeb 등 | 뉴스레터 구독 |
-
 웹검색에 의존하지 않고, 공식 소스에서 구조화된 데이터를 가져오는 것이 핵심입니다. RSS는 20년 넘은 기술이지만, AI 자동화 시대에 오히려 가장 신뢰할 수 있는 데이터 파이프라인입니다.
 
 

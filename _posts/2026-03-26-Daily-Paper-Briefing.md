@@ -29,9 +29,9 @@ tags:
 
 | 소스 | 특징 | MCP Server |
 |------|------|------------|
-| **bioRxiv** | 피어리뷰 전 최신 연구 | O (Life Sciences 마켓) |
-| **PubMed** | 검증된 Biomedical 논문 | O (Life Sciences 마켓) |
-| **arXiv** | AI/ML 최신 연구 | O ([arxiv-mcp-server](https://github.com/blazickjp/arxiv-mcp-server)) |
+| **bioRxiv** | 피어리뷰 전 최신 연구 | O — 공식 (Life Sciences 마켓) |
+| **PubMed** | 검증된 Biomedical 논문 | O — 공식 (Life Sciences 마켓) |
+| **arXiv** | AI/ML 최신 연구 | O — 커뮤니티 ([arxiv-mcp-server](https://github.com/blazickjp/arxiv-mcp-server), ★2.4k) |
 
 bioRxiv, PubMed, arXiv는 모두 **MCP Server**가 있기 때문에 API를 직접 호출할 필요 없이 자연어로 검색할 수 있습니다. MCP Server가 알아서 API를 호출하고 결과를 반환합니다.
 

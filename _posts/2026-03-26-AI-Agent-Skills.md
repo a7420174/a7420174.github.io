@@ -59,7 +59,7 @@ QC에서 확인하는 주요 지표는 다음과 같습니다:
 | **Ribosomal%** | 리보솜 유전자 비율 | 조직별 상이 |
 | **Hemoglobin%** | 헤모글로빈 유전자 비율 | ~0% (혈액 오염 지표) |
 
-MT%가 높은 세포는 세포막이 손상되어 cytoplasmic mRNA가 유출되고 미토콘드리아 mRNA만 남은 상태일 가능성이 높습니다. 즉, 죽거나 죽어가는 세포입니다.
+MT%가 높은 세포는 세포막이 손상되어 cytoplasmic mRNA가 유출되고 미토콘드리아 mRNA만 남은 상태일 가능성이 높습니다. 즉, 죽거나 죽어가는 세포입니다. (Skill 문서에서는 "high MT% = dying cells"로 요약하고 있으며, 위 설명은 일반적인 scRNA-seq 문헌 기반입니다.)
 
 
 ## MAD 기반 필터링
@@ -193,11 +193,13 @@ adata_filtered.write_h5ad("pbmc_10k_filtered.h5ad")
 
 | 조직 | MT% threshold | 참고 |
 |------|---------------|------|
-| **Blood (PBMC)** | 5~8% | 표준적인 threshold |
-| **Brain / Neuron** | 10~15% | 대사 활성이 높아 MT%가 자연적으로 높음 |
+| **Blood (PBMC)** | 5~8% | 표준적인 threshold * |
+| **Brain / Neuron** | 10~15% | 대사 활성이 높아 MT%가 자연적으로 높음 * |
 | **Liver** | 10~15% | 미토콘드리아가 풍부한 조직 |
 | **Muscle** | 10~20% | 에너지 소비가 많은 조직 |
 | **Tumor** | 8~15% | 종양 미세환경에 따라 상이 |
+
+> **참고**: \* 표시 항목은 Skill 문서(scverse QC guidelines)에 명시된 내용이며, 나머지(Liver, Muscle, Tumor)는 Skill에 포함되지 않은 일반적인 생물학 문헌 기반 참고치입니다. 실제 분석 시 해당 조직의 선행 연구를 참고하시기 바랍니다.
 
 
 # 마무리

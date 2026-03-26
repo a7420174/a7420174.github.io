@@ -1,0 +1,98 @@
+<!-- AdBlock Detection Banner -->
+<div id="adblock-notice" style="display:none;">
+  <div class="adblock-notice__inner">
+    <p class="adblock-notice__text">
+      <span class="adblock-notice__icon">&#9749;</span>
+      개떡같은 블로그에도 공수가 듭니다.. 콘텐츠가 도움이 되셨다면, 광고 차단 해제를 부탁드립니다. 감사합니다!
+    </p>
+    <button class="adblock-notice__close" onclick="this.parentElement.parentElement.style.display='none';localStorage.setItem('adblock-dismissed','1');" aria-label="닫기">&times;</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  if (localStorage.getItem('adblock-dismissed') === '1') return;
+
+  var testAd = document.createElement('div');
+  testAd.innerHTML = '&nbsp;';
+  testAd.className = 'adsbox ad-placement ad-banner textads banner-ads';
+  testAd.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;';
+  document.body.appendChild(testAd);
+
+  setTimeout(function() {
+    var blocked = !testAd.offsetHeight || testAd.offsetParent === null || getComputedStyle(testAd).display === 'none';
+    if (blocked) {
+      var notice = document.getElementById('adblock-notice');
+      if (notice) notice.style.display = 'block';
+    }
+    testAd.remove();
+  }, 1500);
+})();
+</script>
+
+<style>
+#adblock-notice {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  animation: adblockSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.adblock-notice__inner {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.2em 1.8em;
+  background: #fff;
+  border-top: 3px solid #1a6b5a;
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+.adblock-notice__text {
+  margin: 0;
+  font-size: 0.88em;
+  line-height: 1.7;
+  color: #2c2c2c;
+}
+
+.adblock-notice__icon {
+  font-size: 1.3em;
+  margin-right: 0.3em;
+}
+
+.adblock-notice__close {
+  background: none;
+  border: 1px solid #e4ddd0;
+  border-radius: 6px;
+  font-size: 1.3em;
+  color: #7a7568;
+  cursor: pointer;
+  padding: 0.2em 0.6em;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.adblock-notice__close:hover {
+  color: #1a6b5a;
+  border-color: #1a6b5a;
+}
+
+@keyframes adblockSlideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@media (max-width: 600px) {
+  .adblock-notice__inner {
+    padding: 1em;
+    flex-direction: column;
+    text-align: center;
+  }
+  .adblock-notice__text br { display: none; }
+}
+</style>
+<!-- /AdBlock Detection Banner -->

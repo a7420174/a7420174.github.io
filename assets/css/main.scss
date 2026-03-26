@@ -4,7 +4,913 @@
 
 @charset "utf-8";
 
+// ============================================================
+// DESIGN SYSTEM: "Scientific Editorial"
+// A warm, authoritative aesthetic — Nature journal meets modern tech blog
+// Genomics-inspired palette: deep teals + warm earth tones
+// ============================================================
+
+// -- Color Palette Overrides (before skin import) --
+$background-color: #faf8f5 !default;        // Warm parchment white
+$text-color: #2c2c2c !default;              // Rich charcoal
+$muted-text-color: #7a7568 !default;        // Warm gray
+$primary-color: #1a6b5a !default;           // Deep genomics teal
+$border-color: #e4ddd0 !default;            // Warm sand
+$footer-background-color: #2c2c2c !default; // Dark charcoal footer
+$link-color: #1a6b5a !default;              // Teal links
+$masthead-link-color: $text-color !default;
+$navicon-link-color-hover: $primary-color !default;
+$code-background-color: #f5f2ed !default;   // Warm code bg
+
 @import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
 @import "minimal-mistakes"; // main partials
 
-// @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+// ============================================================
+// CSS CUSTOM PROPERTIES
+// ============================================================
+:root {
+  --color-teal: #1a6b5a;
+  --color-teal-light: #2d9980;
+  --color-teal-dark: #134d41;
+  --color-earth: #8b7355;
+  --color-earth-light: #c4b59a;
+  --color-sand: #e4ddd0;
+  --color-parchment: #faf8f5;
+  --color-charcoal: #2c2c2c;
+  --color-warm-gray: #7a7568;
+  --color-accent-gold: #c9a84c;
+  --color-accent-coral: #c75c3a;
+  --color-dna-a: #4a9b8e;   // Adenine
+  --color-dna-t: #c9a84c;   // Thymine
+  --color-dna-g: #c75c3a;   // Guanine
+  --color-dna-c: #6b5b8a;   // Cytosine
+  --font-display: 'Playfair Display', Georgia, 'Noto Serif KR', serif;
+  --font-body: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+// ============================================================
+// TYPOGRAPHY
+// ============================================================
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body) !important;
+  font-weight: 400;
+  line-height: 1.8;
+  color: var(--color-charcoal);
+  background-color: var(--color-parchment);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6,
+.page__title,
+.archive__item-title {
+  font-family: var(--font-display) !important;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--color-charcoal);
+}
+
+h1, .page__title {
+  font-weight: 900;
+  font-size: 2.2em !important;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: 1.6em;
+  margin-top: 2.5em;
+  padding-bottom: 0.3em;
+  border-bottom: 2px solid var(--color-sand);
+}
+
+h3 {
+  font-size: 1.3em;
+  color: var(--color-teal-dark);
+}
+
+p {
+  margin-bottom: 1.4em;
+}
+
+strong {
+  font-weight: 700;
+  color: var(--color-charcoal);
+}
+
+// ============================================================
+// LINKS
+// ============================================================
+a {
+  color: var(--color-teal);
+  text-decoration: none;
+  transition: color 0.25s var(--ease-out-quart);
+
+  &:hover {
+    color: var(--color-teal-light);
+  }
+}
+
+// ============================================================
+// MASTHEAD / NAVIGATION
+// ============================================================
+.masthead {
+  background-color: var(--color-parchment);
+  border-bottom: 1px solid var(--color-sand);
+  box-shadow: 0 1px 8px rgba(44, 44, 44, 0.04);
+  transition: box-shadow 0.3s ease;
+
+  &__inner-wrap {
+    max-width: 1200px;
+  }
+}
+
+.site-title {
+  font-family: var(--font-display) !important;
+  font-weight: 900 !important;
+  font-size: 1.3em !important;
+  letter-spacing: -0.02em;
+  color: var(--color-charcoal) !important;
+
+  &:hover {
+    color: var(--color-teal) !important;
+  }
+}
+
+.greedy-nav {
+  background: transparent;
+
+  a {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.85em;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-warm-gray);
+    padding: 0.5em 0.8em;
+    position: relative;
+    transition: color 0.3s var(--ease-out-quart);
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: var(--color-teal);
+      transition: all 0.3s var(--ease-out-expo);
+      transform: translateX(-50%);
+    }
+
+    &:hover {
+      color: var(--color-teal);
+
+      &::after {
+        width: 80%;
+      }
+    }
+  }
+
+  .visible-links a:first-child {
+    font-family: var(--font-display) !important;
+    font-weight: 900;
+    font-size: 1.1em;
+    text-transform: none;
+    letter-spacing: -0.02em;
+    color: var(--color-charcoal);
+  }
+
+  // Mobile hamburger menu button
+  .greedy-nav__toggle {
+    background: var(--color-teal);
+    transition: background 0.3s ease;
+
+    &:hover {
+      background: var(--color-teal-dark);
+    }
+  }
+
+  // Search toggle button - keep transparent
+  .search__toggle {
+    background: transparent;
+    color: var(--color-warm-gray);
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: var(--color-teal);
+    }
+  }
+
+  .hidden-links {
+    background: white;
+    border: 1px solid var(--color-sand);
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+
+    a {
+      text-transform: none;
+      font-size: 0.9em;
+      padding: 0.6em 1.2em;
+    }
+  }
+}
+
+// ============================================================
+// HERO / SPLASH SECTION
+// ============================================================
+.hero-genomics {
+  position: relative;
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, #134d41 0%, #1a6b5a 30%, #2d9980 60%, #4a9b8e 100%);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 50%, rgba(201, 168, 76, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(107, 91, 138, 0.12) 0%, transparent 40%),
+      radial-gradient(circle at 60% 80%, rgba(199, 92, 58, 0.1) 0%, transparent 45%);
+    z-index: 1;
+  }
+
+  // DNA double helix pattern overlay
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.06;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    z-index: 1;
+  }
+}
+
+.hero-genomics__content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 3em 2em;
+  max-width: 800px;
+  animation: heroFadeUp 1s var(--ease-out-expo) both;
+}
+
+.hero-genomics__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: var(--font-mono);
+  font-size: 0.75em;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 1.5em;
+  animation: heroFadeUp 1s 0.1s var(--ease-out-expo) both;
+
+  &::before,
+  &::after {
+    content: '';
+    width: 2em;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.3);
+  }
+}
+
+.hero-genomics__title {
+  font-family: var(--font-display) !important;
+  font-size: 3.5em;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.1;
+  margin: 0 0 0.3em;
+  animation: heroFadeUp 1s 0.15s var(--ease-out-expo) both;
+
+  @media (max-width: 600px) {
+    font-size: 2.2em;
+  }
+}
+
+.hero-genomics__subtitle {
+  font-family: var(--font-body);
+  font-size: 1.15em;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
+  margin-bottom: 2em;
+  animation: heroFadeUp 1s 0.25s var(--ease-out-expo) both;
+}
+
+.hero-genomics__actions {
+  display: flex;
+  gap: 1em;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: heroFadeUp 1s 0.35s var(--ease-out-expo) both;
+}
+
+.hero-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.85em 2em;
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.9em;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  transition: all 0.3s var(--ease-out-expo);
+  cursor: pointer;
+
+  &--primary {
+    background: #fff;
+    color: var(--color-teal-dark);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+      color: var(--color-teal-dark);
+    }
+  }
+
+  &--ghost {
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+    color: #fff;
+    background: rgba(255, 255, 255, 0.05);
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.7);
+      transform: translateY(-2px);
+      color: #fff;
+    }
+  }
+}
+
+// DNA base pair floating indicators
+.hero-genomics__bases {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero-base {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 1.2em;
+  font-weight: 500;
+  opacity: 0;
+  animation: floatBase 12s infinite ease-in-out;
+
+  &--a { color: rgba(74, 155, 142, 0.5); }
+  &--t { color: rgba(201, 168, 76, 0.5); }
+  &--g { color: rgba(199, 92, 58, 0.4); }
+  &--c { color: rgba(107, 91, 138, 0.5); }
+
+  &:nth-child(1) { left: 8%; top: 20%; animation-delay: 0s; }
+  &:nth-child(2) { left: 15%; top: 70%; animation-delay: 2s; }
+  &:nth-child(3) { right: 12%; top: 30%; animation-delay: 4s; }
+  &:nth-child(4) { right: 20%; top: 75%; animation-delay: 1s; }
+  &:nth-child(5) { left: 45%; top: 10%; animation-delay: 3s; }
+  &:nth-child(6) { right: 8%; top: 55%; animation-delay: 5s; }
+  &:nth-child(7) { left: 25%; top: 40%; animation-delay: 7s; }
+  &:nth-child(8) { right: 35%; top: 85%; animation-delay: 6s; }
+}
+
+@keyframes floatBase {
+  0%, 100% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  20%, 80% {
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes heroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ============================================================
+// PAGE CONTENT & LAYOUT
+// ============================================================
+.page {
+  animation: contentFadeIn 0.6s var(--ease-out-expo) both;
+}
+
+@keyframes contentFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page__content {
+  font-size: 1.02em;
+
+  p, li {
+    line-height: 1.85;
+  }
+}
+
+// ============================================================
+// POST CARDS / ARCHIVE ITEMS
+// ============================================================
+.list__item {
+  border-bottom: none !important;
+  margin-bottom: 1.5em;
+
+  .archive__item {
+    background: #fff;
+    border: 1px solid var(--color-sand);
+    border-radius: 10px;
+    padding: 1.8em;
+    transition: all 0.35s var(--ease-out-expo);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--color-teal), var(--color-accent-gold));
+      opacity: 0;
+      transition: opacity 0.35s var(--ease-out-expo);
+    }
+
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 32px rgba(26, 107, 90, 0.08);
+      border-color: rgba(26, 107, 90, 0.2);
+
+      &::before {
+        opacity: 1;
+      }
+    }
+  }
+
+  .archive__item-title {
+    font-size: 1.25em !important;
+    margin-top: 0;
+    margin-bottom: 0.3em;
+
+    a {
+      color: var(--color-charcoal);
+      transition: color 0.25s ease;
+
+      &:hover {
+        color: var(--color-teal);
+      }
+    }
+  }
+
+  .archive__item-excerpt {
+    color: var(--color-warm-gray);
+    font-size: 0.92em;
+    line-height: 1.7;
+  }
+
+  .page__meta {
+    font-family: var(--font-mono);
+    font-size: 0.75em;
+    color: var(--color-warm-gray);
+    letter-spacing: 0.02em;
+  }
+}
+
+// Stagger animation for post list
+.entries-list {
+  .list__item {
+    animation: postSlideIn 0.5s var(--ease-out-expo) both;
+
+    @for $i from 1 through 10 {
+      &:nth-child(#{$i}) {
+        animation-delay: #{$i * 0.08}s;
+      }
+    }
+  }
+}
+
+@keyframes postSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ============================================================
+// ARCHIVE PAGES (Categories, Tags)
+// ============================================================
+.taxonomy__section {
+  .archive__subtitle {
+    font-family: var(--font-display);
+    font-size: 1.4em;
+    color: var(--color-teal-dark);
+    border-bottom: 2px solid var(--color-sand);
+    padding-bottom: 0.3em;
+  }
+}
+
+// ============================================================
+// SIDEBAR / AUTHOR PROFILE
+// ============================================================
+.sidebar {
+  .author__avatar img {
+    border-radius: 50%;
+    border: 3px solid var(--color-sand);
+    transition: border-color 0.3s ease;
+
+    &:hover {
+      border-color: var(--color-teal);
+    }
+  }
+
+  .author__name {
+    font-family: var(--font-display) !important;
+    font-weight: 700;
+    font-size: 1.15em;
+  }
+
+  .author__bio {
+    font-size: 0.88em;
+    color: var(--color-warm-gray);
+    line-height: 1.6;
+  }
+
+  .author__urls {
+    li a {
+      font-size: 0.85em;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: var(--color-teal);
+      }
+    }
+  }
+}
+
+// ============================================================
+// CODE BLOCKS (Bioinformatics-optimized)
+// ============================================================
+div.highlighter-rouge,
+figure.highlight {
+  background: #1e1e2e !important;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  margin: 1.8em 0;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+
+  pre {
+    background: transparent !important;
+    padding: 1.4em;
+    margin: 0;
+    font-family: var(--font-mono) !important;
+    font-size: 0.88em;
+    line-height: 1.7;
+    overflow-x: auto;
+    color: #cdd6f4;
+
+    &::-webkit-scrollbar {
+      height: 6px;
+    }
+    &::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    &::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 3px;
+    }
+  }
+}
+
+code.highlighter-rouge {
+  font-family: var(--font-mono) !important;
+  font-size: 0.87em;
+  background: var(--color-sand);
+  color: var(--color-teal-dark);
+  padding: 0.15em 0.45em;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+// ============================================================
+// TABLE OF CONTENTS
+// ============================================================
+.toc {
+  border: 1px solid var(--color-sand);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+
+  .nav__title {
+    background: var(--color-teal);
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.8em;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-radius: 9px 9px 0 0;
+    padding: 0.6em 1em;
+  }
+
+  a {
+    font-size: 0.88em;
+    color: var(--color-warm-gray);
+    border-bottom-color: var(--color-sand);
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: var(--color-teal);
+    }
+  }
+}
+
+// ============================================================
+// BLOCKQUOTES
+// ============================================================
+blockquote {
+  border-left: 3px solid var(--color-teal);
+  background: rgba(26, 107, 90, 0.04);
+  padding: 1em 1.5em;
+  margin: 1.5em 0;
+  border-radius: 0 8px 8px 0;
+  font-style: italic;
+  color: var(--color-warm-gray);
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// ============================================================
+// FOOTER
+// ============================================================
+.page__footer {
+  background: var(--color-charcoal) !important;
+  color: rgba(255, 255, 255, 0.6);
+  border-top: none;
+
+  a {
+    color: var(--color-teal-light);
+
+    &:hover {
+      color: #fff;
+    }
+  }
+
+  footer {
+    max-width: 1200px;
+  }
+}
+
+// ============================================================
+// PAGINATION
+// ============================================================
+.pagination--pager {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.85em;
+  border-radius: 6px;
+  border-color: var(--color-sand);
+  color: var(--color-warm-gray);
+  transition: all 0.25s var(--ease-out-quart);
+
+  &:hover {
+    background: var(--color-teal);
+    border-color: var(--color-teal);
+    color: #fff;
+  }
+
+  &.disabled {
+    opacity: 0.4;
+  }
+}
+
+// ============================================================
+// SEARCH
+// ============================================================
+.search-content {
+  .search-input {
+    font-family: var(--font-body);
+    border-bottom-color: var(--color-sand);
+
+    &:focus {
+      border-bottom-color: var(--color-teal);
+    }
+  }
+}
+
+// ============================================================
+// ABOUT PAGE - SKILL CARDS
+// ============================================================
+.about-intro {
+  font-size: 1.15em;
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--color-warm-gray);
+  line-height: 1.8;
+  margin-bottom: 2.5em;
+  padding-bottom: 2em;
+  border-bottom: 2px solid var(--color-sand);
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5em;
+  margin: 2em 0;
+}
+
+.skill-card {
+  background: #fff;
+  border: 1px solid var(--color-sand);
+  border-radius: 12px;
+  padding: 1.8em;
+  transition: all 0.35s var(--ease-out-expo);
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-teal), var(--color-accent-gold));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s var(--ease-out-expo);
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(26, 107, 90, 0.1);
+
+    &::after {
+      transform: scaleX(1);
+    }
+  }
+}
+
+.skill-card__icon {
+  font-size: 1.8em;
+  margin-bottom: 0.5em;
+  display: block;
+}
+
+.skill-card__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15em;
+  color: var(--color-charcoal);
+  margin-bottom: 0.8em;
+}
+
+.skill-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+}
+
+.skill-tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.72em;
+  font-weight: 500;
+  padding: 0.3em 0.7em;
+  border-radius: 4px;
+  background: rgba(26, 107, 90, 0.08);
+  color: var(--color-teal-dark);
+  letter-spacing: 0.01em;
+}
+
+// Color variants for skill cards
+.skill-card--ngs .skill-tag { background: rgba(74, 155, 142, 0.12); color: #2d7a6d; }
+.skill-card--bioinfo .skill-tag { background: rgba(107, 91, 138, 0.1); color: #5a4d73; }
+.skill-card--analysis .skill-tag { background: rgba(201, 168, 76, 0.12); color: #8a7230; }
+.skill-card--programming .skill-tag { background: rgba(199, 92, 58, 0.1); color: #9b4a2d; }
+.skill-card--cloud .skill-tag { background: rgba(26, 107, 90, 0.1); color: var(--color-teal-dark); }
+
+// ============================================================
+// RECENT POSTS SECTION (Home page, below hero)
+// ============================================================
+.recent-posts-header {
+  text-align: center;
+  margin: 3em 0 2em;
+
+  h2 {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 1.8em;
+    color: var(--color-charcoal);
+    border-bottom: none;
+    margin-bottom: 0.2em;
+  }
+
+  p {
+    color: var(--color-warm-gray);
+    font-size: 0.95em;
+  }
+
+  &::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-teal), var(--color-accent-gold));
+    margin: 1em auto 0;
+    border-radius: 2px;
+  }
+}
+
+// ============================================================
+// RESPONSIVE REFINEMENTS
+// ============================================================
+@media (max-width: 768px) {
+  h1, .page__title {
+    font-size: 1.7em !important;
+  }
+
+  .hero-genomics {
+    min-height: 60vh;
+  }
+
+  .hero-genomics__title {
+    font-size: 2.2em;
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .list__item .archive__item {
+    padding: 1.3em;
+  }
+}
+
+// ============================================================
+// SCROLLBAR (Webkit)
+// ============================================================
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-parchment);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-earth-light);
+  border-radius: 4px;
+
+  &:hover {
+    background: var(--color-earth);
+  }
+}
+
+// ============================================================
+// SELECTION
+// ============================================================
+::selection {
+  background: rgba(26, 107, 90, 0.2);
+  color: var(--color-charcoal);
+}

@@ -1,0 +1,61 @@
+---
+layout: archive
+---
+
+<!-- ============================================================
+     HERO SECTION: Genomics-themed splash with floating DNA bases
+     ============================================================ -->
+<section class="hero-genomics">
+  <div class="hero-genomics__bases" aria-hidden="true">
+    <span class="hero-base hero-base--a">A</span>
+    <span class="hero-base hero-base--t">T</span>
+    <span class="hero-base hero-base--g">G</span>
+    <span class="hero-base hero-base--c">C</span>
+    <span class="hero-base hero-base--a">A</span>
+    <span class="hero-base hero-base--g">G</span>
+    <span class="hero-base hero-base--t">T</span>
+    <span class="hero-base hero-base--c">C</span>
+  </div>
+
+  <div class="hero-genomics__content">
+    <span class="hero-genomics__eyebrow">Bioinformatics &amp; AI</span>
+    <h1 class="hero-genomics__title">BI Playground</h1>
+    <p class="hero-genomics__subtitle">
+      어려운 건 AI한테 시키고<br>
+      재밌는 건 내가 하는 생물정보학 블로그
+    </p>
+    <div class="hero-genomics__actions">
+      <a href="/posts/" class="hero-btn hero-btn--primary">
+        <i class="fas fa-book-open"></i> Posts 보기
+      </a>
+      <a href="/about/" class="hero-btn hero-btn--ghost">
+        <i class="fas fa-user"></i> About
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     RECENT POSTS
+     ============================================================ -->
+<div class="recent-posts-header">
+  <h2>Recent Posts</h2>
+  <p>최신 게시글</p>
+</div>
+
+{{ content }}
+
+{% if paginator %}
+  {% assign posts = paginator.posts %}
+{% else %}
+  {% assign posts = site.posts %}
+{% endif %}
+
+{% assign entries_layout = page.entries_layout | default: 'list' %}
+<div class="entries-{{ entries_layout }}">
+  {% for post in posts %}
+    {% include archive-single.html type=entries_layout %}
+  {% endfor %}
+</div>
+
+{% include paginator.html %}

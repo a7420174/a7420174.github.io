@@ -13,7 +13,7 @@
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
-title: Hello, genomics!
+title: BI Playground
 email: a7420174@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   Genomics에 진심인 블로그입니다.
@@ -62,9 +62,9 @@ plugins:
   - jekyll-redirect-from
 
 author:
-  name   : "지적인 낙관주의자"
+  name   : "딴생각러"
   avatar : "/assets/images/orange.jpg"
-  bio    : "Genomics에 진심인 하고잡이"
+  bio    : "개떡이라도 일단 AI한테 던져보기"
   links:
     - label: "Website"
       icon: "fas fa-fw fa-link"

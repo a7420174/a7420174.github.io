@@ -71,7 +71,7 @@ MCP Server는 세 가지 요소를 제공합니다:
 주요 기능:
 - **20개 이상의 데이터 소스**에서 타겟-질병 연관성 점수 산출
 - GWAS Catalog, UK Biobank, FinnGen 등 **유전학적 근거** 통합
-- Reactome 기반 **패스웨이 데이터** 제공
+- Reactome 기반 **Pathway 데이터** 제공
 - ChEMBL 및 ClinicalTrials.gov 기반 **임상 근거** 연계
 
 ```
@@ -102,7 +102,7 @@ MCP Server를 통해 가능한 작업:
 
 ## 5) PubMed
 
-[**PubMed**][5]는 NCBI/NLM에서 운영하는 **3,600만 건 이상**의 생의학 문헌 검색 엔진입니다.
+[**PubMed**][5]는 NCBI/NLM에서 운영하는 **3,600만 건 이상**의 Biomedical 문헌 검색 엔진입니다.
 
 MCP Server를 통해 가능한 작업:
 - MeSH term, 날짜 범위, 저널 필터 등을 활용한 **정밀 검색**

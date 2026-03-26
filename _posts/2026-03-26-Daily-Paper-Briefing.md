@@ -27,56 +27,15 @@ tags:
 
 # 신뢰성 있는 소스
 
-| 소스 | 특징 | 접근 방법 |
-|------|------|-----------|
-| **bioRxiv** | 피어리뷰 전 최신 연구 | RSS, REST API, MCP Server |
-| **PubMed** | 검증된 Biomedical 논문 | E-utilities API, MCP Server |
-| **arXiv** | AI/ML 최신 연구 | Atom API, RSS |
-| **Nature Methods** | 방법론 중심 고품질 저널 | RSS |
-| **Genome Biology** | Genomics 핵심 저널 | RSS |
+| 소스 | 특징 | MCP Server |
+|------|------|------------|
+| **bioRxiv** | 피어리뷰 전 최신 연구 | O (Life Sciences 마켓) |
+| **PubMed** | 검증된 Biomedical 논문 | O (Life Sciences 마켓) |
+| **arXiv** | AI/ML 최신 연구 | O ([arxiv-mcp-server](https://github.com/prashalruchiranga/arxiv-mcp-server)) |
+| **Nature Methods** | 방법론 중심 고품질 저널 | X (RSS로 접근) |
+| **Genome Biology** | Genomics 핵심 저널 | X (RSS로 접근) |
 
-각 소스는 API 또는 RSS를 통해 프로그래밍 방식으로 접근할 수 있습니다.
-
-
-## bioRxiv API
-
-bioRxiv는 REST API를 제공합니다:
-
-```bash
-# 특정 날짜 범위의 bioinformatics 프리프린트 조회
-curl "https://api.biorxiv.org/details/biorxiv/2026-03-25/2026-03-26"
-```
-
-RSS 피드도 있습니다:
-```
-https://connect.biorxiv.org/biorxiv_xml.php?subject=bioinformatics
-```
-
-
-## PubMed E-utilities
-
-PubMed는 NCBI E-utilities API를 통해 검색할 수 있습니다:
-
-```bash
-# single cell RNA-seq 최신 논문 검색
-curl "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?\
-db=pubmed&term=single+cell+RNA-seq&retmax=10&sort=date&retmode=json"
-```
-
-> API key를 등록하면 초당 10건까지 요청 가능합니다 (기본 3건). [NCBI 계정](https://www.ncbi.nlm.nih.gov/account/)에서 발급받을 수 있습니다.
-
-
-## arXiv API
-
-AI/ML 분야 논문은 arXiv에서 추적합니다:
-
-```bash
-# cs.AI 최신 논문 10건
-curl "http://export.arxiv.org/api/query?\
-search_query=cat:cs.AI&sortBy=submittedDate&sortOrder=descending&max_results=10"
-```
-
-RSS도 제공됩니다: `https://rss.arxiv.org/rss/cs.AI`
+bioRxiv, PubMed, arXiv는 모두 **MCP Server**가 있기 때문에 API를 직접 호출할 필요 없이 자연어로 검색할 수 있습니다. MCP Server가 알아서 API를 호출하고 결과를 반환합니다.
 
 
 # Claude Code Scheduled Trigger
@@ -272,10 +231,8 @@ Reference
 ---
 - [https://docs.anthropic.com/en/docs/claude-code/cli](https://docs.anthropic.com/en/docs/claude-code/cli)
 - [https://docs.anthropic.com/en/docs/claude-code/sdk](https://docs.anthropic.com/en/docs/claude-code/sdk)
-- [https://api.biorxiv.org/](https://api.biorxiv.org/)
-- [https://www.ncbi.nlm.nih.gov/books/NBK25500/](https://www.ncbi.nlm.nih.gov/books/NBK25500/)
-- [https://info.arxiv.org/help/api/index.html](https://info.arxiv.org/help/api/index.html)
 - [https://modelcontextprotocol.io/](https://modelcontextprotocol.io/)
+- [https://github.com/prashalruchiranga/arxiv-mcp-server](https://github.com/prashalruchiranga/arxiv-mcp-server)
 - [https://openai.com/index/tasks/](https://openai.com/index/tasks/)
 - [https://github.com/google-gemini/gemini-cli](https://github.com/google-gemini/gemini-cli)
 - [https://github.com/openai/codex](https://github.com/openai/codex)

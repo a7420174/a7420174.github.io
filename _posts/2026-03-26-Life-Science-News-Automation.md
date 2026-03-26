@@ -70,31 +70,12 @@ Nature에서는 분야별 RSS를 제공합니다:
 | **ScienceDaily 유전자치료** | `https://www.sciencedaily.com/rss/health_medicine/gene_therapy.xml` | 유전자치료 뉴스 |
 
 
-## AI 뉴스
-
-| 매체 | RSS URL | 비고 |
-|------|---------|------|
-| **OpenAI Blog** | `https://openai.com/blog/rss.xml` | |
-| **Google AI Blog** | `https://blog.google/technology/ai/rss/` | |
-| **DeepMind Blog** | `https://deepmind.google/blog/rss.xml` | |
-| **Anthropic Blog** | N/A | RSS 미제공 |
-
-> Anthropic은 아직 RSS를 제공하지 않습니다. 웹 스크래핑이나 주기적 체크가 필요합니다.
-
 
 # RSS를 MCP로 읽기
 
 RSS 피드를 직접 파싱할 수도 있지만, **RSS MCP Server**를 사용하면 Claude가 자연어로 피드를 읽을 수 있습니다.
 
-커뮤니티에서 제공하는 RSS MCP Server들:
-
-| 프로젝트 | Stars | 설명 |
-|----------|:-----:|------|
-| [veithly/rss-mcp](https://github.com/veithly/rss-mcp) | 31 | RSS/Atom 피드 파싱, RSSHub 지원 |
-| [imprvhub/mcp-rss-aggregator](https://github.com/imprvhub/mcp-rss-aggregator) | 24 | Claude Desktop용 RSS 집계 |
-| [richardwooding/feed-mcp](https://github.com/richardwooding/feed-mcp) | 19 | RSS, Atom, JSON 피드 지원 |
-
-> 모두 커뮤니티 MCP입니다. 공식 RSS MCP Server는 아직 없습니다.
+아직 공식 RSS MCP Server는 없지만, Claude Code의 Scheduled Trigger에서 `curl`로 RSS를 직접 가져온 뒤 LLM이 파싱하는 방식으로 충분히 동작합니다.
 
 
 # 자동화 파이프라인
@@ -168,7 +149,6 @@ claude schedule create \
 | 소스 | 상태 | 대안 |
 |------|------|------|
 | **GenomeWeb** | 페이월, RSS 없음 | 이메일 뉴스레터 구독 |
-| **Anthropic Blog** | RSS 미제공 | 주기적 웹 체크 또는 GitHub releases 모니터링 |
 | **Reddit** | RSS 차단 (403) | Reddit API (OAuth2 필요) 또는 포기 |
 | **Twitter/X** | 무료 API 폐지 | 유료 API ($100/월) 또는 포기 |
 
@@ -186,8 +166,7 @@ claude schedule create \
 |-----------|------|-----------|
 | **논문** | bioRxiv, PubMed, arXiv | MCP Server |
 | **뉴스** | STAT, Fierce, Endpoints, FDA | RSS 피드 |
-| **AI 동향** | OpenAI, Google AI, DeepMind 블로그 | RSS 피드 |
-| **나머지** | GenomeWeb, Anthropic 등 | 뉴스레터 구독 |
+| **나머지** | GenomeWeb 등 | 뉴스레터 구독 |
 
 웹검색에 의존하지 않고, 공식 소스에서 구조화된 데이터를 가져오는 것이 핵심입니다. RSS는 20년 넘은 기술이지만, AI 자동화 시대에 오히려 가장 신뢰할 수 있는 데이터 파이프라인입니다.
 
@@ -199,4 +178,3 @@ Reference
 - [https://endpoints.news/feed/](https://endpoints.news/feed/)
 - [https://www.biopharmadive.com/feeds/news/](https://www.biopharmadive.com/feeds/news/)
 - [https://www.nature.com/subjects/drug-discovery.rss](https://www.nature.com/subjects/drug-discovery.rss)
-- [https://github.com/veithly/rss-mcp](https://github.com/veithly/rss-mcp)

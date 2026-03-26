@@ -199,7 +199,7 @@ adata_filtered.write_h5ad("pbmc_10k_filtered.h5ad")
 | **Muscle** | 10~20% | 에너지 소비가 많은 조직 |
 | **Tumor** | 8~15% | 종양 미세환경에 따라 상이 |
 
-> **참고**: \* 표시 항목은 Skill 문서(scverse QC guidelines)에 명시된 내용이며, 나머지(Liver, Muscle, Tumor)는 Skill에 포함되지 않은 일반적인 생물학 문헌 기반 참고치입니다. 실제 분석 시 해당 조직의 선행 연구를 참고하시기 바랍니다.
+> \* Blood, Brain은 Skill 문서에 나온 값이고, 나머지는 Skill에 없는 일반적인 참고치입니다. 조직마다 다를 수 있으니 선행 연구도 같이 확인하세요.
 
 
 # 마무리

@@ -1,8 +1,8 @@
 ---
 title: "AI Agent Skill: scRNA-seq QC 전처리 자동화"
 header:
-  teaser: https://scanpy.readthedocs.io/en/stable/_images/anndata.svg
-  og_image: https://scanpy.readthedocs.io/en/stable/_images/anndata.svg
+  teaser: https://scanpy.readthedocs.io/en/stable/_static/Scanpy_Logo_BrightFG.svg
+  og_image: https://scanpy.readthedocs.io/en/stable/_static/Scanpy_Logo_BrightFG.svg
 date: 2026-03-26T21:00:00+09:00
 categories:
   - AI

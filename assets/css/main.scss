@@ -200,12 +200,21 @@ a {
 
   // Search toggle button - keep transparent
   .search__toggle {
-    background: transparent;
+    background: transparent !important;
+    border: none !important;
     color: var(--color-warm-gray);
+    padding: 0.5em;
+    width: auto;
+    height: auto;
     transition: color 0.3s ease;
 
     &:hover {
       color: var(--color-teal);
+      background: transparent !important;
+    }
+
+    &::after {
+      display: none !important;
     }
   }
 

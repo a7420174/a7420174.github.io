@@ -21,7 +21,7 @@ LLM이 아무리 똑똑해져도, 외부 데이터에 접근하지 못하면 할
 **Model Context Protocol (MCP)**은 Anthropic에서 2024년 11월에 발표한 오픈 표준으로, AI 모델과 외부 데이터 소스 및 도구를 연결하는 프로토콜입니다. JSON-RPC 기반의 통신을 통해 **Client** (Claude, Cursor 등 AI 앱)와 **Server** (도구 제공자) 간의 양방향 연결을 가능하게 합니다. 2025년 12월에는 Linux Foundation 산하 **Agentic AI Foundation (AAIF)**에 기증되어 Anthropic, Block, OpenAI가 공동으로 관리하고 있습니다.
 
 <center>
-  <img src="https://mintlify.s3.us-west-1.amazonaws.com/mcp/images/architecture.png" alt="MCP Architecture" width="700"/>
+  <img src="https://modelcontextprotocol.io/images/mcp-simple-diagram.png" alt="MCP Architecture" width="700"/>
   <br>
   <b>
     < MCP Architecture >
@@ -47,7 +47,7 @@ MCP Server는 세 가지 요소를 제공합니다:
 [**ToolUniverse**][1]는 Harvard Medical School의 **Zitnik Lab**에서 개발한 AI scientist 생태계입니다. LLM이 600개 이상의 과학 도구(ML 모델, 데이터셋, API, 패키지)를 직접 호출할 수 있도록 **Scientific Model Context Protocol (SMCP)**을 구현했습니다.
 
 <center>
-  <img src="https://zitniklab.hms.harvard.edu/img/ToolUniverse.png" alt="ToolUniverse" width="700"/>
+  <img src="https://arxiv.org/html/2509.23426v2/x1.png" alt="ToolUniverse" width="700"/>
   <br>
   <b>
     < ToolUniverse Overview >

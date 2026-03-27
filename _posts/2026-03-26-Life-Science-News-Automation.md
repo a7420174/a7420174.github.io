@@ -12,6 +12,8 @@ tags:
   - Drug Discovery
   - RSS
   - Claude Code
+toc: true
+toc_sticky: true
 ---
 
 # 왜 웹검색이 아닌 RSS인가
@@ -65,7 +67,7 @@ Nature에서는 분야별 RSS를 제공합니다:
 
 | 소스 | RSS URL | 특징 |
 |------|---------|------|
-| **FDA 보도자료** | `https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds/press-releases/rss.xml` | 승인, 경고, 가이던스 |
+| **FDA 보도자료** | `https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds` | 승인, 경고, 가이던스 (RSS 피드 URL은 FDA 사이트에서 확인 필요) |
 | **ScienceDaily 제약** | `https://www.sciencedaily.com/rss/health_medicine/pharmaceuticals.xml` | 일반 과학 뉴스 |
 | **ScienceDaily 유전자치료** | `https://www.sciencedaily.com/rss/health_medicine/gene_therapy.xml` | 유전자치료 뉴스 |
 
@@ -77,25 +79,22 @@ RSS는 별도의 MCP Server 없이 `curl`만으로 가져올 수 있습니다. S
 
 논문 브리핑 포스트에서 다룬 Scheduled Trigger를 그대로 활용합니다.
 
-```bash
-claude schedule create \
-  --cron "0 8 * * 1-5" \
-  --prompt "다음 RSS 피드에서 지난 24시간 뉴스를 가져와줘:
-    - https://www.statnews.com/feed/
-    - https://www.fiercebiotech.com/rss/xml
-    - https://endpoints.news/feed/
-    - https://www.nature.com/subjects/drug-discovery.rss
-    - https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds/press-releases/rss.xml
+```
+# Claude Code에서 /schedule 명령으로 생성
+/schedule "매일 평일 오전 8시에 다음 RSS 피드에서 지난 24시간 뉴스를 가져와줘:
+  - https://www.statnews.com/feed/
+  - https://www.fiercebiotech.com/rss/xml
+  - https://endpoints.news/feed/
+  - https://www.nature.com/subjects/drug-discovery.rss
 
-    결과에서 다음 키워드 관련 뉴스를 필터링해줘:
-    - 신약 승인, FDA approval, clinical trial
-    - AI drug discovery, precision medicine
-    - gene therapy, cell therapy, antibody
-    - single cell, spatial transcriptomics
+  결과에서 다음 키워드 관련 뉴스를 필터링해줘:
+  - 신약 승인, FDA approval, clinical trial
+  - AI drug discovery, precision medicine
+  - gene therapy, cell therapy, antibody
+  - single cell, spatial transcriptomics
 
-    각 뉴스를 제목, 매체, 1줄 요약 형식으로 정리하고
-    news-log.md에 오늘 날짜 섹션으로 추가해줘" \
-  --dir /path/to/research-repo
+  각 뉴스를 제목, 매체, 1줄 요약 형식으로 정리하고
+  news-log.md에 오늘 날짜 섹션으로 추가해줘" --cron "0 8 * * 1-5"
 ```
 
 
@@ -104,7 +103,7 @@ claude schedule create \
 아래는 2026년 3월 26일에 STAT News, Endpoints News RSS 피드에서 실제 가져온 결과입니다.
 
 ```markdown
-## 2026-03-26 (수)
+## 2026-03-26 (목)
 > 소스: STAT News, Endpoints News RSS
 
 ### 신약개발 / 임상

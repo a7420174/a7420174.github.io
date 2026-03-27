@@ -4,6 +4,8 @@ header:
   teaser: /assets/images/alphagenome-teaser.svg
   og_image: /assets/images/orange.jpg
 date: 2026-03-27T09:00:00+09:00
+toc: true
+toc_sticky: true
 categories:
   - AI
 tags:
@@ -144,7 +146,7 @@ scores = model.score_variant(
 )
 ```
 
-> 스플라이싱 통합 점수가 **1.0 이상**이면 유의미한 스플라이싱 영향이 있다고 판단합니다.
+> quantile score가 **1에 가까울수록** 해당 modality에 대한 영향이 크다고 해석할 수 있습니다.
 
 실제 실행 결과 (BRCA2 chr13:32316462 T>G, 전체 modality):
 
@@ -265,7 +267,7 @@ REF(회색)와 ALT(빨간색) 트랙을 겹쳐서 변이가 유전자 발현에 
 
 # 공식 리소스
 
-- **Colab 노트북 8개** 제공 ([GitHub](https://github.com/google-deepmind/alphagenome/tree/main/colabs/)):
+- **주요 Colab 노트북** 제공 ([GitHub](https://github.com/google-deepmind/alphagenome/tree/main/colabs/)):
   - `quick_start.ipynb` — 첫 예측
   - `batch_variant_scoring.ipynb` — 배치 스코어링
   - `splicing_variant_scoring.ipynb` — 스플라이싱 분석 (BRCA1, BRCA2, CFTR)

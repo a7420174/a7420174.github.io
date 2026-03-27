@@ -230,6 +230,26 @@ plt.show()
 
 REF(회색)와 ALT(빨간색) 트랙을 겹쳐서 변이가 유전자 발현에 미치는 영향을 시각적으로 확인할 수 있습니다.
 
+아래는 실제 AlphaGenome API로 생성한 시각화 결과입니다.
+
+### BRAF V600E — RNA-seq REF vs ALT
+
+<center>
+  <img src="/assets/images/alphagenome_braf_v600e.png" alt="BRAF V600E RNA-seq" width="700"/>
+  <br>
+  <b>< BRAF V600E (chr7:140753336 T>A) — 변이 위치(노란색) 주변 발현 변화 ></b>
+</center>
+<br>
+
+### BRCA2 스플라이싱 변이 — RNA-seq REF vs ALT
+
+<center>
+  <img src="/assets/images/alphagenome_brca2_splicing.png" alt="BRCA2 splicing RNA-seq" width="700"/>
+  <br>
+  <b>< BRCA2 (chr13:32316462 T>G) — 변이 위치 주변 발현 트랙 비교 ></b>
+</center>
+<br>
+
 
 # 지원 범위와 제한사항
 

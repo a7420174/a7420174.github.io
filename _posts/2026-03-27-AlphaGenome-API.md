@@ -146,6 +146,24 @@ scores = model.score_variant(
 
 > 스플라이싱 통합 점수가 **1.0 이상**이면 유의미한 스플라이싱 영향이 있다고 판단합니다.
 
+실제 실행 결과 (BRCA2 chr13:32316462 T>G, 전체 modality):
+
+| Output | Max Raw Score | Quantile | Top Gene |
+|--------|:---:|:---:|:---:|
+| **CHIP_HISTONE** | 114024.0 | **0.9997** | - |
+| **RNA_SEQ** | 1.26 | **0.9996** | FRY |
+| **CHIP_TF** | 2992.0 | **0.998** | - |
+| **SPLICE_SITE_USAGE** | 0.02 | **0.995** | BRCA2 |
+| **CAGE** | 32.1 | 0.990 | - |
+| **ATAC** | 138.4 | 0.988 | - |
+| **PROCAP** | 72.4 | 0.988 | - |
+| **DNASE** | 155.9 | 0.985 | - |
+| **SPLICE_JUNCTIONS** | 0.07 | 0.980 | BRCA2 |
+| **CONTACT_MAPS** | 0.002 | 0.933 | - |
+| **SPLICE_SITES** | 0.01 | 0.687 | BRCA2 |
+
+> BRCA2 스플라이싱 변이는 히스톤 변형(quantile 0.9997), 유전자 발현(0.9996)에서 극단적 영향이 예측되며, SPLICE_SITE_USAGE(0.995)와 SPLICE_JUNCTIONS(0.980)에서도 BRCA2 유전자에 직접적인 스플라이싱 영향이 확인됩니다.
+
 
 ## 배치 변이 스코어링
 
@@ -351,20 +369,27 @@ if __name__ == "__main__":
 사용자: "BRAF V600E (chr7:140753336 T>A) 변이 효과를 분석해줘"
 
 Claude: AlphaGenome score_variant 도구를 호출하겠습니다.
-
-결과:
-- Expression (RNA_SEQ): BRAF 유전자, raw_score=-0.82, quantile=0.95
-  → 유전자 발현이 유의미하게 감소할 것으로 예측
-- Splicing (SPLICE_SITES): raw_score=0.12, quantile=0.42
-  → 스플라이싱에는 큰 영향 없음
-- Chromatin (DNASE): raw_score=0.34, quantile=0.78
-  → Chromatin 접근성이 다소 변화
-
-BRAF V600E는 주로 유전자 발현 수준에서 영향을 미치며,
-스플라이싱 관련 영향은 미미한 것으로 예측됩니다.
 ```
 
-> 위 결과는 형식 예시입니다. 실제 스코어는 AlphaGenome API 실행 결과에 따라 달라집니다.
+아래는 실제 AlphaGenome API 실행 결과입니다:
+
+**BRAF V600E (chr7:140753336 T>A)**
+
+| Output | Max Raw Score | Quantile | Top Gene | 해석 |
+|--------|:---:|:---:|:---:|------|
+| **CHIP_TF** | 869.0 | **0.999** | - | 전사인자 결합에 극단적 영향 |
+| **RNA_SEQ** | 3.95 | **0.998** | NDUFB2 | 유전자 발현 유의미한 변화 |
+| **CHIP_HISTONE** | 7759.0 | **0.986** | - | 히스톤 변형 대규모 변화 |
+| **SPLICE_JUNCTIONS** | 0.13 | **0.990** | BRAF | 스플라이스 정션 영향 |
+| **SPLICE_SITE_USAGE** | 0.01 | **0.980** | BRAF | 스플라이스 사이트 사용 변화 |
+| **CAGE** | 31.4 | 0.973 | - | 프로모터 활성 변화 |
+| **DNASE** | 16.7 | 0.965 | - | Chromatin 접근성 변화 |
+| **PROCAP** | 11.3 | 0.919 | - | 초기 전사 활성 변화 |
+| **ATAC** | 12.4 | 0.682 | - | Chromatin 접근성 (ATAC) |
+| **SPLICE_SITES** | 0.01 | 0.586 | BRAF | 스플라이스 사이트 분류 |
+| **CONTACT_MAPS** | 0.001 | 0.494 | - | 3D 구조 영향 미미 |
+
+> BRAF V600E는 전사인자 결합(quantile 0.999), 유전자 발현(0.998), 히스톤 변형(0.986) 등 **다수의 modality에서 극단적인 영향**이 예측됩니다. 잘 알려진 발암 변이답게 광범위한 regulatory 영향을 보여줍니다.
 
 
 ## Skill로 확장하기

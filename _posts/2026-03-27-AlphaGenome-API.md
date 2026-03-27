@@ -38,7 +38,7 @@ AlphaGenome은 하나의 모델에서 11가지 output을 예측합니다:
 | **CAGE** | 프로모터 활성 |
 | **CHIP_HISTONE** | 히스톤 변형 |
 | **CHIP_TF** | 전사인자 결합 |
-| **CONTACT_MAPS** | 3D Chromatin 접촉 지도 |
+| **CONTACT_MAPS** | 3D Chromatin contact map |
 | **PROCAP** | 초기 전사 활성 (PRO-cap) |
 
 

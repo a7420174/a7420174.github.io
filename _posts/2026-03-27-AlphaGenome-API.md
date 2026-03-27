@@ -16,7 +16,7 @@ tags:
 
 # AlphaGenome이란?
 
-**AlphaGenome**은 Google DeepMind가 개발한 DNA regulatory code 해석 모델입니다. 최대 **100만 bp** 길이의 DNA 서열을 입력받아 유전자 발현, 스플라이싱, 크로마틴 구조 등 **11가지 modality**를 단일 염기 해상도로 예측합니다.
+**AlphaGenome**은 Google DeepMind가 개발한 DNA regulatory code 해석 모델입니다. 최대 **100만 bp** 길이의 DNA 서열을 입력받아 유전자 발현, 스플라이싱, Chromatin 구조 등 **11가지 modality**를 단일 염기 해상도로 예측합니다.
 
 쉽게 말하면, 특정 변이가 유전자에 어떤 영향을 미치는지 AI로 예측해주는 도구입니다.
 
@@ -33,12 +33,12 @@ AlphaGenome은 하나의 모델에서 11가지 output을 예측합니다:
 | **SPLICE_SITES** | 스플라이스 사이트 분류 |
 | **SPLICE_SITE_USAGE** | 상대적 스플라이스 사이트 사용량 |
 | **SPLICE_JUNCTIONS** | 스플라이스 정션 예측 |
-| **DNASE** | 크로마틴 접근성 (DNase-seq) |
-| **ATAC** | 크로마틴 접근성 (ATAC-seq) |
+| **DNASE** | Chromatin 접근성 (DNase-seq) |
+| **ATAC** | Chromatin 접근성 (ATAC-seq) |
 | **CAGE** | 프로모터 활성 |
 | **CHIP_HISTONE** | 히스톤 변형 |
 | **CHIP_TF** | 전사인자 결합 |
-| **CONTACT_MAPS** | 3D 크로마틴 접촉 지도 |
+| **CONTACT_MAPS** | 3D Chromatin 접촉 지도 |
 | **PROCAP** | 초기 전사 활성 (PRO-cap) |
 
 
@@ -271,7 +271,7 @@ def score_variant(
     alt: str,
     organism: str = "human",
 ) -> dict:
-    """변이의 발현, 스플라이싱, 크로마틴 영향을 예측합니다."""
+    """변이의 발현, 스플라이싱, Chromatin 영향을 예측합니다."""
 
     variant = genome.Variant(
         chromosome=chromosome,
@@ -358,7 +358,7 @@ Claude: AlphaGenome score_variant 도구를 호출하겠습니다.
 - Splicing (SPLICE_SITES): raw_score=0.12, quantile=0.42
   → 스플라이싱에는 큰 영향 없음
 - Chromatin (DNASE): raw_score=0.34, quantile=0.78
-  → 크로마틴 접근성이 다소 변화
+  → Chromatin 접근성이 다소 변화
 
 BRAF V600E는 주로 유전자 발현 수준에서 영향을 미치며,
 스플라이싱 관련 영향은 미미한 것으로 예측됩니다.
@@ -387,7 +387,7 @@ MCP Tool이 "도구"라면, Skill은 "워크플로우"입니다. AlphaGenome Too
 
 # 마무리
 
-AlphaGenome은 변이 해석에 있어 기존 도구(CADD, SpliceAI 등)와 차별화되는 점이 있습니다. 하나의 모델에서 발현, 스플라이싱, 크로마틴, 3D 구조까지 **통합적으로 예측**한다는 점입니다.
+AlphaGenome은 변이 해석에 있어 기존 도구(CADD, SpliceAI 등)와 차별화되는 점이 있습니다. 하나의 모델에서 발현, 스플라이싱, Chromatin, 3D 구조까지 **통합적으로 예측**한다는 점입니다.
 
 여기에 MCP Tool로 감싸면 코드를 몰라도 자연어로 변이 분석을 요청할 수 있고, Skill까지 추가하면 분석 워크플로우 자체를 자동화할 수 있습니다.
 

@@ -158,25 +158,50 @@ with cellxgene_census.open_soma() as census:
 CD274(PD-L1)가 종양 macrophage에서 더 높게 나온다면, 면역 회피 기전과 일치하는 결과입니다.
 
 
-## 3) 삼중음성 유방암의 세포 유형 구성
+## 3) 폐선암 세포 유형 구성 (실제 실행 결과)
+
+발현 데이터 없이 **메타데이터만 조회**할 때는 `get_obs()`를 사용합니다. 훨씬 가볍고 빠릅니다.
 
 ```python
 import cellxgene_census
 
-with cellxgene_census.open_soma() as census:
+with cellxgene_census.open_soma(census_version="2025-11-08") as census:
     obs_df = cellxgene_census.get_obs(
         census,
         organism="Homo sapiens",
-        value_filter="disease == 'triple-negative breast carcinoma'",
-        column_names=["cell_type", "tissue", "sex", "dataset_id"],
+        value_filter="tissue_general == 'lung' and disease == 'lung adenocarcinoma'",
+        column_names=["cell_type", "disease", "tissue"],
     )
 
     print(f"총 세포 수: {len(obs_df)}")
-    print(f"\n세포 유형 분포:")
     print(obs_df['cell_type'].value_counts().head(15))
 ```
 
-발현 데이터 없이 **메타데이터만 조회**할 때는 `get_obs()`를 사용합니다. 훨씬 가볍고 빠릅니다.
+아래는 WSL Ubuntu 환경에서 실제 실행한 결과입니다:
+
+```
+=== Lung Adenocarcinoma Cell Composition ===
+Total cells: 1,190,858
+
+cell_type
+CD4-positive, alpha-beta T cell         166,387
+CD8-positive, alpha-beta T cell         147,701
+alveolar macrophage                     102,988
+macrophage                               84,820
+T cell                                   82,143
+natural killer cell                      63,985
+B cell                                   62,351
+malignant cell                           56,502
+classical monocyte                       43,371
+epithelial cell of lung                  33,765
+regulatory T cell                        31,818
+epithelial cell                          29,519
+CD1c-positive myeloid dendritic cell     28,159
+plasma cell                              26,996
+pulmonary alveolar type 2 cell           22,679
+```
+
+**119만 세포**에서 세포 유형별 구성을 확인할 수 있습니다. CD4+ T cell과 CD8+ T cell이 가장 많고, macrophage(alveolar + general)가 약 18만으로 종양 미세환경에서 큰 비중을 차지합니다.
 
 
 ## 4) Glioblastoma — 종양 미세환경 유전자 발현

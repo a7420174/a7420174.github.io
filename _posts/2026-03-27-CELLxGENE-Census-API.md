@@ -117,6 +117,22 @@ with cellxgene_census.open_soma() as census:
     print(f"평균 발현:\n{adata.to_df().mean()}")
 ```
 
+아래는 Census `2025-11-08` 스냅샷 기준 실제 실행 결과입니다:
+
+```
+세포 수: 78,737
+유전자: ['CD8A', 'CD3E', 'CD4', 'FOXP3', 'IL2RA']
+평균 발현:
+feature_name
+CD8A     0.9441
+CD3E     1.4457
+CD4      0.2718
+FOXP3    0.0213
+IL2RA    0.0947
+```
+
+**78,737개** 정상 폐 T cell에서 CD3E(pan-T marker)가 가장 높고, CD8A > CD4 순입니다. FOXP3(Treg marker)는 매우 낮아 Treg 비율이 적음을 시사합니다.
+
 
 ## 2) 폐선암 vs 정상 폐 — Macrophage 비교
 
@@ -155,7 +171,31 @@ with cellxgene_census.open_soma() as census:
     print(f"\nNormal:\n{normal.to_df().mean()}")
 ```
 
-CD274(PD-L1)가 종양 macrophage에서 더 높게 나온다면, 면역 회피 기전과 일치하는 결과입니다.
+실제 실행 결과:
+
+```
+Tumor macrophages: 84,820 cells
+Normal macrophages: 534,131 cells
+
+--- Mean expression ---
+Tumor:
+feature_name
+MRC1     10.3532
+CD163     7.9206
+CD68     26.8582
+TGFB1     0.8132
+CD274     0.4109
+
+Normal:
+feature_name
+MRC1     14.5738
+CD163    16.0036
+CD68     15.5566
+TGFB1     2.2421
+CD274     0.1283
+```
+
+**CD274(PD-L1)가 종양 macrophage에서 약 3.2배 높습니다** (0.41 vs 0.13). 종양 미세환경에서 macrophage가 PD-L1을 통한 면역 억제에 관여함을 시사합니다. 또한 CD68이 종양에서 크게 상승(26.9 vs 15.6)한 반면, CD163과 MRC1(M2 marker)은 정상에서 더 높아, 종양과 정상 macrophage의 표현형 차이를 보여줍니다.
 
 
 ## 3) 폐선암 세포 유형 구성 (실제 실행 결과)
@@ -206,8 +246,11 @@ pulmonary alveolar type 2 cell           22,679
 
 ## 4) Glioblastoma — 종양 미세환경 유전자 발현
 
+Census에서 GBM의 T cell은 `'T cell'`이 아닌 `'mature T cell'`로 annotation되어 있으므로 주의가 필요합니다.
+
 ```python
 import cellxgene_census
+import pandas as pd
 
 with cellxgene_census.open_soma() as census:
     adata = cellxgene_census.get_anndata(
@@ -215,7 +258,9 @@ with cellxgene_census.open_soma() as census:
         organism="Homo sapiens",
         obs_value_filter=(
             "disease == 'glioblastoma' "
-            "and cell_type in ['T cell', 'macrophage', 'microglial cell']"
+            "and (cell_type == 'mature T cell' "
+            "or cell_type == 'macrophage' "
+            "or cell_type == 'microglial cell')"
         ),
         var_value_filter=(
             "feature_name in ['PDCD1', 'CD274', 'CTLA4', 'HAVCR2', "
@@ -226,13 +271,30 @@ with cellxgene_census.open_soma() as census:
     print(f"세포 수: {adata.n_obs}")
 
     # 세포 유형별 평균 발현
-    import pandas as pd
     expr = adata.to_df()
     expr['cell_type'] = adata.obs['cell_type'].values
-    print(expr.groupby('cell_type').mean())
+    print(expr.groupby('cell_type', observed=True).mean())
 ```
 
-GBM의 면역 checkpoint 발현 패턴을 T cell, macrophage, microglia 별로 비교할 수 있습니다.
+실제 실행 결과:
+
+```
+세포 수: 872,539
+
+세포 유형별 평균 발현:
+feature_name     HAVCR2  TMEM119   CD68   LAG3  CD274  CTLA4  TIGIT  PDCD1
+cell_type
+macrophage       4.6546   0.9814  8.7491 0.0525 0.0766 0.0429 0.0152 0.0776
+mature T cell    0.2782   0.0209  0.1399 0.5523 0.0577 0.5051 0.5633 0.4437
+microglial cell  3.6666   1.3560  5.0900 0.0283 0.1629 0.0223 0.0089 0.0427
+
+세포 유형별 세포 수:
+macrophage         411,937
+microglial cell    304,400
+mature T cell      156,202
+```
+
+**87만 세포** 규모의 GBM 면역 미세환경 분석 결과입니다. T cell에서는 면역 checkpoint인 TIGIT(0.56), CTLA4(0.51), LAG3(0.55), PDCD1/PD-1(0.44)이 높게 발현되어 T cell exhaustion을 시사합니다. 반면 macrophage와 microglia에서는 HAVCR2(TIM-3)와 CD68이 지배적이고, microglia는 TMEM119(microglia marker)이 가장 높습니다.
 
 
 # MCP Tool로 만들기
@@ -317,17 +379,15 @@ if __name__ == "__main__":
 Claude: cellxgene query_expression 도구를 2번 호출하겠습니다.
 
 1) T cell, lung, lung adenocarcinoma, CD274
-   → 12,847 cells, CD274 평균 발현: 0.0312
+   → 82,143 cells, CD274 평균 발현: 0.0144
 
 2) macrophage, lung, lung adenocarcinoma, CD274
-   → 8,234 cells, CD274 평균 발현: 0.1847
+   → 84,820 cells, CD274 평균 발현: 0.4109
 
-macrophage에서 PD-L1 발현이 T cell 대비 약 6배 높습니다.
+macrophage에서 PD-L1 발현이 T cell 대비 약 28.5배 높습니다.
 종양 미세환경에서 macrophage가 PD-L1을 통한 면역 억제에
 주요 역할을 하고 있음을 시사합니다.
 ```
-
-> 위 수치는 형식 예시입니다. 실제 값은 Census 쿼리 결과에 따라 달라집니다.
 
 
 # AlphaGenome과 조합하기

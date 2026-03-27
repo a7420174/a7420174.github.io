@@ -237,11 +237,161 @@ REF(회색)와 ALT(빨간색) 트랙을 겹쳐서 변이가 유전자 발현에 
 - **커뮤니티 포럼**: [https://www.alphagenomecommunity.com](https://www.alphagenomecommunity.com)
 
 
+# 한 걸음 더: MCP Tool로 만들기
+
+여기까지는 Python 코드를 직접 실행하는 방식입니다. 하지만 이걸 **MCP Tool**로 만들면, LLM에게 자연어로 변이를 던지는 것만으로 AlphaGenome 결과를 받을 수 있습니다.
+
+```
+"BRCA2 chr13:32316462 T>G 변이의 스플라이싱 영향을 분석해줘"
+→ LLM이 AlphaGenome MCP Tool을 호출
+→ 스플라이싱 점수 + 영향받는 유전자 + 해석까지 자동 반환
+```
+
+
+## MCP Server 만들기
+
+MCP Server는 **JSON-RPC 함수를 정의**하면 됩니다. Python으로 간단한 AlphaGenome MCP Server를 만들어보겠습니다.
+
+```python
+# alphagenome_mcp.py
+from mcp.server.fastmcp import FastMCP
+from alphagenome.data import genome
+from alphagenome.models import dna_client, variant_scorers
+import os
+
+mcp = FastMCP("alphagenome")
+
+model = dna_client.create(os.environ["ALPHAGENOME_API_KEY"])
+
+@mcp.tool()
+def score_variant(
+    chromosome: str,
+    position: int,
+    ref: str,
+    alt: str,
+    organism: str = "human",
+) -> dict:
+    """변이의 발현, 스플라이싱, 크로마틴 영향을 예측합니다."""
+
+    variant = genome.Variant(
+        chromosome=chromosome,
+        position=position,
+        reference_bases=ref,
+        alternate_bases=alt,
+    )
+
+    org = (
+        dna_client.Organism.HOMO_SAPIENS
+        if organism == "human"
+        else dna_client.Organism.MUS_MUSCULUS
+    )
+
+    interval = variant.reference_interval.resize(
+        dna_client.SEQUENCE_LENGTH_1MB
+    )
+
+    all_scorers = variant_scorers.RECOMMENDED_VARIANT_SCORERS
+    scores = model.score_variant(
+        interval=interval,
+        variant=variant,
+        variant_scorers=list(all_scorers.values()),
+        organism=org,
+    )
+
+    df = variant_scorers.tidy_scores([scores])
+
+    # 주요 결과 요약
+    results = {}
+    for _, row in df.iterrows():
+        key = f"{row['output_type']}_{row['variant_scorer']}"
+        if key not in results or abs(row['raw_score']) > abs(results[key]['raw_score']):
+            results[key] = {
+                "gene": row.get("gene_name", "N/A"),
+                "output_type": row["output_type"],
+                "scorer": row["variant_scorer"],
+                "raw_score": round(float(row["raw_score"]), 4),
+                "quantile_score": round(float(row["quantile_score"]), 4),
+            }
+
+    return {
+        "variant": f"{chromosome}:{position} {ref}>{alt}",
+        "organism": organism,
+        "scores": list(results.values()),
+    }
+
+if __name__ == "__main__":
+    mcp.run()
+```
+
+
+## Claude Code에 등록
+
+`.mcp.json`에 서버를 추가합니다:
+
+```json
+{
+  "mcpServers": {
+    "alphagenome": {
+      "command": "python",
+      "args": ["alphagenome_mcp.py"],
+      "env": {
+        "ALPHAGENOME_API_KEY": "YOUR_API_KEY"
+      }
+    }
+  }
+}
+```
+
+
+## 실제 사용 예시
+
+등록 후 Claude에게 자연어로 질문하면 됩니다:
+
+```
+사용자: "BRAF V600E (chr7:140753336 T>A) 변이 효과를 분석해줘"
+
+Claude: AlphaGenome score_variant 도구를 호출하겠습니다.
+
+결과:
+- Expression (RNA_SEQ): BRAF 유전자, raw_score=-0.82, quantile=0.95
+  → 유전자 발현이 유의미하게 감소할 것으로 예측
+- Splicing (SPLICE_SITES): raw_score=0.12, quantile=0.42
+  → 스플라이싱에는 큰 영향 없음
+- Chromatin (DNASE): raw_score=0.34, quantile=0.78
+  → 크로마틴 접근성이 다소 변화
+
+BRAF V600E는 주로 유전자 발현 수준에서 영향을 미치며,
+스플라이싱 관련 영향은 미미한 것으로 예측됩니다.
+```
+
+> 위 결과는 형식 예시입니다. 실제 스코어는 AlphaGenome API 실행 결과에 따라 달라집니다.
+
+
+## Skill로 확장하기
+
+MCP Tool이 "도구"라면, Skill은 "워크플로우"입니다. AlphaGenome Tool 위에 Skill을 얹으면 더 체계적인 분석이 가능합니다:
+
+```markdown
+# AlphaGenome Variant Analysis Skill
+
+1. 사용자가 변이를 입력하면:
+2. score_variant 도구로 11가지 modality 스코어링 실행
+3. quantile_score > 0.9인 항목을 "유의미한 영향"으로 분류
+4. 영향받는 유전자와 modality를 요약
+5. ClinVar, gnomAD 등 기존 데이터베이스와 비교 권장 사항 제시
+6. 결과를 마크다운 테이블로 정리하여 반환
+```
+
+이렇게 하면 "BRCA1 변이 분석해줘"라는 한마디로 AlphaGenome 실행 → 결과 해석 → 임상 맥락 정리까지 자동으로 이루어집니다.
+
+
 # 마무리
 
 AlphaGenome은 변이 해석에 있어 기존 도구(CADD, SpliceAI 등)와 차별화되는 점이 있습니다. 하나의 모델에서 발현, 스플라이싱, 크로마틴, 3D 구조까지 **통합적으로 예측**한다는 점입니다.
 
-API key 하나면 Python에서 바로 사용할 수 있으니, 관심 있는 변이가 있다면 직접 돌려보세요.
+여기에 MCP Tool로 감싸면 코드를 몰라도 자연어로 변이 분석을 요청할 수 있고, Skill까지 추가하면 분석 워크플로우 자체를 자동화할 수 있습니다.
+
+API → Tool → Skill. 이 세 단계가 "AI한테 개떡같이 던져도 찰떡같이 나오는" 구조의 핵심입니다.
 
 
 Reference
@@ -250,3 +400,5 @@ Reference
 - [https://www.alphagenomedocs.com/](https://www.alphagenomedocs.com/)
 - [https://deepmind.google.com/science/alphagenome](https://deepmind.google.com/science/alphagenome)
 - [https://doi.org/10.1038/s41586-025-10014-0](https://doi.org/10.1038/s41586-025-10014-0)
+- [https://modelcontextprotocol.io/](https://modelcontextprotocol.io/)
+- [https://github.com/modelcontextprotocol/python-sdk](https://github.com/modelcontextprotocol/python-sdk)

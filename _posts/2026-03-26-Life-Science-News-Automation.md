@@ -1,7 +1,7 @@
 ---
 title: "신약개발 뉴스 자동화: RSS로 매일 브리핑 받기"
 header:
-  teaser: /assets/images/daily-briefing-teaser.svg
+  teaser: /assets/images/news-automation-teaser.svg
   og_image: /assets/images/orange.jpg
 date: 2026-03-26T23:00:00+09:00
 categories:

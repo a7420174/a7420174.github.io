@@ -409,9 +409,7 @@ H&E 조직 이미지 위에 세포 유형을 오버레이한 결과입니다. Lo
 
 ![Kidney Visium Spatial Gene Expression](/assets/images/cellxgene-spatial-expression.png)
 
-H&E 이미지 위에 유전자 발현을 오버레이한 결과입니다. **UMOD**(Loop of Henle marker)는 수질(medulla) 영역에 집중되고, **AQP1**(Proximal Tubule)은 피질(cortex) 전반에 분포하며, **CD68**(Macrophage)은 산발적으로 분포합니다. raw count에 `log1p` 변환을 적용했습니다.
-
-> `spatialdata`는 의존성이 복잡하므로(`geopandas`, `scikit-image`, `xarray` 등) `uv`로 독립 가상환경을 만들거나 Google Colab에서 실행을 권장합니다.
+H&E 이미지 위에 유전자 발현을 오버레이한 결과입니다. **UMOD**(Loop of Henle marker)는 수질(medulla) 영역에 집중되고, **AQP1**(Proximal Tubule)은 피질(cortex) 전반에 분포하며, **CD68**(Macrophage)은 산발적으로 분포합니다.
 
 
 # MCP Tool로 만들기

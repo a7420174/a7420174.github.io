@@ -43,20 +43,23 @@ Census의 핵심은 **조건부 슬라이싱**입니다:
 
 # 암종 데이터
 
-Census에는 다양한 암종 데이터가 포함되어 있습니다. 실제 확인된 목록:
+Census에는 다양한 암종 데이터가 포함되어 있습니다. CELLxGENE API로 실제 확인한 데이터 규모:
 
-| 분류 | 암종 |
-|------|------|
-| **폐** | lung adenocarcinoma, non-small cell, small cell, squamous cell, large cell |
-| **유방** | breast cancer, triple-negative, HER2+, luminal A/B, invasive ductal/lobular |
-| **간** | hepatocellular carcinoma, intrahepatic cholangiocarcinoma |
-| **신장** | clear cell renal, chromophobe renal cell carcinoma |
-| **대장** | colorectal cancer, sessile serrated adenoma |
-| **뇌** | glioblastoma, neuroblastoma |
-| **혈액** | AML, ALL, DLBCL, follicular lymphoma, plasma cell myeloma |
-| **피부** | melanoma, uveal melanoma, basal cell carcinoma |
-| **난소** | ovarian cancer, malignant serous tumor |
-| **기타** | gastric cancer, oral/oropharynx SCC, neuroendocrine carcinoma |
+| 암종 | 데이터셋 수 | 세포 수 |
+|------|:---:|---:|
+| **Lung adenocarcinoma** | 12 | 4,939,955 |
+| **Squamous cell lung carcinoma** | 4 | 4,494,669 |
+| **Glioblastoma** | 6 | 1,830,729 |
+| **B-cell non-Hodgkin lymphoma** | 6 | 1,590,877 |
+| **Malignant ovarian serous tumor** | 5 | 1,549,547 |
+| **Breast cancer** | 34 | 1,308,712 |
+| **Melanoma** | 2 | 747,904 |
+| **Renal cell carcinoma** | 20 | 745,504 |
+| **Neuroblastoma** | 3 | 592,116 |
+| **Basal cell carcinoma** | 11 | 557,907 |
+| **Triple-negative breast carcinoma** | 16 | 544,075 |
+
+폐선암만 해도 **490만 세포**, 유방암 전체는 **130만 세포** 규모입니다.
 
 
 # 설치 및 기본 사용법
@@ -67,7 +70,7 @@ Census에는 다양한 암종 데이터가 포함되어 있습니다. 실제 확
 pip install cellxgene-census
 ```
 
-> Linux/macOS 권장. Windows에서는 tiledbsoma 빌드 이슈가 있을 수 있어 WSL 또는 Docker 사용을 권장합니다.
+> **Windows에서는 tiledbsoma 빌드가 안 됩니다.** Linux/macOS를 사용하거나 WSL, Docker, Google Colab에서 실행하세요. Colab이 가장 간편합니다.
 
 
 ## 기본 구조

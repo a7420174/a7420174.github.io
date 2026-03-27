@@ -5,3 +5,4 @@ Gemfile.lock
 CLAUDE.md
 .env
 .claude/
+.venv/

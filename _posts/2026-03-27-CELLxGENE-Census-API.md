@@ -297,6 +297,123 @@ mature T cell      156,202
 **87만 세포** 규모의 GBM 면역 미세환경 분석 결과입니다. T cell에서는 면역 checkpoint인 TIGIT(0.56), CTLA4(0.51), LAG3(0.55), PDCD1/PD-1(0.44)이 높게 발현되어 T cell exhaustion을 시사합니다. 반면 macrophage와 microglia에서는 HAVCR2(TIM-3)와 CD68이 지배적이고, microglia는 TMEM119(microglia marker)이 가장 높습니다.
 
 
+## 5) Spatial Transcriptomics 데이터 조회
+
+Census `2025-01-30` 스냅샷부터 **Spatial Transcriptomics** 데이터가 베타로 포함되었습니다. scRNA-seq과 별도로 `census_spatial_sequencing` 컬렉션에 저장되어 있습니다.
+
+```python
+import cellxgene_census
+import tiledbsoma
+
+with cellxgene_census.open_soma(census_version="2025-01-30") as census:
+    exp = census["census_spatial_sequencing"]["homo_sapiens"]
+
+    cell_metadata = exp.obs.read(
+        column_names=["assay", "cell_type", "tissue_general", "disease"]
+    ).concat().to_pandas()
+
+    print(f"Total spatial cells: {len(cell_metadata)}")
+    print(f"\nAssays:\n{cell_metadata['assay'].value_counts()}")
+    print(f"\nTissues:\n{cell_metadata['tissue_general'].value_counts().head(10)}")
+    print(f"\nDiseases:\n{cell_metadata['disease'].value_counts().head(5)}")
+```
+
+실제 실행 결과:
+
+```
+Total spatial cells: 2,967,531
+
+Assays:
+Slide-seqV2                       1,634,667
+Visium Spatial Gene Expression    1,332,864
+
+Tissues:
+kidney             1,037,593
+heart                362,184
+lung                 275,274
+lymph node           246,056
+liver                158,148
+endocrine gland      154,752
+skin of body         124,800
+exocrine gland       119,808
+breast                90,697
+colon                 69,888
+
+Diseases:
+normal                              1,896,909
+renal cell carcinoma                  238,027
+metastatic melanoma                   220,029
+breast cancer                         184,693
+myocardial infarction                 119,808
+```
+
+**약 297만 spot/cell**의 spatial 데이터가 포함되어 있으며, Visium과 Slide-seqV2 두 가지 assay를 지원합니다. 346개 데이터셋에서 kidney, heart, lung 등 다양한 조직이 포함되어 있습니다.
+
+> **주의**: Spatial 데이터는 일반 `census_data`가 아닌 `census_spatial_sequencing` 컬렉션에 있습니다. 접근 방식이 다르므로 `get_anndata()`/`get_obs()` 대신 `exp.obs.read()`를 사용합니다.
+
+### SpatialData 포맷으로 변환
+
+spatial 좌표까지 포함한 분석을 하려면 `SpatialData` 포맷으로 변환합니다. `tiledbsoma>=1.15.3`과 `spatialdata` 패키지가 필요합니다.
+
+```python
+import cellxgene_census
+import tiledbsoma
+
+census = cellxgene_census.open_soma(census_version="2025-01-30")
+exp = census["census_spatial_sequencing"]["homo_sapiens"]
+
+with exp.axis_query(
+    measurement_name="RNA",
+    obs_query=tiledbsoma.AxisQuery(
+        value_filter="tissue_general == 'kidney' and assay == 'Visium Spatial Gene Expression'"
+    )
+) as query:
+    sdata = query.to_spatialdata(X_name="raw")
+
+print(sdata)
+census.close()
+```
+
+실제 실행 결과:
+
+```
+SpatialData object
+├── Images
+│     ├── '05f813a4-..._GRCh38-2020-A': DataArray[cyx] (3, 1834, 2000)
+│     ├── '0671c0d4-..._GRCh38-2020-A': DataArray[cyx] (3, 2000, 2000)
+│     └── ... (16개 H&E 이미지)
+├── Shapes
+│     ├── '05f813a4-..._loc': GeoDataFrame shape: (4,992, 3) (2D shapes)
+│     ├── '0671c0d4-..._loc': GeoDataFrame shape: (4,992, 3) (2D shapes)
+│     └── ... (16개 슬라이드 좌표)
+└── Tables
+      └── 'RNA': AnnData (79,872, 44,405)
+```
+
+**16개 Visium 슬라이드**에서 **79,872 spots x 44,405 genes**의 발현 데이터와 함께 H&E 이미지, 공간 좌표가 포함됩니다.
+
+Shapes에는 각 spot의 좌표가 `POINT(x, y)` 형태로 저장되어 있습니다:
+
+```
+   soma_joinid     radius           geometry
+0      2264134  36.750596  POINT (1422 1194)
+1      2264010  36.750596  POINT (1422 1390)
+2      2265857  36.750596  POINT (1422 1587)
+```
+
+변환된 SpatialData에는 **H&E 이미지**, **공간 좌표**, **발현 데이터**가 모두 포함되어 있어, 조직 구조 위에 직접 시각화할 수 있습니다. 아래는 하나의 kidney Visium 슬라이드(4,992 spots)의 H&E overlay 결과입니다.
+
+![Kidney Visium Cell Type Map](/assets/images/cellxgene-spatial-celltype.png)
+
+H&E 조직 이미지 위에 세포 유형을 오버레이한 결과입니다. Loop of Henle 상피세포(파란색)와 macrophage(주황색), CD4+ T cell(초록색)이 조직 구조에 따라 공간적으로 분포하는 패턴을 볼 수 있습니다. Unknown이 많은 것은 Visium spot 해상도의 한계로, deconvolution 없이는 세포 유형 할당이 어려운 spot이 많기 때문입니다.
+
+![Kidney Visium Spatial Gene Expression](/assets/images/cellxgene-spatial-expression.png)
+
+H&E 이미지 위에 유전자 발현을 오버레이한 결과입니다. **UMOD**(Loop of Henle marker)는 수질(medulla) 영역에 집중되고, **AQP1**(Proximal Tubule)은 피질(cortex) 전반에 분포하며, **CD68**(Macrophage)은 산발적으로 분포합니다. raw count에 `log1p` 변환을 적용했습니다.
+
+> `spatialdata`는 의존성이 복잡하므로(`geopandas`, `scikit-image`, `xarray` 등) `uv`로 독립 가상환경을 만들거나 Google Colab에서 실행을 권장합니다.
+
+
 # MCP Tool로 만들기
 
 이전 AlphaGenome 포스트와 마찬가지로, Census SDK를 MCP Tool로 감싸면 자연어로 쿼리할 수 있습니다.

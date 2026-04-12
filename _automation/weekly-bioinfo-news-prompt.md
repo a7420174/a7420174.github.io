@@ -35,11 +35,15 @@ ls _posts/*주간뉴스* 2>/dev/null | tail -4
 1. WebSearch로 "bioinformatics tool released this week site:github.com" 및 "bioinformatics github trending this week" 검색
 2. WebSearch로 "Bioconductor new package 2026" 및 "bioinformatics python package release 2026" 검색
 3. 이번 주 첫 릴리즈 또는 major 업데이트(v1.0, v2.0 등) 2~3개 선별 (상시 유명 툴 업데이트 제외)
-4. 각 툴을 아래 형식으로 반환:
+4. **필터링 기준 (반드시 준수):**
+   - **GitHub 기반 툴**: 저장소 star 수가 **100개 미만이면 제외**. WebFetch로 GitHub 페이지를 확인하거나 WebSearch로 star 수를 파악한다. 확인이 불가능한 경우 제외한다.
+   - **GitHub 외 툴** (Bioconductor, PyPI, 학술 소프트웨어 등): Google Scholar, PubMed 등에서 **citation이 50회 이상**이거나, 해당 분야에서 널리 알려진 툴(예: 공식 문서, 튜토리얼, 학회 발표 자료가 다수 존재)인 경우에만 포함한다.
+5. 각 툴을 아래 형식으로 반환:
    - 툴명 (영어)
    - 한국어 설명 (무엇을 하는 툴인지, 1~2문장)
    - GitHub 또는 공식 URL
    - 주요 기능/특징 1줄
+   - ⭐ GitHub star 수 또는 citation 수 (확인된 경우)
 
 ### Agent C — 컨퍼런스/이벤트 수집
 다음 작업을 수행하고 결과를 반환하라:
@@ -108,6 +112,7 @@ header:
 - **설명**: [한국어 설명]
 - **링크**: [GitHub](URL)
 - **주요 기능**: [한줄]
+- **인기도**: ⭐ [star 수] (GitHub) 또는 📄 [citation 수]회 인용
 
 (2~3개 반복)
 

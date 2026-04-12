@@ -9,9 +9,9 @@ Working directory: `c:\Users\백인표\Documents\GitHub\a7420174.github.io`
 - M월 N주차: 해당 월에서 몇 번째 토요일인지 (예: 4월 두 번째 토요일 → 4월 2주차)
 - 파일명: `_posts/YYYY-MM-DD-Bioinformatics-주간뉴스-YYYY년-M월-N주차.md`
 
-최근 4주 포스트 목록을 기록해 중복 제거에 활용한다:
+기존 주간뉴스 포스트 전체 목록을 기록해 중복 제거에 활용한다:
 ```bash
-ls _posts/*주간뉴스* 2>/dev/null | tail -4
+ls _posts/*주간뉴스* 2>/dev/null
 ```
 
 ## 1단계: 병렬 수집 — 4개 Agent 동시 실행
@@ -142,7 +142,7 @@ header:
 
 1. **링크 유효성**: 포스트 내 모든 URL에 WebFetch로 접근해서 404 또는 접근 불가인 링크를 찾는다. 404 링크는 해당 아이템을 제거하고 수정된 포스트를 반환한다.
 
-2. **중복 제거**: `_posts/` 디렉토리에서 최근 4주 `*주간뉴스*` 포스트를 읽어서 동일한 논문 제목, 툴명, 뉴스 제목이 있으면 제거한다.
+2. **중복 제거**: `_posts/` 디렉토리의 **모든 `*주간뉴스*` 포스트**를 읽어서 동일한 논문 제목, 툴명, 뉴스 제목이 하나라도 있으면 해당 아이템을 제거한다.
 
 3. **형식 검증**: YAML front matter에 title, date, categories, tags, toc, header.teaser 필드가 모두 있는지 확인한다. 누락 시 추가한다.
 

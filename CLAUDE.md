@@ -97,10 +97,12 @@ Common tags: `MCP`, `AI`, `Bioinformatics`, `Computational Biology`, `LLM`, `scR
 
 ## Scheduled Automation
 
-- **Weekly Bioinformatics Job Postings**: Remote trigger (`trig_01UgCMxFR6oxHoRBqEYbfWA6`) runs every Saturday 09:00 KST (cron: `0 0 * * 6` UTC). Collects Bioinformatics & Computational Biology job postings from BRIC BioJob, JobKorea, Saramin, jobs.ac.kr, rndjob.or.kr. Uses Ralph-Loop (Planner→Editor→Validator) role-switching pipeline. Posts to `_posts/YYYY-MM-DD-Bioinformatics-채용공고-YYYY년-M월-N주차.md`.
+- **Weekly Bioinformatics Job Postings**: Remote trigger (`trig_01UgCMxFR6oxHoRBqEYbfWA6`) runs every Saturday 09:00 KST (cron: `0 0 * * 6` UTC). Collects Bioinformatics & Computational Biology job postings from BRIC BioJob, JobKorea, Saramin, jobs.ac.kr, rndjob.or.kr. Uses Planner→Editor→Validator pipeline. Posts to `_posts/YYYY-MM-DD-Bioinformatics-채용공고-YYYY년-M월-N주차.md`.
   - **Excluded sources**: Wanted (unreliable deadlines), 하이브레인넷 (403 bot block)
   - **Scope**: Bioinformatics & Computational Biology only (no wet-lab/general biology)
   - **상시채용**: Allowed with `(상시)` label; concrete deadline postings listed first
+  - **Duplicate detection**: TITLE BLACKLIST + COMPANY_DEADLINE BLACKLIST (same company + same deadline = duplicate even if title differs across platforms)
+  - **Manual fallback**: When trigger output is missing/empty, run parallel subagents per source (BRIC/Saramin+JobKorea/Remember+rndjob+jobs.ac.kr), then Validator agent, then commit+push
   - **Manage**: https://claude.ai/code/scheduled/trig_01UgCMxFR6oxHoRBqEYbfWA6
 
 - **Weekly Bioinformatics News**: Remote trigger (`trig_014R4st9j2miDXeb54bUaJzx`) runs every Saturday 09:00 KST (cron: `0 0 * * 6` UTC). Collects weekly Bioinformatics news: papers (bioRxiv MCP/PubMed MCP), tools (GitHub/Bioconductor/PyPI), conferences (ISMB/RECOMB/ASHG deadlines), industry news (Nature News/GenomeWeb/NIH). Uses parallel subagents (4 collectors) → Editor → Validator pipeline. Posts to `_posts/YYYY-MM-DD-Bioinformatics-주간뉴스-YYYY년-M월-N주차.md`.

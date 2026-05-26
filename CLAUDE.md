@@ -101,8 +101,9 @@ Common tags: `MCP`, `AI`, `Bioinformatics`, `Computational Biology`, `LLM`, `scR
   - **Excluded sources**: Wanted (unreliable deadlines), 하이브레인넷 (403 bot block)
   - **Scope**: Bioinformatics & Computational Biology only (no wet-lab/general biology)
   - **상시채용**: Allowed with `(상시)` label; concrete deadline postings listed first
-  - **Duplicate detection**: TITLE BLACKLIST + COMPANY_DEADLINE BLACKLIST (same company + same deadline = duplicate even if title differs across platforms)
-  - **Manual fallback**: When trigger output is missing/empty, run parallel subagents per source (BRIC/Saramin+JobKorea/Remember+rndjob+jobs.ac.kr), then Validator agent, then commit+push
+  - **Duplicate detection**: TITLE BLACKLIST + COMPANY_DEADLINE BLACKLIST. Exclude a posting ONLY if its title exactly matches a blacklisted title, OR its (company, deadline) pair exactly matches. Same company with a different role AND different deadline is VALID — do NOT exclude on company name alone.
+  - **Manual fallback**: When trigger output is missing/empty, run parallel subagents per source (Saramin+JobKorea / Remember+rndjob+jobs.ac.kr), then Validator agent, then commit+push
+  - **BRIC access**: Agent subagents run in a restricted sandbox that blocks `ibric.org` (ECONNREFUSED). The MAIN session's Bash (`curl`) and WebFetch CAN reach BRIC (HTTP 200). So during manual fallback, fetch BRIC from the MAIN session directly — do NOT delegate BRIC to a subagent. BRIC list HTML is UTF-8 but the Bash stdout mangles Korean (terminal locale); parse with Python or use WebFetch for clean text. The scheduled trigger itself runs on Anthropic infra and historically reaches BRIC fine.
   - **Manage**: https://claude.ai/code/scheduled/trig_01UgCMxFR6oxHoRBqEYbfWA6
 
 - **Weekly Bioinformatics News**: Remote trigger (`trig_014R4st9j2miDXeb54bUaJzx`) runs every Saturday 09:00 KST (cron: `0 0 * * 6` UTC). Collects weekly Bioinformatics news: papers (bioRxiv MCP/PubMed MCP), tools (GitHub/Bioconductor/PyPI), conferences (ISMB/RECOMB/ASHG deadlines), industry news (Nature News/GenomeWeb/NIH). Uses parallel subagents (4 collectors) → Editor → Validator pipeline. Posts to `_posts/YYYY-MM-DD-Bioinformatics-주간뉴스-YYYY년-M월-N주차.md`.

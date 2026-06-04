@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" font-family="'Noto Sans KR','Noto Sans CJK KR',sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f3d34"/>
+      <stop offset="1" stop-color="#1a6b5a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- title -->
+  <text x="80" y="120" fill="#e9f5f1" font-size="34" font-weight="700" letter-spacing="1">AI Agent · scRNA-seq QC</text>
+  <text x="80" y="190" fill="#ffffff" font-size="56" font-weight="800">스킬, 쓰면 뭐가 다를까?</text>
+  <text x="80" y="245" fill="#9fd8c8" font-size="26">재현성 · 정확성을 5회 반복으로 직접 테스트</text>
+
+  <!-- left: no-skill scattered dots -->
+  <g transform="translate(140,440)">
+    <text x="60" y="120" fill="#f4b8b1" font-size="22" text-anchor="middle" font-weight="700">스킬 미사용</text>
+    <text x="60" y="148" fill="#d9776f" font-size="16" text-anchor="middle">매 실행마다 다른 결과</text>
+    <circle cx="0"   cy="0"  r="13" fill="#d9776f"/>
+    <circle cx="40"  cy="-34" r="13" fill="#d9776f"/>
+    <circle cx="80"  cy="22" r="13" fill="#d9776f"/>
+    <circle cx="120" cy="-12" r="13" fill="#d9776f"/>
+    <circle cx="-40" cy="14" r="13" fill="#d9776f"/>
+  </g>
+
+  <!-- divider -->
+  <line x1="600" y1="360" x2="600" y2="560" stroke="#2d8a74" stroke-width="2" stroke-dasharray="6 8"/>
+
+  <!-- right: skill flat line -->
+  <g transform="translate(720,440)">
+    <text x="180" y="120" fill="#bdeade" font-size="22" text-anchor="middle" font-weight="700">스킬 사용</text>
+    <text x="180" y="148" fill="#7fc9b4" font-size="16" text-anchor="middle">5회 모두 byte 단위로 동일</text>
+    <line x1="0" y1="0" x2="360" y2="0" stroke="#5fd0b3" stroke-width="6" stroke-linecap="round"/>
+    <circle cx="0"   cy="0" r="11" fill="#5fd0b3"/>
+    <circle cx="90"  cy="0" r="11" fill="#5fd0b3"/>
+    <circle cx="180" cy="0" r="11" fill="#5fd0b3"/>
+    <circle cx="270" cy="0" r="11" fill="#5fd0b3"/>
+    <circle cx="360" cy="0" r="11" fill="#5fd0b3"/>
+  </g>
+
+  <text x="1120" y="600" fill="#6fae9d" font-size="18" text-anchor="end">BI Playground · pbmc3k · Claude Code</text>
+</svg>

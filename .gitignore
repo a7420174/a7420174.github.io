@@ -6,3 +6,5 @@ CLAUDE.md
 .env
 .claude/
 .venv/
+.agents/
+skills-lock.json

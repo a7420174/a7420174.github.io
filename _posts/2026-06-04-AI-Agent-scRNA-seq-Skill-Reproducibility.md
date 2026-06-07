@@ -1,5 +1,5 @@
 ---
-title: "AI 에이전트로 scRNA-seq QC, '스킬' 쓰면 재현성이 달라질까? — 5회 반복 실험"
+title: "AI 에이전트로 scRNA-seq QC, '스킬' 쓰면 재현성이 달라질까?"
 date: 2026-06-04
 categories:
   - AI

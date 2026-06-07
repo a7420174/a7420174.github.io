@@ -1,0 +1,23 @@
+---
+layout: null
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Custom sitemap (overrides jekyll-sitemap auto-generation).
+  Includes: home, /about/, all posts.
+  Excludes: pagination (/page2/...), /categories/, /tags/, /posts/ year-archive, 404.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>{{ '/' | absolute_url }}</loc>
+  </url>
+  <url>
+    <loc>{{ '/about/' | absolute_url }}</loc>
+  </url>
+  {% for post in site.posts %}
+  <url>
+    <loc>{{ post.url | absolute_url }}</loc>
+    <lastmod>{{ post.last_modified_at | default: post.date | date_to_xmlschema }}</lastmod>
+  </url>
+  {% endfor %}
+</urlset>

@@ -81,6 +81,16 @@ Common tags: `MCP`, `AI`, `Bioinformatics`, `Computational Biology`, `LLM`, `scR
 - **Page views**: Busuanzi counter on each post
 - **Ad-blocker detection**: Polite banner in footer
 
+## SEO / Indexing
+
+- **Google**: No public API to push indexing for general pages (Indexing API is JobPosting/BroadcastEvent only + needs GCP). Rely on **sitemap auto-crawl** (`jekyll-sitemap` → `/sitemap.xml`, already healthy). Submit `sitemap.xml` (singular!) in GSC; manual per-URL requests are optional speedups, not required.
+- **Naver / Bing — IndexNow (automated)**: On every `master` push touching `_posts/**`, [.github/workflows/indexnow.yml](.github/workflows/indexnow.yml) diffs added/modified posts and runs [_automation/submit_indexnow.py](_automation/submit_indexnow.py) to POST their URLs to `api.indexnow.org` + `searchadvisor.naver.com/indexnow`.
+  - **Key file**: `/{key}.txt` at repo root (public — IndexNow keys are not secret; the file IS the ownership proof). Current key `9cf15a8b80a04134b863d5567f3d18da`; same value is hardcoded as `INDEXNOW_KEY` in the workflow.
+  - **URL rule** (empirically matches live sitemap): `https://a7420174.github.io/{categories-lowercased}/{slug}/` where `slug` = filename minus `YYYY-MM-DD-` prefix and `.md` (case/Korean preserved), each segment percent-encoded.
+  - **Covers all posts** (any category) — IndexNow has no content-type restriction.
+  - **Prereq**: site must be registered/verified in **Naver Search Advisor** for Naver to accept pings (Bing works from the key file alone).
+- **Google Indexing API (not adopted)**: setup guide kept at [_automation/google-indexing-setup.md](_automation/google-indexing-setup.md) in case GCP becomes available later.
+
 ## Writing Style
 
 - Korean language with English technical terms (e.g., Chromatin, Pathway, Biomedical, metric)

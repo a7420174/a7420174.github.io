@@ -1,0 +1,60 @@
+name: IndexNow (Naver / Bing)
+
+# 새 글이 master에 push되면 추가/수정된 _posts 글의 URL을 IndexNow로 제출한다.
+# Google은 IndexNow 미지원 → sitemap 자동 크롤에 맡김. 여기선 Naver·Bing만 통보.
+on:
+  push:
+    branches: [master]
+    paths:
+      - '_posts/**'
+
+# 동시 push 시 직전 실행을 취소해 중복 제출 방지
+concurrency:
+  group: indexnow-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (full history for diff)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine changed posts
+        id: changed
+        run: |
+          BEFORE="${{ github.event.before }}"
+          AFTER="${{ github.event.after }}"
+          EMPTY_TREE=$(git hash-object -t tree /dev/null)
+          # 새 브랜치/첫 푸시 등으로 before가 0이면 빈 트리와 비교
+          if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            BEFORE="$EMPTY_TREE"
+          fi
+          FILES=$(git diff --name-only --diff-filter=AM "$BEFORE" "$AFTER" -- '_posts/*.md' || true)
+          echo "Changed posts:"
+          echo "$FILES"
+          # 멀티라인 출력
+          {
+            echo "files<<EOF"
+            echo "$FILES"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Set up Python
+        if: steps.changed.outputs.files != ''
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install deps
+        if: steps.changed.outputs.files != ''
+        run: pip install pyyaml
+
+      - name: Submit to IndexNow
+        if: steps.changed.outputs.files != ''
+        env:
+          INDEXNOW_KEY: 9cf15a8b80a04134b863d5567f3d18da
+        run: |
+          echo "${{ steps.changed.outputs.files }}" | tr '\n' '\0' | xargs -0 -r python _automation/submit_indexnow.py

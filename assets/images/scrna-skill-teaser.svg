@@ -29,7 +29,7 @@
   <!-- right: skill flat line -->
   <g transform="translate(720,440)">
     <text x="180" y="120" fill="#bdeade" font-size="22" text-anchor="middle" font-weight="700">스킬 사용</text>
-    <text x="180" y="148" fill="#7fc9b4" font-size="16" text-anchor="middle">5회 모두 byte 단위로 동일</text>
+    <text x="180" y="148" fill="#7fc9b4" font-size="16" text-anchor="middle">2회 모두 byte 단위로 동일</text>
     <line x1="0" y1="0" x2="360" y2="0" stroke="#5fd0b3" stroke-width="6" stroke-linecap="round"/>
     <circle cx="0"   cy="0" r="11" fill="#5fd0b3"/>
     <circle cx="90"  cy="0" r="11" fill="#5fd0b3"/>

@@ -5,6 +5,10 @@
 `/home/a7420174/.openclaw/workspace/writer/automation/weekly-bioinfo-jobs-raw.txt` 에 보관했으니 참고용으로 읽어라.
 
 RULES:
+- **모든 curl 은 반드시 `--max-time 25` 를 붙인다.** 응답이 안 오면 그 사이트는 건너뛴다.
+  한 사이트에서 2회 이상 실패하면 그 소스는 포기하고 다음으로 넘어간다.
+  전체 수집은 30분 안에 끝낼 것(그 넘어가면 지금 가진 결과로 진행한다).
+- **모든 URL 요청은 한 번만** 재시도한다. 무한 재시도 금지.
 - URL 추측 금지. 모든 URL 은 실제로 fetch 한 페이지에서 가져온 것만.
 - 채용 공고 개별 URL 만 사용 (회사 채용포털 홈·검색결과 페이지 금지).
 - 범위: Bioinformatics / Computational Biology 만. wet-lab, 일반 생물학, 화학 제외.
@@ -34,7 +38,7 @@ Step 0: 준비
 Step 1: BRIC BioJob (최우선) — 쿠키 + Referer 필요
 - 목록 페이지 먼저 워밍업(쿠키 화이기):
 ```bash
-curl -sL -c /tmp/bc.txt -b /tmp/bc.txt \
+curl -sL --max-time 25 -c /tmp/bc.txt -b /tmp/bc.txt \
   -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36' \
   -H 'Accept: text/html' -H 'Accept-Language: ko-KR' \
   'https://www.ibric.org/bric/biojob/recruit.do' | grep -o 'articleNo=[0-9]*' | sort -u
@@ -44,7 +48,7 @@ curl -sL -c /tmp/bc.txt -b /tmp/bc.txt \
 - 상세는 쿠키 + Referer 를 반드시 넣는다. 없으면 HTTP 200 + 빈 바디가 온다.
 ```bash
 for aid in <articleNos>; do
-  curl -sL -c /tmp/bc.txt -b /tmp/bc.txt \
+  curl -sL --max-time 25 -c /tmp/bc.txt -b /tmp/bc.txt \
     -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36' \
     -H 'Accept: text/html' -H 'Accept-Language: ko-KR' \
     -H 'Referer: https://www.ibric.org/bric/biojob/recruit.do' \
@@ -66,14 +70,14 @@ Step 2: Saramin — 마감일은 meta 태그에서만
   `/zf_user/jobs/view?rec_idx=` 또는 `/jobs/relay/view?rec_idx=`
 - 마감일 추출:
 ```bash
-curl -sL -H 'User-Agent: Mozilla/5.0' 'URL' | grep -i 'description\|magam\|deadline\|og:' | head -10
+curl -sL --max-time 25 -H 'User-Agent: Mozilla/5.0' 'URL' | grep -i 'description\|magam\|deadline\|og:' | head -10
 ```
 - meta 의 magamil 뒤 날짜. 오늘보다 이전이면 **제외**. 본문의 D-xx 카운트다운은 쓰지 않는다.
 
 Step 3: JobKorea — RSC payload
 - web_search `site:jobkorea.co.kr bioinformatics`. 허용 URL 패턴: `/Recruit/GI_Read/`
 ```bash
-curl -sL -H 'User-Agent: Mozilla/5.0' 'URL' | grep -o 'endDate[^,]*'
+curl -sL --max-time 25 -H 'User-Agent: Mozilla/5.0' 'URL' | grep -o 'endDate[^,]*'
 ```
 - 응답에 JOB_NOT_FOUND 가 있으면 제외. endDate < 오늘이면 제외. 본문 확보는 web_fetch.
 

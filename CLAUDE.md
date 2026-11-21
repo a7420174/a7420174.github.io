@@ -107,16 +107,39 @@ Common tags: `MCP`, `AI`, `Bioinformatics`, `Computational Biology`, `LLM`, `scR
 
 ## Scheduled Automation
 
-- **Weekly Bioinformatics Job Postings**: Trigger `trig_01UgCMxFR6oxHoRBqEYbfWA6`, Saturday 09:00 KST (`0 0 * * 6` UTC). Planner→Editor→Validator pipeline → `_posts/YYYY-MM-DD-Bioinformatics-채용공고-YYYY년-M월-N주차.md`. [Manage](https://claude.ai/code/scheduled/trig_01UgCMxFR6oxHoRBqEYbfWA6)
-  - **Scope**: Bioinformatics & Computational Biology only (no wet-lab/general biology). **Sources**: BRIC, JobKorea, Saramin, Remember, rndjob, jobs.ac.kr. Excluded: Wanted, 하이브레인넷. 상시채용 allowed with `(상시)` label, concrete deadlines first.
-  - **Duplicates**: Exclude ONLY if title exactly matches, OR (company, deadline) pair exactly matches. Same company + different role + different deadline = VALID. Same role reposted with new deadline = duplicate.
-  - **Zero new postings**: do NOT create/commit an empty post.
-  - **BRIC quirks**: Responses are flaky (HTTP 200 full / 200 empty / ECONNREFUSED) per sandbox instance → retry until body >1KB or fall back to WebFetch. Subagents can't reach `ibric.org`; fetch BRIC from the MAIN session. Pagination works via `?article.offset=N&articleLimit=20` (scan 0/20/40/60). Detail pages need cookies + `Referer` header. List HTML is UTF-8 but Bash stdout mangles Korean — parse with Python or WebFetch.
-  - **Manual fallback**: parallel subagents (Saramin+JobKorea / Remember+rndjob+jobs.ac.kr) + BRIC in main session → Validator → commit.
-  - **Trigger update API**: event object needs `{"data": {"type": "user", "message": {...}}}`; always resend full `session_context` (model `claude-opus-4-6` + git `sources`) or it resets to defaults.
+**자동화는 Claude Code 원격 트리거가 아니라 OpenClaw(Gateway) 크론으로 동작한다.**
+실행 에이전트: `writer`. 스케줄: 매주 토요일 09:00 KST (`0 9 * * 6`, tz `Asia/Seoul`).
+결과 보고는 OpenClaw 대화로 돌아온다.
 
-- **Weekly Bioinformatics News**: Remote trigger (`trig_014R4st9j2miDXeb54bUaJzx`) runs every Saturday 09:00 KST (cron: `0 0 * * 6` UTC). Collects weekly Bioinformatics news: papers (bioRxiv MCP/PubMed MCP), tools (GitHub/Bioconductor/PyPI), conferences (ISMB/RECOMB/ASHG deadlines), industry news (Nature News/GenomeWeb/NIH). Uses parallel subagents (4 collectors) → Editor → Validator pipeline. Posts to `_posts/YYYY-MM-DD-Bioinformatics-주간뉴스-YYYY년-M월-N주차.md`.
-  - **Category**: `Bioinformatics` (new)
-  - **Teaser**: `/assets/images/weekly-news-teaser.svg`
-  - **Prompt source**: `_automation/weekly-bioinfo-news-prompt.md`
-  - **Manage**: https://claude.ai/code/scheduled/trig_014R4st9j2miDXeb54bUaJzx
+| 작업 | 자동화 이름 | 프롬프트 |
+|------|-------------|----------|
+| 주간 Bioinformatics 뉴스 | `blog-weekly-bioinfo-news` | [_automation/weekly-bioinfo-news-prompt-openclaw.md](_automation/weekly-bioinfo-news-prompt-openclaw.md) |
+| 주간 Bioinformatics 채용공고 | `blog-weekly-bioinfo-jobs` | [_automation/weekly-bioinfo-jobs-prompt.md](_automation/weekly-bioinfo-jobs-prompt.md) |
+
+공통 지침: [_automation/automation-common.md](_automation/automation-common.md)
+(저장소 경로, Windows git.exe 사용법, 중복 제거, 발행 체크리스트, humanize-korean 적용, 결과 보고 형식)
+
+### 과거 Claude Code 트리거 (참고, 더 이상 사용하지 않음)
+- `trig_01UgCMxFR6oxHoRBqEYbfWA6` — 주간 채용공고 (Claude Code 원격 트리거)
+- `trig_014R4st9j2miDXeb54bUaJzx` — 주간 뉴스 (Claude Code 원격 트리거)
+  원본 프롬프트 원문은 Claude Code 세션 로그에 남아 있다.
+
+### 운영 노트
+- **git 조작은 Windows git.exe 로 한다.** WSL 의 `git` 에는 GitHub 자격증명이 없어 push 가 실패한다.
+  `/mnt/c/Program Files/Git/cmd/git.exe` -C "C:/Users/Kim JaeHyun/a7420174.github.io"
+- WSL 에는 bioRxiv/PubMed MCP 가 없다. 뉴스 수집은 `web_search` / `web_fetch` 와
+  bioRxiv API · PubMed E-utilities curl 로 대체한다.
+- 채용공고 수집 소스는 BRIC(ibric.org), JobKorea, Saramin, Remember Career, jobs.ac.kr, rndjob.or.kr.
+  Wanted·하이브레인넷은 제외. 상시채용은 `(상시)` 라벨.
+- 중복 제거 기준: 제목이 같거나, (회사명, 마감일) 쌍이 같으면 중복. 같은 회사·다른 직무·다른 마감일은 유효.
+- 신규 공고 0건이면 빈 포스트를 만들지 않는다.
+
+## 문체 규칙 — humanize-korean 스킬
+
+블로그 본문(한국어)은 발행 직전에 **humanize-korean** 스킬로 윤문한다.
+스킬: <https://github.com/epoko77-ai/im-not-ai> (MIT). OpenClaw 워크스페이스 설치 위치:
+`/home/a7420174/.openclaw/workspace/writer/skills/humanize-korean/`
+
+- 의미 불변(사실·수치·날짜·고유명사·URL 100% 보존), 장르 유지(블로그), AI 티만 제거.
+- 변경률 30% 초과 경고, 50% 초과 롤백. 판정은 `scripts/verify_gates.py` 출력이 SSOT.
+- 실행 절차는 [_automation/automation-common.md](_automation/automation-common.md) 5절.

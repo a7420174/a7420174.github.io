@@ -35,7 +35,14 @@
 - 이번 주 첫 릴리즈 또는 major 업데이트 2~3개 선별 (상시 유명 툴 업데이트는 제외)
 - 필터(필수):
   - GitHub 저장소는 **star 100개 미만이면 제외**. star 수 확인이 안 되면 제외.
-    (확인 방법: `https://api.github.com/repos/{owner}/{repo}` → `stargazers_count`)
+    확인 방법(우선순위):
+    1) `curl -sL -H 'User-Agent: Mozilla/5.0' https://github.com/{owner}/{repo}` 응답 HTML 에서
+       `stargazers` 카운트 파싱 (예: `aria-label="12345 users starred"` 또는 `/stargazers` 링크 옆 숫자).
+    2) `https://api.github.com/repos/{owner}/{repo}` → `stargazers_count`
+       (**주의**: 이 호스트 IP 는 unauthenticated API rate limit 에 자주 걸린다.
+       403/rate limit 메시지가 오면 API 를 포기하고 1) 로 돌아간다.)
+    3) web_search "github {owner}/{repo} stars" 로 교차 확인.
+    세 방법 모두 실패하면 해당 툴은 제외한다.
   - GitHub 외 툴(Bioconductor, PyPI 등)은 citation 50회 이상이거나 해당 분야에 널리 알려진
     공식 문서·튜토리얼·학회 자료가 있을 때만 포함.
 - 각 항목: 툴명 / 한국어 설명 1~2문장 / 공식 URL / 주요 기능 1줄 / 인기도(⭐ star 수 또는 📄 citation 수)

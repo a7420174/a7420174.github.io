@@ -1,0 +1,51 @@
+name: JobPosting JSON-LD 갱신
+
+# _data/jobpostings.json 을 항상 최신으로 유지한다.
+#   - 채용공고 글이 push 되면 즉시 재생성
+#   - 매주 화요일(마감일이 지난 공고 제거) 자동 재생성
+# 변경이 있을 때만 커밋하고, GitHub Pages 재빌드가 JobPosting 마크업을 반영한다.
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '_posts/*채용공고*.md'
+      - '_automation/generate_jobpostings.py'
+  schedule:
+    - cron: '30 19 * * 1'   # 매주 월요일 04:30 KST
+  workflow_dispatch:
+
+concurrency:
+  group: jobposting-jsonld-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Regenerate _data/jobpostings.json
+        run: python3 _automation/generate_jobpostings.py --repo-root .
+
+      - name: Commit if changed
+        run: |
+          if git diff --quiet -- _data/jobpostings.json; then
+            echo "변경 없음 - 커밋 스킵"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add _data/jobpostings.json
+          git commit -m "chore: JobPosting JSON-LD 데이터 갱신"
+          git push origin HEAD:${{ github.ref_name }}

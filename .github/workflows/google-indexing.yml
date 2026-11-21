@@ -1,0 +1,92 @@
+name: Google Indexing API (채용공고 색인 요청)
+
+# 채용공고 글이 master에 push되면 Google Indexing API로 색인을 직접 요청한다.
+# Indexing API는 JobPosting 용도만 허용 → '채용공고' 카테고리 글만 제출한다.
+#
+# 사전 준비 (1회, 사람이 수행):
+#   1) GCP 프로젝트에 'Web Search Indexing API' 활성화
+#   2) 서비스 계정 JSON 발급
+#   3) Search Console 속성(a7420174.github.io)의 '사용자 및 권한' 에
+#      서비스 계정 이메일을 '소유자'로 추가
+#   4) GitHub Secret: GOOGLE_INDEXING_SA_JSON = JSON 전체
+# 상세: _automation/google-indexing-setup.md
+#
+# Secret 이 없으면 이 워크플로는 아무 것도 하지 않고 종료한다.
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '_posts/*채용공고*.md'
+      - '_automation/submit_indexing.py'
+  workflow_dispatch:
+
+concurrency:
+  group: google-indexing-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check secret
+        id: has_secret
+        env:
+          SA: ${{ secrets.GOOGLE_INDEXING_SA_JSON }}
+        run: |
+          if [ -n "$SA" ]; then echo "value=true" >> "$GITHUB_OUTPUT";
+          else echo "value=false" >> "$GITHUB_OUTPUT"; echo "::notice::GOOGLE_INDEXING_SA_JSON 미설정 - 건너뜁니다"; fi
+
+      - name: Checkout
+        if: steps.has_secret.outputs.value == 'true'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Set up Python
+        if: steps.has_secret.outputs.value == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install deps
+        if: steps.has_secret.outputs.value == 'true'
+        run: pip install google-auth requests
+
+      - name: Collect job posting URLs
+        if: steps.has_secret.outputs.value == 'true'
+        id: urls
+        run: |
+          python3 - <<'PY' > urls.txt
+          import glob, json, os, re, urllib.parse
+          # 마감일이 지나 유효한 공고가 남아 있는 글만 제출한다 (구글 정책 준수).
+          try:
+              active = set(json.load(open('_data/jobpostings.json', encoding='utf-8')).keys())
+          except Exception:
+              active = set()
+          for path in sorted(glob.glob('_posts/*채용공고*.md')):
+              name = os.path.basename(path)[:-3]
+              slug = re.sub(r'^\d{4}-\d{2}-\d{2}-', '', name)
+              if slug not in active:
+                  continue
+              # permalink: /:categories/:title/
+              q = urllib.parse.quote(slug, safe='-')
+              print(f'https://a7420174.github.io/{urllib.parse.quote("채용공고", safe="-")}/{q}/')
+          PY
+          cat urls.txt
+          echo "count=$(wc -l < urls.txt)" >> "$GITHUB_OUTPUT"
+
+      - name: Submit to Indexing API
+        if: steps.has_secret.outputs.value == 'true'
+        env:
+          GOOGLE_INDEXING_SA_JSON: ${{ secrets.GOOGLE_INDEXING_SA_JSON }}
+        run: |
+          cat urls.txt | python3 _automation/submit_indexing.py | tee indexing.log
+
+      - name: Upload log
+        if: always() && steps.has_secret.outputs.value == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: google-indexing-log
+          path: indexing.log

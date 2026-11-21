@@ -50,6 +50,7 @@ layout: default
           </aside>
         {% endif %}
         {{ content }}
+        {% if page.categories contains '채용공고' %}{% include jobposting-jsonld.html %}{% endif %}
         {% if page.link %}<div><a href="{{ page.link }}" class="btn btn--primary">{{ site.data.ui-text[locale].ext_link_label | default: "Direct Link" }}</a></div>{% endif %}
       </section>
 

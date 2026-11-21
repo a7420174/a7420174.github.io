@@ -1,0 +1,104 @@
+name: Search Console Sync (sitemap 제출 + 색인 상태)
+
+# push 할 때마다 sitemap 을 GSC 에 재제출하고, 새 글의 색인 상태를 자동 조회한다.
+# '글마다 손으로 등록/색인 요청' 하는 일을 대신해 준다.
+#
+# 사전 준비 (1회, 사람이 수행):
+#   1) GCP 프로젝트에 'Search Console API' 활성화
+#   2) 서비스 계정을 GSC 속성 'a7420174.github.io' 의 '소유자'로 추가
+#   3) GitHub Secret: GOOGLE_SA_JSON = 서비스 계정 JSON 전체
+# Secret 이 없으면 아무 것도 하지 않고 종료한다.
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - '_posts/**'
+      - 'sitemap.xml'
+      - '_automation/gsc_sync.py'
+  schedule:
+    # 매주 수요일 04:20 KST (색인 상태 주간 확인)
+    - cron: '20 19 * * 2'
+  workflow_dispatch:
+
+concurrency:
+  group: gsc-sync-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check secret
+        id: has_secret
+        env:
+          SA: ${{ secrets.GOOGLE_SA_JSON }}
+        run: |
+          if [ -n "$SA" ]; then echo "value=true" >> "$GITHUB_OUTPUT";
+          else echo "value=false" >> "$GITHUB_OUTPUT"; echo "::notice::GOOGLE_SA_JSON 미설정 - 건너뜁니다"; fi
+
+      - name: Checkout
+        if: steps.has_secret.outputs.value == 'true'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Set up Python
+        if: steps.has_secret.outputs.value == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install deps
+        if: steps.has_secret.outputs.value == 'true'
+        run: pip install google-auth requests
+
+      - name: Collect changed post URLs
+        if: steps.has_secret.outputs.value == 'true'
+        run: |
+          BEFORE="${{ github.event.before }}"
+          AFTER="${{ github.event.after }}"
+          EMPTY_TREE=$(git hash-object -t tree /dev/null)
+          if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            BEFORE="$EMPTY_TREE"
+          fi
+          git diff --name-only --diff-filter=AM "$BEFORE" "$AFTER" -- '_posts/*.md' > changed.txt || true
+          python3 - <<'PY' > urls.txt
+          import os, re, urllib.parse
+          for line in open('changed.txt', encoding='utf-8'):
+              p = line.strip()
+              if not p or not p.endswith('.md'):
+                  continue
+              name = os.path.basename(p)[:-3]
+              slug = re.sub(r'^\d{4}-\d{2}-\d{2}-', '', name)
+              txt = open(p, encoding='utf-8').read()
+              m = re.search(r'^categories:\s*(.*)$', txt, re.M)
+              cat = (m.group(1).strip().strip("'\"") if m else '')
+              cat = urllib.parse.quote(cat.lower(), safe='-')
+              tail = urllib.parse.quote(slug, safe='-')
+              print(f"https://a7420174.github.io/{cat}/{tail}/")
+          PY
+          cat urls.txt
+
+      - name: Submit sitemap and inspect index status
+        if: steps.has_secret.outputs.value == 'true'
+        env:
+          GOOGLE_SA_JSON: ${{ secrets.GOOGLE_SA_JSON }}
+        run: |
+          python3 _automation/gsc_sync.py \
+            --site https://a7420174.github.io \
+            --urls-file urls.txt | tee gsc-sync.log
+
+      - name: Summary
+        if: always() && steps.has_secret.outputs.value == 'true'
+        run: cat gsc-sync.log >> "$GITHUB_STEP_SUMMARY" 2>/dev/null || true
+
+      - name: Upload log
+        if: always() && steps.has_secret.outputs.value == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: gsc-sync-log
+          path: |
+            gsc-sync.log
+            gsc-index-status.json

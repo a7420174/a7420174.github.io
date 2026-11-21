@@ -20,7 +20,7 @@ tags:
 
 **AlphaGenome**은 Google DeepMind가 개발한 DNA regulatory code 해석 모델입니다. 최대 **100만 bp** 길이의 DNA 서열을 입력받아 유전자 발현, 스플라이싱, Chromatin 구조 등 **11가지 modality**를 단일 염기 해상도로 예측합니다.
 
-쉽게 말하면, 특정 변이가 유전자에 어떤 영향을 미치는지 AI로 예측해주는 도구입니다.
+쉽게 말하면 특정 변이가 유전자에 어떤 영향을 미치는지 AI로 예측해주는 도구입니다.
 
 > Avsec et al. "Advancing regulatory variant effect prediction with AlphaGenome" *Nature* 649, 1206–1218 (2026). [DOI: 10.1038/s41586-025-10014-0](https://doi.org/10.1038/s41586-025-10014-0)
 
@@ -164,7 +164,7 @@ scores = model.score_variant(
 | **CONTACT_MAPS** | 0.002 | 0.933 | - |
 | **SPLICE_SITES** | 0.01 | 0.687 | BRCA2 |
 
-> BRCA2 스플라이싱 변이는 히스톤 변형(quantile 0.9997), 유전자 발현(0.9996)에서 극단적 영향이 예측되며, SPLICE_SITE_USAGE(0.995)와 SPLICE_JUNCTIONS(0.980)에서도 BRCA2 유전자에 직접적인 스플라이싱 영향이 확인됩니다.
+> BRCA2 스플라이싱 변이는 히스톤 변형(quantile 0.9997), 유전자 발현(0.9996)에서 극단적 영향이 예측됩니다. SPLICE_SITE_USAGE(0.995)와 SPLICE_JUNCTIONS(0.980)에서도 BRCA2 유전자에 직접적인 스플라이싱 영향이 확인됩니다.
 
 
 ## 배치 변이 스코어링
@@ -279,7 +279,7 @@ REF(회색)와 ALT(빨간색) 트랙을 겹쳐서 변이가 유전자 발현에 
 
 # 한 걸음 더: MCP Tool로 만들기
 
-여기까지는 Python 코드를 직접 실행하는 방식입니다. 하지만 이걸 **MCP Tool**로 만들면, LLM에게 자연어로 변이를 던지는 것만으로 AlphaGenome 결과를 받을 수 있습니다.
+여기까지는 Python 코드를 직접 실행하는 방식입니다. 하지만 이걸 **MCP Tool**로 만들면 LLM에게 자연어로 변이를 던지는 것만으로 AlphaGenome 결과를 받을 수 있습니다.
 
 ```
 "BRCA2 chr13:32316462 T>G 변이의 스플라이싱 영향을 분석해줘"
@@ -416,7 +416,7 @@ Claude: AlphaGenome score_variant 도구를 호출하겠습니다.
 
 ## Skill로 확장하기
 
-MCP Tool이 "도구"라면, Skill은 "워크플로우"입니다. AlphaGenome Tool 위에 Skill을 얹으면 더 체계적인 분석이 가능합니다:
+MCP Tool이 "도구"라면 Skill은 "워크플로우"입니다. AlphaGenome Tool 위에 Skill을 얹으면 더 체계적인 분석이 가능합니다:
 
 ```markdown
 # AlphaGenome Variant Analysis Skill
@@ -434,9 +434,9 @@ MCP Tool이 "도구"라면, Skill은 "워크플로우"입니다. AlphaGenome Too
 
 # 마무리
 
-AlphaGenome은 변이 해석에 있어 기존 도구(CADD, SpliceAI 등)와 차별화되는 점이 있습니다. 하나의 모델에서 발현, 스플라이싱, Chromatin, 3D 구조까지 **통합적으로 예측**한다는 점입니다.
+AlphaGenome은 변이 해석에 있어 기존 도구(CADD, SpliceAI 등)와는 차별화됩니다. 하나의 모델에서 발현, 스플라이싱, Chromatin, 3D 구조까지 **통합적으로 예측**하기 때문입니다.
 
-여기에 MCP Tool로 감싸면 코드를 몰라도 자연어로 변이 분석을 요청할 수 있고, Skill까지 추가하면 분석 워크플로우 자체를 자동화할 수 있습니다.
+여기에 MCP Tool로 감싸면 코드를 몰라도 자연어로 변이 분석을 요청할 수 있고 Skill까지 추가하면 분석 워크플로우 자체를 자동화할 수 있습니다.
 
 API → Tool → Skill. 이 세 단계가 "AI한테 개떡같이 던져도 찰떡같이 나오는" 구조의 핵심입니다.
 

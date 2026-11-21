@@ -20,7 +20,7 @@ toc_sticky: true
 
 생물정보학 분야에서 하루에 bioRxiv에만 수십 편의 프리프린트가 올라옵니다. 여기에 PubMed, arXiv cs.AI까지 합치면 관련 논문을 추적하는 것 자체가 하나의 업무가 됩니다.
 
-결국 핵심은 두 가지입니다:
+두 가지를 정하면 됩니다:
 1. **어디서** 긁어올 것인가 (신뢰성 있는 소스)
 2. **어떻게** 자동으로 받아볼 것인가 (자동화)
 
@@ -40,7 +40,7 @@ bioRxiv, PubMed, arXiv는 모두 **MCP Server**가 있기 때문에 API를 직�
 
 # Claude Code Scheduled Trigger
 
-여기서 핵심입니다. **Scheduled Trigger**는 Claude Code에서 제공하는 스케줄 기반 자동 실행 기능입니다. cron 표현식으로 실행 주기를 정하고, 프롬프트를 지정하면 Claude Code가 해당 시간에 자동으로 작업을 수행합니다.
+**Scheduled Trigger**는 Claude Code에서 제공하는 스케줄 기반 자동 실행 기능입니다. cron 표현식으로 실행 주기를 정하고 프롬프트를 지정하면 Claude Code가 해당 시간에 자동으로 작업을 수행합니다.
 
 
 ## Trigger 생성
@@ -193,7 +193,7 @@ OpenAI의 [**Codex CLI**](https://github.com/openai/codex)도 터미널 기반 �
 | **Copilot Studio + Power Automate** | O | 엔터프라이즈, 개발자 CLI 아님 |
 | **n8n / Make** | O | 워크플로우 자동화, LLM API 호출 가능 |
 
-> n8n이나 Make 같은 워크플로우 자동화 플랫폼은 cron 스케줄링 + LLM API 호출을 조합할 수 있어서, 코드 없이 논문 브리핑 파이프라인을 만드는 데 적합합니다.
+> n8n이나 Make 같은 워크플로우 자동화 플랫폼은 cron 스케줄링 + LLM API 호출을 조합할 수 있어서 코드 없이 논문 브리핑 파이프라인을 만드는 데 적합합니다.
 
 
 ## 결론: 어떤 걸 써야 할까
@@ -218,14 +218,14 @@ OpenAI의 [**Codex CLI**](https://github.com/openai/codex)도 터미널 기반 �
 
 - Scheduled Trigger는 Claude Code가 **실행 중**이어야 동작합니다. 항상 켜둘 수 없다면 **GitHub Actions** 연동을 고려하세요.
 - MCP Server 가용성은 외부 서비스에 의존하므로, 중요한 워크플로우에서는 API 직접 호출(curl)을 백업으로 프롬프트에 포함하는 것이 안정적입니다.
-- PubMed API는 NCBI API key 없이 초당 3건 제한이 있습니다. 매일 실행 수준에서는 문제없지만, 대량 검색 시 key 등록을 권장합니다.
+- PubMed API는 NCBI API key 없이 초당 3건 제한이 있습니다. 매일 실행 수준에서는 문제없지만 대량 검색 시 key 등록을 권장합니다.
 
 
 # 마무리
 
-매일 아침 커피 한 잔 하는 동안, AI가 알아서 논문을 긁어오고 요약해주는 시대입니다. 소스를 정하고, 키워드를 세팅하고, Trigger 하나 걸어두면 끝입니다.
+매일 아침 커피 한 잔 하는 동안, AI가 알아서 논문을 긁어오고 요약해주는 시대입니다. 소스를 정하고 키워드를 세팅하고 Trigger 하나 걸어두면 끝입니다.
 
-개떡같이 프롬프트를 써도 MCP Server가 알아서 API를 호출하고, Claude가 알아서 요약해줍니다. 생물정보학자의 아침 루틴에 논문 브리핑을 자동으로 추가해보세요.
+개떡같이 프롬프트를 써도 MCP Server가 알아서 API를 호출하고 Claude가 알아서 요약해줍니다. 생물정보학자의 아침 루틴에 논문 브리핑을 자동으로 추가해보세요.
 
 
 Reference

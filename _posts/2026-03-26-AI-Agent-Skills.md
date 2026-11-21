@@ -45,7 +45,7 @@ Anthropic은 **Life Sciences 마켓플레이스**를 통해 생명과학 분야�
 
 Single-cell RNA-seq(scRNA-seq) 분석의 첫 번째 단계는 항상 **Quality Control(QC)**입니다. 죽은 세포, ambient RNA, doublet 등을 걸러내지 않으면 downstream 분석 결과를 신뢰할 수 없기 때문입니다.
 
-이 Skill은 [**scverse**][1] 생태계의 best practice를 따르며, **Scanpy**를 기반으로 QC 워크플로우를 자동화합니다.
+이 Skill은 [**scverse**][1] 생태계의 best practice를 따르며 **Scanpy**를 기반으로 QC 워크플로우를 자동화합니다.
 
 
 ## QC metric
@@ -60,7 +60,7 @@ QC에서 확인하는 주요 지표는 다음과 같습니다:
 | **Ribosomal%** | 리보솜 유전자 비율 | 조직별 상이 |
 | **Hemoglobin%** | 헤모글로빈 유전자 비율 | ~0% (혈액 오염 지표) |
 
-MT%가 높은 세포는 세포막이 손상되어 cytoplasmic mRNA가 유출되고 미토콘드리아 mRNA만 남은 상태일 가능성이 높습니다. 즉, 죽거나 죽어가는 세포입니다. (Skill 문서에서는 "high MT% = dying cells"로 요약하고 있으며, 위 설명은 일반적인 scRNA-seq 문헌 기반입니다.)
+MT%가 높은 세포는 세포막이 손상되어 cytoplasmic mRNA가 유출되고 미토콘드리아 mRNA만 남은 상태일 가능성이 높습니다. 즉, 죽거나 죽어가는 세포입니다. (Skill 문서에서는 "high MT% = dying cells"로 요약하고 있으며 위 설명은 일반적인 scRNA-seq 문헌 기반입니다.)
 
 
 ## MAD 기반 필터링
@@ -72,7 +72,7 @@ MAD = median(|X - median(X)|)
 Outlier: X > median(X) + n_mads × MAD
 ```
 
-MAD 방식의 장점은 프로토콜, 조직, 종(species)에 관계없이 **데이터 자체의 분포에 맞춰** outlier를 감지한다는 점입니다.
+MAD 방식은 프로토콜, 조직, 종(species)에 관계없이 **데이터 자체의 분포에 맞춰** outlier를 감지합니다.
 
 기본 threshold (scverse best practice):
 - **Total counts**: 5 MADs (log-transformed) — 관대하게
@@ -200,7 +200,7 @@ adata_filtered.write_h5ad("pbmc_10k_filtered.h5ad")
 | **Muscle** | 10~20% | 에너지 소비가 많은 조직 |
 | **Tumor** | 8~15% | 종양 미세환경에 따라 상이 |
 
-> \* Blood, Brain은 Skill 문서에 나온 값이고, Liver, Muscle, Tumor는 일반적인 문헌에서 제시되는 참고치이며, 실제 분석 시 데이터에 맞게 조정이 필요합니다. 조직마다 다를 수 있으니 선행 연구도 같이 확인하세요.
+> \* Blood, Brain은 Skill 문서에 나온 값이고 Liver, Muscle, Tumor는 일반적인 문헌에서 제시되는 참고치이며 실제 분석 시 데이터에 맞게 조정이 필요합니다. 조직마다 다를 수 있으니 선행 연구도 같이 확인하세요.
 
 
 # 마무리

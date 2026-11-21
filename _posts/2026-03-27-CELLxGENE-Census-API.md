@@ -18,16 +18,16 @@ tags:
 
 # CELLxGENE Census란?
 
-**CELLxGENE Census**는 Chan Zuckerberg Initiative(CZI)에서 제공하는 단일세포 데이터 플랫폼입니다. 전 세계 연구자들이 공개한 **5천만 개 이상의 세포** 데이터를 하나의 Python SDK로 쿼리할 수 있습니다.
+**CELLxGENE Census**는 Chan Zuckerberg Initiative(CZI)에서 제공하는 단일세포 데이터 플랫폼입니다. 전 세계 연구자들이 공개한 **5천만 개 이상의 세포** 데이터를 하나의 Python SDK로 조회할 수 있습니다.
 
-일반적으로 scRNA-seq 데이터를 얻으려면 GEO에서 데이터셋을 찾고, 다운로드하고, 포맷을 맞추고, 통합해야 합니다. Census는 이 과정을 **한 줄의 쿼리**로 대체합니다.
+일반적으로 scRNA-seq 데이터를 얻으려면 GEO에서 데이터셋을 찾고 다운로드한 뒤 포맷을 맞추고 통합해야 합니다. Census는 이 과정을 **한 줄의 쿼리**로 대체합니다.
 
 > 공식 문서: [https://chanzuckerberg.github.io/cellxgene-census/](https://chanzuckerberg.github.io/cellxgene-census/)
 
 
 # 뭘 조회할 수 있나
 
-Census의 핵심은 **필터 기반 쿼리**입니다. 원하는 조건을 조합해서 데이터를 가져옵니다:
+Census는 **필터 기반 쿼리**로 동작합니다. 원하는 조건을 조합해서 데이터를 가져옵니다:
 
 | 필터 | 예시 |
 |------|------|
@@ -37,7 +37,7 @@ Census의 핵심은 **필터 기반 쿼리**입니다. 원하는 조건을 조�
 | **sex** | male, female |
 | **organism** | Homo sapiens, Mus musculus |
 
-이 필터들을 조합하면 매우 구체적인 쿼리가 가능합니다:
+이 필터들을 조합하면 원하는 조건으로 좁혀 갈 수 있습니다:
 - "인간 폐의 T cell에서 CD3E 발현"
 - "간암 vs 정상 간의 macrophage 비교"
 - "삼중음성 유방암의 B cell 유전자 발현 패턴"
@@ -45,7 +45,7 @@ Census의 핵심은 **필터 기반 쿼리**입니다. 원하는 조건을 조�
 
 # 암종 데이터
 
-Census에는 다양한 암종 데이터가 포함되어 있습니다. CELLxGENE API로 실제 확인한 데이터 규모:
+Census에는 다양한 암종 데이터가 들어 있습니다. CELLxGENE API로 확인한 데이터 규모:
 
 | 암종 | 데이터셋 수 | 세포 수 |
 |------|:---:|---:|
@@ -133,7 +133,7 @@ FOXP3    0.0213
 IL2RA    0.0947
 ```
 
-**78,737개** 정상 폐 T cell에서 CD3E(pan-T marker)가 가장 높고, CD8A > CD4 순입니다. FOXP3(Treg marker)는 매우 낮아 Treg 비율이 적음을 시사합니다.
+**78,737개** 정상 폐 T cell에서 CD3E(pan-T marker)가 가장 높고 CD8A, CD4가 그 뒤를 이룹니다. FOXP3(Treg marker)는 매우 낮아 Treg 비율이 적음을 드러냅니다.
 
 
 ## 2) 폐선암 vs 정상 폐 — Macrophage 비교
@@ -197,7 +197,7 @@ TGFB1     2.2421
 CD274     0.1283
 ```
 
-**CD274(PD-L1)가 종양 macrophage에서 약 3.2배 높습니다** (0.41 vs 0.13). 종양 미세환경에서 macrophage가 PD-L1을 통한 면역 억제에 관여함을 시사합니다. 또한 CD68이 종양에서 크게 상승(26.9 vs 15.6)한 반면, CD163과 MRC1(M2 marker)은 정상에서 더 높아, 종양과 정상 macrophage의 표현형 차이를 보여줍니다.
+**CD274(PD-L1)가 종양 macrophage에서 약 3.2배 높습니다** (0.41 vs 0.13). 종양 미세환경에서 macrophage가 PD-L1을 통한 면역 억제에 관여함을 시사합니다. CD68은 종양에서 크게 상승(26.9 vs 15.6)한 반면 CD163과 MRC1(M2 marker)은 정상에서 더 높습니다. 종양과 정상 macrophage 사이의 표현형 차이가 이렇게 드러납니다.
 
 
 ## 3) 폐선암 세포 유형 구성 (실제 실행 결과)
@@ -242,7 +242,7 @@ plasma cell                              26,996
 pulmonary alveolar type 2 cell           22,679
 ```
 
-**119만 세포**에서 세포 유형별 구성을 확인할 수 있습니다. CD4+ T cell과 CD8+ T cell이 가장 많고, macrophage(alveolar + general)가 약 18만으로 종양 미세환경에서 큰 비중을 차지합니다.
+**119만 세포**에서 세포 유형별 구성을 확인할 수 있습니다. CD4+ T cell과 CD8+ T cell이 가장 많고 macrophage(alveolar + general)가 약 18만으로 종양 미세환경에서 큰 비중을 차지합니다.
 
 
 ## 4) Glioblastoma — 종양 미세환경 유전자 발현
@@ -295,7 +295,7 @@ microglial cell    304,400
 mature T cell      156,202
 ```
 
-**87만 세포** 규모의 GBM 면역 미세환경 분석 결과입니다. T cell에서는 면역 checkpoint인 TIGIT(0.56), CTLA4(0.51), LAG3(0.55), PDCD1/PD-1(0.44)이 높게 발현되어 T cell exhaustion을 시사합니다. 반면 macrophage와 microglia에서는 HAVCR2(TIM-3)와 CD68이 지배적이고, microglia에서는 TMEM119이 다른 세포 유형(macrophage 0.98, mature T cell 0.02)에 비해 가장 높게 발현(1.36)되어 microglia-specific marker임을 확인할 수 있습니다.
+**87만 세포** 규모의 GBM 면역 미세환경 분석 결과입니다. T cell에서는 면역 checkpoint인 TIGIT(0.56), CTLA4(0.51), LAG3(0.55), PDCD1/PD-1(0.44)이 높게 발현되어 T cell exhaustion을 시사합니다. 반면 macrophage와 microglia에서는 HAVCR2(TIM-3)와 CD68이 지배적입니다. microglia의 TMEM119은 다른 세포 유형(macrophage 0.98, mature T cell 0.02)에 비해 가장 높게 발현(1.36)되어 microglia-specific marker로 보입니다.
 
 
 ## 5) Spatial Transcriptomics 데이터 조회
@@ -348,7 +348,7 @@ breast cancer                         184,693
 myocardial infarction                 119,808
 ```
 
-**약 297만 spot/cell**의 spatial 데이터가 포함되어 있으며, Visium과 Slide-seqV2 두 가지 assay를 지원합니다. kidney, heart, lung 등 다양한 조직이 포함되어 있습니다.
+**약 297만 spot/cell**의 spatial 데이터가 들어 있으며 Visium과 Slide-seqV2 두 가지 assay를 지원합니다. kidney, heart, lung 등 다양한 조직이 함께 담겨 있습니다.
 
 > **주의**: Spatial 데이터는 일반 `census_data`가 아닌 `census_spatial_sequencing` 컬렉션에 있습니다. 접근 방식이 다르므로 `get_anndata()`/`get_obs()` 대신 `exp.obs.read()`를 사용합니다.
 
@@ -391,7 +391,7 @@ SpatialData object
       └── 'RNA': AnnData (79,872, 44,405)
 ```
 
-**16개 Visium 슬라이드**에서 **79,872 spots x 44,405 genes**의 발현 데이터와 함께 H&E 이미지, 공간 좌표가 포함됩니다.
+**16개 Visium 슬라이드**에서 **79,872 spots x 44,405 genes**의 발현 데이터에 H&E 이미지와 공간 좌표가 함께 담깁니다.
 
 Shapes에는 각 spot의 좌표가 `POINT(x, y)` 형태로 저장되어 있습니다:
 
@@ -402,20 +402,20 @@ Shapes에는 각 spot의 좌표가 `POINT(x, y)` 형태로 저장되어 있습�
 2      2265857  36.750596  POINT (1422 1587)
 ```
 
-변환된 SpatialData에는 **H&E 이미지**, **공간 좌표**, **발현 데이터**가 모두 포함되어 있어, 조직 구조 위에 직접 시각화할 수 있습니다. 아래는 하나의 kidney Visium 슬라이드(4,992 spots)의 H&E overlay 결과입니다.
+변환된 SpatialData에는 **H&E 이미지**, **공간 좌표**, **발현 데이터**가 모두 들어 있어 조직 구조 위에 직접 시각화할 수 있습니다. 아래는 하나의 kidney Visium 슬라이드(4,992 spots)의 H&E overlay 결과입니다.
 
 ![Kidney Visium Cell Type Map](/assets/images/cellxgene-spatial-celltype.png)
 
-H&E 조직 이미지 위에 세포 유형을 오버레이한 결과입니다. Loop of Henle 상피세포(파란색), macrophage(주황색), CD4+ T cell(초록색) 등이 조직 영역 내에 분포하고 있습니다. 전체 4,992 spots 중 약 70%(3,487개)가 unknown으로, 이는 Visium의 ~55μm spot 해상도 한계로 여러 세포가 하나의 spot에 섞여 명확한 세포 유형 할당이 어렵기 때문입니다. 보다 정밀한 분석을 위해서는 cell2location 같은 deconvolution 방법이 필요합니다.
+H&E 조직 이미지 위에 세포 유형을 오버레이한 결과입니다. Loop of Henle 상피세포(파란색), macrophage(주황색), CD4+ T cell(초록색) 등이 조직 영역 내에 분포하고 있습니다. 전체 4,992 spots 중 약 70%(3,487개)가 unknown입니다. Visium의 ~55μm spot 해상도 한계로 여러 세포가 하나의 spot에 섞여 있어 세포 유형을 명확히 할당하기 어렵기 때문입니다. 보다 정밀한 분석을 위해서는 cell2location 같은 deconvolution 방법이 필요합니다.
 
 ![Kidney Visium Spatial Gene Expression](/assets/images/cellxgene-spatial-expression.png)
 
-H&E 이미지 위에 유전자 발현(log1p)을 오버레이한 결과입니다. **UMOD**(Loop of Henle marker, 1,917 spots), **AQP1**(Proximal Tubule, 2,677 spots), **CD68**(Macrophage, 1,998 spots)의 발현 분포를 조직 구조와 함께 확인할 수 있습니다. 이 해상도에서는 피질/수질 경계가 명확히 드러나지 않지만, 각 marker의 발현 강도 차이는 관찰됩니다.
+H&E 이미지 위에 유전자 발현(log1p)을 오버레이한 결과입니다. **UMOD**(Loop of Henle marker, 1,917 spots), **AQP1**(Proximal Tubule, 2,677 spots), **CD68**(Macrophage, 1,998 spots)의 발현 분포를 조직 구조와 함께 확인할 수 있습니다. 이 해상도에서는 피질/수질 경계가 뚜렷하지 않습니다. 다만 각 marker의 발현 강도 차이는 관찰됩니다.
 
 
 # MCP Tool로 만들기
 
-이전 AlphaGenome 포스트와 마찬가지로, Census SDK를 MCP Tool로 감싸면 자연어로 쿼리할 수 있습니다.
+이전 AlphaGenome 포스트에서 다룬 것과 마찬가지로 Census SDK를 MCP Tool로 감싸면 자연어로 쿼리할 수 있습니다.
 
 ```python
 # cellxgene_mcp.py
@@ -534,9 +534,9 @@ Census와 AlphaGenome을 함께 쓰면 더 강력합니다:
 
 # 마무리
 
-CELLxGENE Census는 scRNA-seq 분야에서 유일하게 **API로 접근 가능한 대규모 데이터 플랫폼**입니다. GEO에서 데이터셋을 하나씩 다운로드하던 시대와 비교하면, "폐선암 macrophage의 PD-L1 발현"을 코드 한 줄로 조회할 수 있다는 건 엄청난 변화입니다.
+CELLxGENE Census는 scRNA-seq 분야에서 유일하게 **API로 접근 가능한 대규모 데이터 플랫폼**입니다. GEO에서 데이터셋을 하나씩 다운로드하던 시대에 비하면 "폐선암 macrophage의 PD-L1 발현"을 코드 한 줄로 조회할 수 있다는 건 엄청난 변화입니다.
 
-여기에 MCP Tool로 감싸면 자연어로 쿼리하고, AlphaGenome과 조합하면 변이 기능 예측까지 이어지는 파이프라인을 구성할 수 있습니다.
+여기에 MCP Tool로 감싸면 자연어로 쿼리할 수 있고 AlphaGenome과 조합하면 변이 기능 예측까지 이어지는 파이프라인을 구성할 수 있습니다.
 
 
 Reference

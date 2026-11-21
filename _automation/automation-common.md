@@ -58,6 +58,8 @@ REPO_W="C:/Users/Kim JaeHyun/a7420174.github.io"
   5. `python3 {SKILL}/scripts/verify_gates.py --before .../01_input.txt --after .../final.md --genre blog`
      → exit 0/1 은 채택, exit 2(변경률≥50%)는 롤백 후 1회 재실행, exit 3 은 재시도.
   6. 윤문된 본문을 `_posts/*.md` 에 반영 (front matter 는 절대 건드리지 않음)
+   - **`<!-- HUMANIZE-SUMMARY -->` 블록은 포스트에 남기지 않는다.** 저장 직전에 그 블록(표시자 포함)과
+     뒤따르는 요약 목록을 잘라낸다. (구현 예: `re.sub(r"\n?<!-- HUMANIZE-SUMMARY -->.*?(?=\n## |\Z)", "\n", text, flags=re.S)`)
 - 스킬이 없거나 스크립트가 실패하면(경고와 함께) 윤문 없이 진행하되, 결과 보고에
   "윤문 스킵(사유)" 을 명시한다.
 

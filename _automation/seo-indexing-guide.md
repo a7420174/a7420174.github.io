@@ -255,6 +255,37 @@ Secret 등록 (2개, 내용 동일 — **같은 JSON 을 두 이름으로**):
 > 그리고 폰에서 열면 `localhost` 가 폰을 가리켜 콜백이 안 온다 →
 > **승인 후 주소창의 `code=` 값을 직접 전달**하는 방식으로 처리.
 
+## 2-8. 실측 결과 (2026-11-22) + 트러블슈팅 기록
+
+### 실측 결과
+| 항목 | 결과 |
+|---|---|
+| GSC 속성 | `https://a7420174.github.io/` (permissionLevel: siteOwner) |
+| sitemap 제출 | HTTP **204** / errors 0 / warnings 0 |
+| Indexing API publish | HTTP **200** |
+| URL Inspection | 정상 동작 (색인 허용 4 / 전체 10 on 최근 10개) |
+| **전체 45개 URL 색인 상태** | **33개 색인됨, 12개 "Google에는 아직 알려지지 않은 URL"** |
+
+> `contents: {submitted: 18, indexed: 0}` 는 GSC 내부 집계가 아직 갱신되지 않은 것.
+> 실제 URL Inspection 결과(33/45)가 신뢰할 값이다.
+
+### 트러블슈팅 (전부 실제로 겪고 고친 것)
+1. **`403 org_internal`** — OAuth Audience 가 Internal. gmail 계정은 조직 구성원이 아니므로
+   승인 자체가 막힘 → **Personal 모드**로 해결.
+2. **`Service account key creation is disabled`** — 개인 gmail 의 자동 생성 조직 정책.
+   키 없이 **authorized_user (refresh token)** 로 대체.
+3. **GitHub Secret 등록 422 'improperly encrypted secret'** — GitHub 는 libsodium sealed box 를 쓴다.
+   AES-GCM 불가 → `gh secret set` 사용.
+4. **워크플로가 실패인데 success 로 표시** — `| tee` 가 exit code 를 삼킴 → `set -o pipefail`.
+5. **`Unrecognized named-value: 'secrets'` (422)** — step `if:` 에서 secrets 컨텍스트 불가.
+   → step output(`outputs.wif`) 으로 분기.
+6. **URL Inspection 403 "You do not own this site"** — 속성 URL 의 trailing slash 를 벗겨서.
+   → **slash 를 반드시 유지** (`https://a7420174.github.io/`).
+7. **post URL 이 `/-%20bioinformatics/` 로 깨짐** — 워크플로마다 인라인으로 front matter 를 파싱하며
+   오차가 발생. → **`_automation/collect_post_urls.py` 하나로 통합.**
+8. **OAuth 콜백이 안 옴** — 폰에서 열면 `localhost` 가 폰을 가리킴.
+   → 승인 후 주소창의 `code=` 값을 직접 전달.
+
 ## 3. 자동화 흐름
 
 ```

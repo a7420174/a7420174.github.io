@@ -103,6 +103,64 @@ python3 _automation/register_gsc_secrets.py --json /path/to/sa.json
   예상치 못한 과금이 나도 자동 차단됩니다. (Google Cloud 콘솔에서 1분 컷)
 - 참고: `Indexing API` 할당량은 프로젝트당이므로, 프로젝트 1개면 충분합니다.
 
+## 2-5. 키 없이 인증하기 — `iam.disableServiceAccountKeyCreation` 정책일 때
+
+Google 은 **2024-05-03 이후 생성된 조직**에 기본으로 이 정책을 적용한다.
+에러 메시지:
+
+```
+Service account key creation is disabled
+constraints/iam.disableServiceAccountKeyCreation
+```
+
+**이건 사용자의 실수가 아니라 정책이다.** 키가 없어도 아래 3가지 방법 중 하나로 API 를 쓸 수 있다.
+
+### 방법 A — 조직 정책 해제 (가장 간단, 권한이 있으면)
+https://console.cloud.google.com/iam-admin/orgpolicies
+→ 프로젝트 드롭다운에서 **조직** 선택 → Filter 에 `iam.disableServiceAccountKeyCreation`
+→ **Disable service account key creation** → **Manage policy**
+→ **Override parent's policy** 체크 → **Enforcement: Off** → **Set policy**
+→ organize 단계로 돌아가 JSON 키 발급.
+
+> 조직 정책 관리자(`roles/orgpolicy.policyAdmin`) 권한이 있어야 한다. 없으면 방법 B/C.
+
+### 방법 B — 본인 계정 OAuth (서비스 계정 불필요) ✅ 권장
+Indexing API / Search Console API 는 OAuth 2.0 토큰이면 되고, **GSC 속성의 소유자 계정**
+토큰으로 정상 동작한다.
+
+1. console.cloud.google.com → 프로젝트 → **API 및 서비스 → 사용자 인증 정보(OAuth 클라이언트 ID)**
+2. **클라이언트 ID 만들기** → 적용 대상 **데스크톱 앱** → 이름 입력 → **만들기**
+3. 만들어진 항목에서 **클라이언트 ID** 와 **클라이언트 비밀번호** 확인
+4. 토큰 발급:
+   ```bash
+   pip install google-auth-oauthlib google-auth
+   python3 _automation/fetch_oauth_token.py --client-id <ID> --client-secret <SECRET>
+   ```
+   → 브라우저에서 로그인·승인 → refresh token 출력
+5. Secret 3개 등록:
+   | Name | Value |
+   |---|---|
+   | `GOOGLE_OAUTH_CLIENT_ID` | 클라이언트 ID |
+   | `GOOGLE_OAUTH_CLIENT_SECRET` | 클라이언트 비밀번호 |
+   | `GOOGLE_OAUTH_REFRESH_TOKEN` | 위 스크립트가 출력한 refresh token |
+
+### 방법 C — Workload Identity Federation (키 아예 없음, GitHub Actions 최적)
+GitHub Actions 의 OIDC 토큰으로 GCP 인증. 키 파일 자체가 존재하지 않아 가장 안전.
+
+1. console.cloud.google.com → **IAM 및 관리자 → Workload Identity Federation** → 풀 생성
+2. 풀에 **GitHub(OIDC) 공급자** 추가 (issuer: `https://token.actions.githubusercontent.com`,
+   attribute mapping: `google.subject=assertion.sub`,
+   `attribute.repository=assertion.repository`)
+3. **서비스 계정** 생성 (키는 안 만듦) → IAM 바인딩으로
+   `roles/iam.workloadIdentityUser` 권한 부여
+4. repo **Settings → Secrets and variables → Actions → Variables** 에:
+   - `GCP_WORKLOAD_IDENTITY_PROVIDER` = `projects/숫자/locations/global/workloadIdentityPools/풀/providers/제공자`
+   - `GCP_SERVICE_ACCOUNT` = `이메일@프로젝트.iam.gserviceaccount.com`
+   - `USE_WIF` = `true`
+5. workflow 가 자동으로 `google-github-actions/auth` 로 인증 (workflow 에 이미 반영됨)
+
+> 방법 B/C 모두 사용자는 **GSC 속성 소유자로 등록**되어야 한다(B는 본인 계정이면 이미 소유자).
+
 ## 3. 자동화 흐름
 
 ```

@@ -7,7 +7,8 @@ Indexing API 는 JobPosting(채용공고) / BroadcastEvent / 일반 URL 일부�
 여기서는 '채용공고' 카테고리 글만 제출한다.
 
 입력: stdin 에 URL 한 줄씩
-환경: GOOGLE_INDEXING_SA_JSON (서비스 계정 JSON 전체)
+환경: GOOGLE_INDEXING_SA_JSON (서비스 계정 JSON) 또는
+      GOOGLE_OAUTH_CLIENT_ID / _SECRET / _REFRESH_TOKEN (본인 계정) 또는 ADC(키 없음)
 의존: google-auth, requests
 """
 from __future__ import annotations
@@ -20,26 +21,16 @@ SITE = "https://a7420174.github.io"
 
 
 def main() -> int:
-    raw = os.environ.get("GOOGLE_INDEXING_SA_JSON", "").strip()
-    if not raw:
-        print("[ERROR] GOOGLE_INDEXING_SA_JSON secret 이 설정되지 않았습니다.", file=sys.stderr)
-        return 1
-    try:
-        from google.oauth2 import service_account
-        from google.auth.transport.requests import AuthorizedSession
-    except ImportError:
-        print("[ERROR] google-auth / requests 가 필요합니다: pip install google-auth requests",
-              file=sys.stderr)
-        return 1
-
     urls = [l.strip() for l in sys.stdin if l.strip()]
     if not urls:
         print("[ERROR] 제출할 URL 이 없습니다.")
         return 1
 
-    creds = service_account.Credentials.from_service_account_info(
-        json.loads(raw), scopes=["https://www.googleapis.com/auth/indexing"])
-    session = AuthorizedSession(creds)
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from gsc_auth import get_session, SCOPES_INDEXING
+    session = get_session(SCOPES_INDEXING)
+    if session is None:
+        return 1
 
     ok = fail = 0
     for url in urls:

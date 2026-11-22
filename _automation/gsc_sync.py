@@ -9,7 +9,9 @@
 사용:
     python3 _automation/gsc_sync.py --site https://a7420174.github.io --urls-file urls.txt
 환경:
-    GOOGLE_SA_JSON  — 서비스 계정 JSON 전체 (GSC '소유자' 로 추가된 계정)
+    GOOGLE_SA_JSON — 서비스 계정 JSON (GSC '소유자' 로 추가된 계정)
+    또는 GOOGLE_OAUTH_CLIENT_ID/_SECRET/_REFRESH_TOKEN (본인 계정)
+    또는 ADC (워크로드 ID 페더레이션 — 키 없이 동작)
 의존: google-auth, requests
 """
 from __future__ import annotations
@@ -25,20 +27,14 @@ INSPECT_ENDPOINT = "https://searchconsole.googleapis.com/v1/urlInspection/index:
 
 
 def get_session():
-    raw = os.environ.get("GOOGLE_SA_JSON", "").strip()
-    if not raw:
-        print("[ERROR] GOOGLE_SA_JSON secret 이 설정되지 않았습니다.", file=sys.stderr)
-        sys.exit(1)
-    try:
-        from google.oauth2 import service_account
-        from google.auth.transport.requests import AuthorizedSession
-    except ImportError:
-        print("[ERROR] google-auth / requests 필요: pip install google-auth requests",
-              file=sys.stderr)
-        sys.exit(1)
-    creds = service_account.Credentials.from_service_account_info(
-        json.loads(raw), scopes=["https://www.googleapis.com/auth/webmasters"])
-    return AuthorizedSession(creds)
+    import os as _os
+    import sys as _sys
+    _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+    from gsc_auth import get_session as _gs, SCOPES_WEBMASTERS
+    session = _gs(SCOPES_WEBMASTERS)
+    if session is None:
+        _sys.exit(1)
+    return session
 
 
 def submit_sitemap(session, site: str) -> bool:

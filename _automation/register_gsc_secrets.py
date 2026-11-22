@@ -71,13 +71,28 @@ def main() -> int:
     except json.JSONDecodeError as e:
         print(f"[ERROR] JSON 파싱 실패: {e}", file=sys.stderr)
         return 1
-    for field in ("type", "client_email", "private_key", "project_id"):
-        if field not in sa:
-            print(f"[ERROR] 서비스 계정 JSON 에 '{field}' 가 없습니다. "
+    # 자격증명 유형: service_account(서비스 계정) 또는 authorized_user(본인 OAuth)
+    ctype = sa.get("type", "")
+    if ctype == "service_account":
+        required = ("client_email", "private_key", "project_id")
+    elif ctype == "authorized_user":
+        required = ("client_id", "client_secret", "refresh_token")
+    else:
+        print(f"[ERROR] 알 수 없는 credential type '{ctype}'. "
+              f"service_account 또는 authorized_user 여야 합니다.", file=sys.stderr)
+        return 1
+    for field in required:
+        if field not in sa or not sa[field]:
+            print(f"[ERROR] 자격증명 JSON 에 '{field}' 가 없습니다. "
                   f"올바른 JSON 인지 확인하세요.", file=sys.stderr)
             return 1
-    print(f"[info] 서비스 계정: {sa['client_email']}")
-    print(f"[info] 프로젝트: {sa['project_id']}")
+    if ctype == "service_account":
+        print(f"[info] 인증 유형: 서비스 계정")
+        print(f"[info] 서비스 계정: {sa['client_email']}")
+        print(f"[info] 프로젝트: {sa['project_id']}")
+    else:
+        print(f"[info] 인증 유형: 본인 OAuth (authorized_user)")
+        print(f"[info] 클라이언트 ID: {sa['client_id']}")
 
     st, pk = api("GET", f"https://api.github.com/repos/{args.repo}/actions/secrets/public-key",
                  args.token)

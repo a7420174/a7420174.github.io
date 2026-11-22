@@ -7,7 +7,9 @@ iam.disableServiceAccountKeyCreation / iam.managed.disableServiceAccountKeyCreat
 에서도 동작하도록 **3가지 인증 방식**을 지원한다.
 
 우선순위:
-  1) GOOGLE_SA_JSON            — 서비스 계정 JSON (scope: indexing / webmasters)
+  1) GOOGLE_SA_JSON / GOOGLE_INDEXING_SA_JSON
+                             — 자격증명 JSON. type 이 service_account 면 서비스 계정,
+                               authorized_user 면 본인 OAuth refresh token.
   2) GOOGLE_OAUTH_CLIENT_ID
      GOOGLE_OAUTH_CLIENT_SECRET
      GOOGLE_OAUTH_REFRESH_TOKEN — 본인 계정 OAuth (refresh token). GSC 소유자 계정이면 사용 가능.
@@ -42,19 +44,41 @@ def get_session(scopes: list[str]):
         _err("google-auth / requests 가 필요합니다: pip install google-auth requests")
         return None
 
-    # 1) 서비스 계정 JSON
-    sa_raw = os.environ.get("GOOGLE_SA_JSON", "").strip()
-    if sa_raw:
+    # 1) 자격증명 JSON (서비스 계정 또는 authorized_user)
+    for env_name in ("GOOGLE_SA_JSON", "GOOGLE_INDEXING_SA_JSON"):
+        raw = os.environ.get(env_name, "").strip()
+        if not raw:
+            continue
         try:
-            from google.oauth2 import service_account
-            creds = service_account.Credentials.from_service_account_info(
-                json.loads(sa_raw), scopes=scopes)
+            info = json.loads(raw)
+        except json.JSONDecodeError as e:
+            _err(f"{env_name} JSON 파싱 실패: {e}")
+            continue
+        try:
+            if info.get("type") == "service_account":
+                from google.oauth2 import service_account
+                creds = service_account.Credentials.from_service_account_info(
+                    info, scopes=scopes)
+            elif info.get("type") == "authorized_user":
+                from google.oauth2.credentials import Credentials
+                creds = Credentials(
+                    token=None,
+                    refresh_token=info["refresh_token"],
+                    token_uri=info.get("token_uri", "https://oauth2.googleapis.com/token"),
+                    client_id=info["client_id"],
+                    client_secret=info["client_secret"],
+                    scopes=scopes)
+            else:
+                _err(f"{env_name}: 알 수 없는 credential type "
+                     f"'{info.get('type')}' — 무시합니다.")
+                continue
+            print(f"[info] 인증: {env_name} ({info.get('type')})", file=sys.stderr)
             return AuthorizedSession(creds)
         except Exception as e:
-            _err(f"GOOGLE_SA_JSON 인증 실패: {e}")
-            return None
+            _err(f"{env_name} 인증 실패: {e}")
+            continue
 
-    # 2) 사용자 OAuth (client id/secret + refresh token)
+    # 2) 사용자 OAuth (client id/secret + refresh token 을 개별 secret 으로)
     cid = os.environ.get("GOOGLE_OAUTH_CLIENT_ID", "").strip()
     csec = os.environ.get("GOOGLE_OAUTH_CLIENT_SECRET", "").strip()
     rt = os.environ.get("GOOGLE_OAUTH_REFRESH_TOKEN", "").strip()
@@ -64,6 +88,7 @@ def get_session(scopes: list[str]):
             creds = Credentials(token=None, refresh_token=rt,
                                 token_uri="https://oauth2.googleapis.com/token",
                                 client_id=cid, client_secret=csec, scopes=scopes)
+            print("[info] 인증: 개별 OAuth secret", file=sys.stderr)
             return AuthorizedSession(creds)
         except Exception as e:
             _err(f"사용자 OAuth 인증 실패: {e}")

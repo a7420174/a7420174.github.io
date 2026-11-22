@@ -35,16 +35,22 @@ jobs:
         env:
           SA: ${{ secrets.GOOGLE_INDEXING_SA_JSON }}
           CID: ${{ secrets.GOOGLE_OAUTH_CLIENT_ID }}
+          WIF: ${{ vars.USE_WIF }}
         run: |
-          if [ -n "$SA" ] || [ -n "$CID" ] || [ -n "${{ vars.USE_WIF }}" ]; then
+          if [ -n "$SA" ] || [ -n "$CID" ]; then
             echo "value=true" >> "$GITHUB_OUTPUT"
+            echo "wif=false" >> "$GITHUB_OUTPUT"
+          elif [ -n "$WIF" ]; then
+            echo "value=true" >> "$GITHUB_OUTPUT"
+            echo "wif=true" >> "$GITHUB_OUTPUT"
           else
             echo "value=false" >> "$GITHUB_OUTPUT"
+            echo "wif=false" >> "$GITHUB_OUTPUT"
             echo "::notice::Google 자격증명 미설정 - 건너뜁니다 (Secret 또는 repo variable USE_WIF=true)"
           fi
 
       - name: Workload Identity Federation (키 없음)
-        if: steps.has_secret.outputs.value == 'true' && secrets.GOOGLE_INDEXING_SA_JSON == '' && secrets.GOOGLE_OAUTH_CLIENT_ID == ''
+        if: steps.has_secret.outputs.wif == 'true'
         uses: google-github-actions/auth@v2
         with:
           workload_identity_provider: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}

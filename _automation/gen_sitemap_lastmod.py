@@ -97,7 +97,14 @@ def main() -> int:
         if not ts:
             ts = mtime_iso(path)
             missing += 1
-        data[post_slug(path)] = ts
+        slug = post_slug(path)
+        data[slug] = ts
+        # Liquid 의 map 조회가 한글 키에서 실패하는 사례가 있어
+        # percent-encoded 키도 함께 저장한다 (sitemap 템플릿에서 둘 다 시도).
+        import urllib.parse
+        encoded = urllib.parse.quote(slug, safe="/")
+        if encoded != slug:
+            data[encoded] = ts
 
     os.makedirs(os.path.dirname(out), exist_ok=True)
     with open(out, "w", encoding="utf-8") as f:

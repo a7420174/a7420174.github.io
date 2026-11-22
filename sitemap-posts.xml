@@ -5,7 +5,9 @@ layout: null
 <!-- 게시물 sitemap. lastmod = git 최종 수정 시각 (_data/sitemap_lastmod.json) -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   {%- for post in site.posts %}
-  {%- assign lm = site.data.sitemap_lastmod[post.url] | default: post.last_modified_at | default: post.date %}
+  {%- assign lm = site.data.sitemap_lastmod[post.url] %}
+  {%- if lm == nil %}{% assign lm = site.data.sitemap_lastmod[post.url | uri_escape] %}{% endif %}
+  {%- if lm == nil %}{% assign lm = post.last_modified_at | default: post.date %}{% endif %}
   <url>
     <loc>{{ post.url | absolute_url }}</loc>
     <lastmod>{{ lm | date_to_xmlschema }}</lastmod>

@@ -161,6 +161,62 @@ GitHub Actions 의 OIDC 토큰으로 GCP 인증. 키 파일 자체가 존재하�
 
 > 방법 B/C 모두 사용자는 **GSC 속성 소유자로 등록**되어야 한다(B는 본인 계정이면 이미 소유자).
 
+## 2-6. OAuth Audience 설정 — `403 org_internal` 해결
+
+에러:
+```
+indexing-bot은(는) 조직 내에서만 사용할 수 있습니다   (403 org_internal)
+```
+
+원인: OAuth 클라이언트의 **대상 사용자(Audience)가 "Internal"** 로 설정됨.
+Internal 은 "해당 Google Cloud 조직 구성원만 승인 가능"이므로、组织 밖 계정이 승인 자체가 막힘.
+(공식: *"An org_internal authorization error is displayed when authorization is requested from
+users outside the Google Cloud project's parent."*)
+
+### Audience 3가지 비교
+
+| 유형 | 검증 필요 | 7일 만료 | 도메인 링크 필요 | 비고 |
+|---|---|---|---|---|
+| **Personal** | ❌ 불필요 | ❌ 없음 | ❌ 불필요 | ✅ **여기선 이게 정답** |
+| Internal | ❌ 불필요 | ❌ 없음 | ❌ 불필요 | 조직 구성원만 → gmail 계정엔 불가 |
+| External + Testing | ❌ | ⚠️ **있음** (refresh token 포함) | ❌ | GitHub Actions 용도에 부적합 |
+| External + In production | ⚠️ **브랜딩 검증** | ❌ 없음 | ⚠️ **필요** (홈페이지·개인정보처리방침·약관) | 과도 |
+
+### 방법 B-1 — Personal 모드 (권장, 10분)
+https://console.cloud.google.com/auth/overview/personal
+
+1. **Personal 모드 프로젝트 선택 또는 새로 만들기** (기본 이름 `personal-mode-app`)
+2. **애플리케이션 유형: 데스크톱 앱**
+3. 약관 동의 체크 → **계속**
+4. **클라이언트 ID / 클라이언트 비밀번호** 복사 또는 **JSON 다운로드**
+5. **새 프로젝트에서 API 2개 활성화** (아래 2-6-1)
+6. 아래 OAuth 링크로 승인 → refresh token 발급
+
+> Personal 모드는 *한 번 설정하면 External/Internal 로 변경 불가*.
+> 하지만 이 용도(본인 계정 1개, 장기 refresh token)에는 오히려 최적이다.
+
+#### 2-6-1 Personal 프로젝트에서 활성화할 API
+`https://console.cloud.google.com/apis/library` → 프로젝트 선택 후:
+- **Web Search Indexing API** (`indexing.googleapis.com`) → 사용 설정
+- **Search Console API** (`searchconsole.googleapis.com`) → 사용 설정
+
+> ⚠️ Personal 모드 프로젝트는 다른 프로젝트와 별개다. API 활성화는 **OAuth 클라이언트가 있는
+> 그 프로젝트**에서 해야 한다. 다르면 API 호출이 `403 has not been used` 로 막힌다.
+
+### 방법 B-2 — External + Production (브랜딩 검증 필요, 비권장)
+검증 요구사항:
+- 홈페이지: `https://a7420174.github.io/` (검증된 도메인에 호스팅, 로그인 화면만으로 ❌)
+- **개인정보처리방침**: 홈페이에서 링크되어야 하고 OAuth 화면의 링크와 동일해야 함
+- 이용약관
+- Authorized domains 에 `a7420174.github.io` 등록
+- 앱 이름·로고 표시를 원하면 브랜드 검증 별도 진행
+
+→ 블로그에 개인정보처리방침 페이지를 새로 만드는 것이 선행되어야 하므로 비용이 큼.
+
+### 방법 C — Workload Identity Federation (키 파일 없음, OAuth 앱 검증도 불필요)
+서비스 계정 + WIF 풀만 만들면 되므로 OAuth 동의 화면·검증이 아예 필요 없다.
+자세한 절차는 2-5절 방법 C 참고.
+
 ## 3. 자동화 흐름
 
 ```

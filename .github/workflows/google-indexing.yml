@@ -76,21 +76,23 @@ jobs:
         if: steps.has_secret.outputs.value == 'true'
         id: urls
         run: |
-          python3 - <<'PY' > urls.txt
-          import glob, json, os, re, urllib.parse
           # 마감일이 지나 유효한 공고가 남아 있는 글만 제출한다 (구글 정책 준수).
+          python3 - <<'PY' > urls.txt
+          import glob, json, os, sys
+          sys.path.insert(0, '_automation')
+          from collect_post_urls import url_of
           try:
               active = set(json.load(open('_data/jobpostings.json', encoding='utf-8')).keys())
           except Exception:
               active = set()
           for path in sorted(glob.glob('_posts/*채용공고*.md')):
               name = os.path.basename(path)[:-3]
-              slug = re.sub(r'^\d{4}-\d{2}-\d{2}-', '', name)
+              slug = name
+              import re
+              slug = re.sub(r'^\d{4}-\d{2}-\d{2}-', '', slug)
               if slug not in active:
                   continue
-              # permalink: /:categories/:title/
-              q = urllib.parse.quote(slug, safe='-')
-              print(f'https://a7420174.github.io/{urllib.parse.quote("채용공고", safe="-")}/{q}/')
+              print(url_of(path))
           PY
           cat urls.txt
           echo "count=$(wc -l < urls.txt)" >> "$GITHUB_OUTPUT"

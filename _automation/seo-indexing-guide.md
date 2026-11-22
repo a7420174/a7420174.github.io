@@ -66,7 +66,17 @@
 > ⚠️ "소유자" 가 아니면 API 가 `Permission denied` 를 냅니다.
 
 ### 2-3. GitHub Secret 등록
-repo → Settings → Secrets and variables → Actions → New repository secret
+
+**방법 A (권장, 자동)** — 저장소 조작 권한이 있는 토큰(GitHub CLI `gh auth token` 또는 PAT)이 있으면
+서비스 계정 JSON 파일 하나로 Secret 2개를 자동 등록할 수 있다:
+
+```bash
+export GITHUB_TOKEN=<github_token>
+python3 _automation/register_gsc_secrets.py --json /path/to/sa.json
+# → GOOGLE_INDEXING_SA_JSON, GOOGLE_SA_JSON 두 개 자동 등록 + 확인
+```
+
+**방법 B (수동)** — repo → Settings → Secrets and variables → Actions → New repository secret
 
 | Name | Value | 쓰이는 곳 |
 |---|---|---|
@@ -74,6 +84,9 @@ repo → Settings → Secrets and variables → Actions → New repository secre
 | `GOOGLE_SA_JSON` | **동일한** JSON 전체 | gsc-sync.yml |
 
 두 워크플로가 scope만 다르게 씁니다 (indexing / webmasters). 같은 키 파일을 두 Secret 에 넣으면 됩니다.
+
+> JSON 키 파일은 **절대 저장소에 커밋하지 않는다.** `.gitignore` 에 `*.json` 키 패턴이 없으면
+> 커밋 전에 반드시 `git status` 로 확인할 것.
 
 ## 2-4. 비용은? — **무료입니다**
 

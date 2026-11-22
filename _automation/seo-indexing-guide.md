@@ -63,6 +63,21 @@ repo → Settings → Secrets and variables → Actions → New repository secre
 
 두 워크플로가 scope만 다르게 씁니다 (indexing / webmasters). 같은 키 파일을 두 Secret 에 넣으면 됩니다.
 
+## 2-4. 비용은? — **무료입니다**
+
+둘 다 과금 대상이 아닙니다 (2026-11-22 확인).
+
+| API | 과금 | 기본 할당량 |
+|---|---|---|
+| Indexing API | **"All use of the Indexing API is available without payment"** (공식 문서) | publish **200건/일** (미티시간 자정 초기화), 읽기 180/분, 전체 380/분 |
+| Search Console API | **"All use of Google Search Console API is free of charge"** (공식 문서) | 사용량 한도 있음 (일 1,000,000 / 분 4,000 정도, 검색어당 16,000/일) |
+
+- 프로젝트를 만들 때 콘솔이 결제 계정을 요구하면: **무료 체험(90일, $300 크레딧)** 을 쓰거나,
+  결제가 필요 없는 API 라 결제 계정 없이 진행할 수 있습니다. 어차피 이 API 둘은 과금되지 않습니다.
+- 혹시 걱정되면 **결제 → 예산 및 알림 → 예산 금액 0원 + 알림 임계값 10%** 로 걸어두면
+  예상치 못한 과금이 나도 자동 차단됩니다. (Google Cloud 콘솔에서 1분 컷)
+- 참고: `Indexing API` 할당량은 프로젝트당이므로, 프로젝트 1개면 충분합니다.
+
 ## 3. 자동화 흐름
 
 ```

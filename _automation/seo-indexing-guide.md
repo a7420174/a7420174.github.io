@@ -217,6 +217,44 @@ https://console.cloud.google.com/auth/overview/personal
 서비스 계정 + WIF 풀만 만들면 되므로 OAuth 동의 화면·검증이 아예 필요 없다.
 자세한 절차는 2-5절 방법 C 참고.
 
+## 2-7. 실제 적용된 구성 (2026-11-22 확정) — 본인 OAuth + Personal 모드
+
+SA 키가 막힌 환경(조직 정책 + gmail 계정)에서 **실제로 동작하는 경로**로 완성했다.
+
+사용한 것:
+- 프로젝트: `earnest-keep-515502-r5` (Personal 모드, 이름 `personal-mode-app` 자동 생성)
+- OAuth 클라이언트: 데스크톱 앱, Audience=Personal → 검증·만료·도메인 링크 모두 면제
+- 자격증명: `authorized_user` JSON (client_id / client_secret / **refresh_token**)
+
+Secret 등록 (2개, 내용 동일 — **같은 JSON 을 두 이름으로**):
+| Name | 쓰이는 곳 | scope |
+|---|---|---|
+| `GOOGLE_INDEXING_SA_JSON` | google-indexing.yml | `.../auth/indexing` |
+| `GOOGLE_SA_JSON` | gsc-sync.yml | `.../auth/webmasters` |
+
+`_automation/gsc_auth.py` 가 JSON 의 `type` 을 보고 자동 분기:
+- `service_account` → 서비스 계정
+- `authorized_user` → 본인 OAuth refresh token
+
+### refresh token 재발급 방법 (만료/회수 시)
+1. Personal 모드 프로젝트의 OAuth 클라이언트에서 client_id/client_secret 확인
+2. 아래 스크립트로 승인 (pysodium·oauthlib 불필요, 표준 라이브러리만 사용):
+   ```bash
+   python3 _automation/oauth_device_flow.py \
+     --client-id <ID> --client-secret <SECRET> --port 8768
+   ```
+   → 승인 URL 열기 → 콜백 수신 → `oauth_creds.json` 생성
+3. Secret 2개 재등록 (`gh secret set` 또는 `_automation/register_gsc_secrets.py`)
+
+> **주의**: GitHub Secret 암호화는 **libsodium sealed box** 방식이라 AES-GCM 으로는 안 된다.
+> `cryptography` 만으로는 불가능 → `gh secret set` CLI 사용이 확실하다.
+> (pynacl 이 없는 환경이면 gh 바이너리를 받아 쓴다)
+
+> **주의**: OAuth 콜백 서버는 `handle_request` 1회 처리 후 종료된다.
+> 포트 점검용 연결이 그것을 소비해 죽으므로 `serve_forever` 로 돌릴 것.
+> 그리고 폰에서 열면 `localhost` 가 폰을 가리켜 콜백이 안 온다 →
+> **승인 후 주소창의 `code=` 값을 직접 전달**하는 방식으로 처리.
+
 ## 3. 자동화 흐름
 
 ```

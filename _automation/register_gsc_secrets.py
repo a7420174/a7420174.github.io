@@ -23,7 +23,6 @@ import os
 import sys
 import urllib.request
 
-from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 
 def api(method: str, url: str, token: str, body: dict | None = None) -> tuple[int, dict]:
@@ -43,11 +42,24 @@ def api(method: str, url: str, token: str, body: dict | None = None) -> tuple[in
 
 
 def encrypt(secret: str, key_b64: str, key_id: str) -> tuple[str, str]:
-    key = base64.b64decode(key_b64)
-    aes = AESGCM(key)
-    nonce = os.urandom(12)
-    ct = aes.encrypt(nonce, secret.encode("utf-8"), key_id.encode("utf-8"))
-    return base64.b64encode(nonce + ct).decode(), key_id
+    """GitHub Secret 암호화.
+
+    ⚠️ GitHub 는 libsodium sealed box (crypto_box_seal) 를 사용한다.
+    AES-GCM 으로는 422 'improperly encrypted secret' 가 난다.
+    pynacl 이 있으면 그것을 쓰고, 없으면 gh CLI 로 등록하도록 안내한다.
+    """
+    try:
+        from nacl import public, encoding
+        key = base64.b64decode(key_b64)
+        pk = public.PublicKey(key)
+        sealed = public.SealedBox(pk).encrypt(secret.encode("utf-8"))
+        return base64.b64encode(sealed).decode(), key_id
+    except ImportError:
+        pass
+    print("[ERROR] pynacl 이 없어 libsodium sealed box 암호화를 수행할 수 없습니다.\n"
+          "       gh CLI 로 등록하세요:\n"
+          "         gh secret set <NAME> --repo <owner/repo> --body \"<JSON>\"", file=sys.stderr)
+    raise SystemExit(2)
 
 
 def main() -> int:

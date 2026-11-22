@@ -39,7 +39,10 @@ def get_session():
 
 def submit_sitemap(session, site: str) -> bool:
     feed = f"{site}/sitemap.xml"
-    url = SITEMAP_ENDPOINT.format(site=site, feed=urllib.parse.quote(feed, safe=""))
+    # site 와 feed 모두 경로 세그먼트로 인코딩해야 한다 (한글/슬래시 포함).
+    url = SITEMAP_ENDPOINT.format(
+        site=urllib.parse.quote(site, safe=""),
+        feed=urllib.parse.quote(feed, safe=""))
     r = session.put(url)
     if r.status_code in (200, 204):
         print(f"[ OK ] sitemap 제출 완료: {feed}")
@@ -93,8 +96,12 @@ def main() -> int:
     ok = submit_sitemap(session, site)
 
     rows = []
+    urls = []
     if args.urls_file and os.path.exists(args.urls_file):
         urls = [l.strip() for l in open(args.urls_file, encoding="utf-8") if l.strip()]
+    if not urls:
+        print("[info] 검사 대상 URL 이 없어 건너뜁니다.")
+    else:
         rows = inspect(session, site, urls)
         with open("gsc-index-status.json", "w", encoding="utf-8") as f:
             json.dump(rows, f, ensure_ascii=False, indent=2)

@@ -82,6 +82,11 @@ jobs:
             BEFORE="$EMPTY_TREE"
           fi
           git diff --name-only --diff-filter=AM "$BEFORE" "$AFTER" -- '_posts/*.md' > changed.txt || true
+          # workflow_dispatch 등에서는 diff 가 없을 수 있다 → 최근 글 10개로 대체
+          if [ ! -s changed.txt ]; then
+            ls -1 _posts/*.md 2>/dev/null | sort -r | head -10 > changed.txt
+            echo "::notice::변경 글 없음 - 최근 10개 글로 대체"
+          fi
           python3 - <<'PY' > urls.txt
           import os, re, urllib.parse
           for line in open('changed.txt', encoding='utf-8'):

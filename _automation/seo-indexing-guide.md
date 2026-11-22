@@ -44,8 +44,20 @@
 ### 2-2. 서비스 계정 (Indexing API + Search Console API 공용)
 `https://console.cloud.google.com` 에서:
 1. 프로젝트 생성(예: `blog-indexing`)
-2. **API 및 서비스 → 라이브러리** → `Web Search Indexing API` 사용 설정
-3. **API 및 서비스 → 라이브러리** → `Search Console API` 사용 설정
+2. **API 활성화** — 아래 3개 중 아무거나 (모두 같은 결과):
+   - **(권장) 원클릭 설정 도구**: https://console.cloud.google.com/start/api?id=indexing.googleapis.com&credential=client_key
+     → 프로젝트 생성 + API 활성화를 한 번에. 라이브러리에서 안 보여도 이 링크는 동작함.
+   - **라이브러리 직접 검색**: **API 및 서비스 → 라이브러리** → 검색창에 **`Web Search Indexing API`** 입력
+     → **"Indexing API" 로 검색하면 안 나올 수 있다** (콘솔 표시명이 "Web Search Indexing API" 이다)
+     → 항목 옆 **사용 설정(Enable)**
+     → 같은 화면에서 `Search Console API` 도 사용 설정
+   - **gcloud CLI** (Cloud Shell 이면 설치 없이 바로 실행 가능):
+     ```bash
+     gcloud services enable indexing.googleapis.com --project=PROJECT_ID
+     gcloud services enable searchconsole.googleapis.com --project=PROJECT_ID
+     ```
+   - **라이브러리에 항목 자체가 안 보일 때**: 상단 프로젝트 드롭다운에서 프로젝트가 **선택된 상태인지**
+     확인(미선택이면 목록이 안 나온다). "빠른 시작" 화면으로 리디렉션되면 위 원클릭 링크를 쓰면 된다.
 4. **IAM 및 관리자 → 서비스 계정** → 생성 (역할 없음)
 5. 해당 서비스 계정 → **키** → 새 키(JSON) 생성 → **절대 git 에 커밋 금지**
 6. **Search Console → 속성 → 설정 → 사용자 및 권한** → 서비스 계정 이메일

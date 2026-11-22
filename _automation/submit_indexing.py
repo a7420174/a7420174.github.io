@@ -27,7 +27,7 @@ def main() -> int:
         return 1
 
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-    from gsc_auth import get_session, SCOPES_INDEXING
+    from gsc_auth import get_session, SCOPES_INDEXING  # noqa: E402
     session = get_session(SCOPES_INDEXING)
     if session is None:
         return 1

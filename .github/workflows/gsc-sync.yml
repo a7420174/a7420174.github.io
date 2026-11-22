@@ -101,6 +101,7 @@ jobs:
           GOOGLE_OAUTH_CLIENT_SECRET: ${{ secrets.GOOGLE_OAUTH_CLIENT_SECRET }}
           GOOGLE_OAUTH_REFRESH_TOKEN: ${{ secrets.GOOGLE_OAUTH_REFRESH_TOKEN }}
         run: |
+          set -o pipefail
           python3 _automation/gsc_sync.py \
             --site https://a7420174.github.io \
             --urls-file urls.txt | tee gsc-sync.log

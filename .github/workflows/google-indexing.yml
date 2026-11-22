@@ -97,6 +97,7 @@ jobs:
           GOOGLE_OAUTH_CLIENT_SECRET: ${{ secrets.GOOGLE_OAUTH_CLIENT_SECRET }}
           GOOGLE_OAUTH_REFRESH_TOKEN: ${{ secrets.GOOGLE_OAUTH_REFRESH_TOKEN }}
         run: |
+          set -o pipefail
           cat urls.txt | python3 _automation/submit_indexing.py | tee indexing.log
 
       - name: Upload log

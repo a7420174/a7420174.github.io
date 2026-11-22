@@ -153,14 +153,40 @@ def check_robots(site: str) -> None:
         err("robots.txt 에 'Disallow: /' 가 있어 크롤이 전부 막혀 있습니다.")
 
 
-def parse_sitemap(site: str) -> tuple[list[str], dict[str, str]]:
-    raw = fetch(f"{site}/sitemap.xml")
+def _collect_xml(raw: bytes, site: str, depth: int = 0) -> tuple[list[str], dict[str, str]]:
+    """urlset 또는 sitemapindex 를 재귀적으로 해석해 URL 목록을 모은다."""
     try:
         root = ET.fromstring(raw)
     except ET.ParseError as e:
-        err(f"sitemap.xml XML 파싱 실패: {e}")
+        err(f"sitemap XML 파싱 실패: {e}")
         return [], {}
-    locs, lastmods = [], {}
+
+    tag = root.tag.split('}')[-1]
+    locs: list[str] = []
+    lastmods: dict[str, str] = {}
+
+    if tag == "sitemapindex":
+        children = [n.findtext("sm:loc", default="", namespaces=NS).strip()
+                    for n in root.findall("sm:sitemap", NS)]
+        children = [c for c in children if c]
+        info(f"sitemapindex: 하위 sitemap {len(children)}개")
+        if depth > 2:
+            err("sitemapindex 중첩이 2단계를 넘습니다.")
+            return [], {}
+        for child in children:
+            if not child.startswith(site):
+                err(f"하위 sitemap 이 사이트 외부 주소입니다: {child}")
+                continue
+            try:
+                sub_raw = fetch(child)
+            except Exception as e:
+                err(f"하위 sitemap 조회 실패 {child}: {e}")
+                continue
+            sub_locs, sub_lm = _collect_xml(sub_raw, site, depth + 1)
+            locs.extend(sub_locs)
+            lastmods.update(sub_lm)
+        return locs, lastmods
+
     for node in root.findall("sm:url", NS):
         loc = node.findtext("sm:loc", default="", namespaces=NS).strip()
         lm = node.findtext("sm:lastmod", default="", namespaces=NS).strip()
@@ -169,6 +195,11 @@ def parse_sitemap(site: str) -> tuple[list[str], dict[str, str]]:
             if lm:
                 lastmods[loc] = lm
     return locs, lastmods
+
+
+def parse_sitemap(site: str) -> tuple[list[str], dict[str, str]]:
+    raw = fetch(f"{site}/sitemap.xml")
+    return _collect_xml(raw, site)
 
 
 def check_locs(site: str, locs: list[str]) -> set[str]:

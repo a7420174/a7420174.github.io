@@ -3,21 +3,18 @@ layout: null
 ---
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Custom sitemap (overrides jekyll-sitemap auto-generation).
-  Includes: home, /about/, all posts.
-  Excludes: pagination (/page2/...), /categories/, /tags/, /posts/ year-archive, 404.
+  Sitemap index — 글과 정적 페이지를 분리한다.
+  - /sitemap-posts.xml : 게시물 (lastmod = 실제 git 최종 수정 시각)
+  - /sitemap-pages.xml : 홈, about
+  lastmod 는 _data/sitemap_lastmod.json (generate 스크립트 산출물) 을 사용한다.
 -->
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>{{ '/' | absolute_url }}</loc>
-  </url>
-  <url>
-    <loc>{{ '/about/' | absolute_url }}</loc>
-  </url>
-  {% for post in site.posts %}
-  <url>
-    <loc>{{ post.url | absolute_url }}</loc>
-    <lastmod>{{ post.last_modified_at | default: post.date | date_to_xmlschema }}</lastmod>
-  </url>
-  {% endfor %}
-</urlset>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>{{ '/sitemap-posts.xml' | absolute_url }}</loc>
+    <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>{{ '/sitemap-pages.xml' | absolute_url }}</loc>
+    <lastmod>{{ site.time | date_to_xmlschema }}</lastmod>
+  </sitemap>
+</sitemapindex>

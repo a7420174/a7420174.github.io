@@ -143,12 +143,18 @@ def check_robots(site: str) -> None:
     if "Sitemap:" not in body:
         err("robots.txt 에 'Sitemap:' 선언이 없습니다.")
         return
+    declared = []
     for line in body.splitlines():
         if line.lower().startswith("sitemap:"):
             u = line.split(":", 1)[1].strip()
+            declared.append(u)
             info(f"robots.txt sitemap 선언: {u}")
-            if u != f"{site}/sitemap.xml":
-                warn(f"robots.txt 의 sitemap URL 이 표준 경로와 다릅니다: {u}")
+    # 표준 경로(sitemap.xml) 가 선언되어 있으면 하위 sitemap 추가 선언은 정상이다.
+    if f"{site}/sitemap.xml" not in declared:
+        warn(f"robots.txt 에 표준 sitemap 경로({site}/sitemap.xml) 선언이 없습니다: {declared}")
+    for u in declared:
+        if not u.startswith(site + "/"):
+            err(f"robots.txt 의 sitemap 이 사이트 외부 주소입니다: {u}")
     if "Disallow: /" in body:
         err("robots.txt 에 'Disallow: /' 가 있어 크롤이 전부 막혀 있습니다.")
 

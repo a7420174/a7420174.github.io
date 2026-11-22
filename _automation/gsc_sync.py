@@ -38,7 +38,7 @@ def get_session():
 
 
 def submit_sitemap(session, site: str) -> bool:
-    feed = f"{site}/sitemap.xml"
+    feed = f"{site.rstrip('/')}/sitemap.xml"
     # site 와 feed 모두 경로 세그먼트로 인코딩해야 한다 (한글/슬래시 포함).
     url = SITEMAP_ENDPOINT.format(
         site=urllib.parse.quote(site, safe=""),
@@ -90,7 +90,9 @@ def main() -> int:
     ap.add_argument("--sitemap", action="store_true", help="sitemap 제출만 수행")
     args = ap.parse_args()
 
-    site = args.site.rstrip("/")
+    # GSC 속성은 trailing slash 를 포함한다 ("https://a7420174.github.io/").
+    # slash 를 제거하면 inspection API 가 403 'You do not own this site' 를 낸다.
+    site = args.site.rstrip("/") + "/"
     session = get_session()
 
     ok = submit_sitemap(session, site)

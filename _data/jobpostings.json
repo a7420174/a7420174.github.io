@@ -355,50 +355,6 @@
     {
       "@type": "JobPosting",
       "datePosted": "2026-11-21",
-      "description": "박사학위, 분자진단 검사 개발 관련 기업 실무 경력, 액체생검 기반 암 유전체 NGS 검사 경력 암 진단 등 분자진단 어세이 연구개발 및 성능 검증, PCR 기반 primer/probe 설계, NGS 검사·생물정보학 기반 데이터 분석 및 해석, DNA 메틸화 기반 바이오마커 연구",
-      "directApply": false,
-      "employmentType": "FULL_TIME",
-      "hiringOrganization": {
-        "@type": "Organization",
-        "name": "이원다이애그노믹스(주)"
-      },
-      "jobLocation": {
-        "@type": "Place",
-        "address": {
-          "@type": "PostalAddress",
-          "addressCountry": "KR",
-          "addressLocality": "인천 연수구 (인천 테크노파크역)"
-        }
-      },
-      "title": "이원다이애그노믹스(주) - R&D팀 [책임급] 연구원",
-      "url": "https://www.saramin.co.kr/zf_user/jobs/view?rec_idx=55591912",
-      "validThrough": "2026-11-23"
-    },
-    {
-      "@type": "JobPosting",
-      "datePosted": "2026-11-21",
-      "description": "석사 졸업예정~7년차, 전산학·머신러닝·전산생물학·생물정보학·생물물리학·화학공학 등 관련 전공 항체 물성 예측 ML 모델 개발·고도화, 단백질 언어모델·구조 예측 모델 기반 표현 학습, multi-task·transfer learning 기반 다중 물성 동시 예측, 데이터 누수 방지 평가 체계 구축, 공개 데이터셋(OAS, SAbDab, Thera-SAbDab) 큐레이션",
-      "directApply": false,
-      "employmentType": "FULL_TIME",
-      "hiringOrganization": {
-        "@type": "Organization",
-        "name": "(주)피플렙 (헤드헌팅 — AI 항체 신약 개발 스타트업)"
-      },
-      "jobLocation": {
-        "@type": "Place",
-        "address": {
-          "@type": "PostalAddress",
-          "addressCountry": "KR",
-          "addressLocality": "경기 과천시"
-        }
-      },
-      "title": "(주)피플렙 (헤드헌팅 — AI 항체 신약 개발 스타트업) - AI연구원",
-      "url": "https://www.saramin.co.kr/zf_user/jobs/view?rec_idx=55582617",
-      "validThrough": "2026-11-22"
-    },
-    {
-      "@type": "JobPosting",
-      "datePosted": "2026-11-21",
       "description": "석사 이상, 경력 3~8년, 질량분석 데이터 처리·정량·QC 경험, 단백질-약물 활성 예측 모델링 경험 우대 HRMS 질량분석 데이터 처리·정량·QC와 통계 분석, 약물 처리에 따른 단백질 변화 분석과 타깃 후보 도출, 실험 설계 단계 참여, 단백질-약물 활성 예측 모델 개발·고도화와 벤치마크 설계, 바이오메디컬 데이터베이스 통합 분석과 데이터 플랫폼 운영",
       "directApply": false,
       "employmentType": "FULL_TIME",

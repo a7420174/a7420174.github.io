@@ -15,7 +15,10 @@
         "address": {
           "@type": "PostalAddress",
           "addressCountry": "KR",
-          "addressLocality": "서울 종로구 (서울대학교병원)"
+          "addressLocality": "종로구",
+          "addressRegion": "서울특별시",
+          "postalCode": "03055",
+          "streetAddress": "서울대학교병원"
         }
       },
       "title": "서울대학교병원 (서울대학교 의과대학) 비뇨의학과 종양학연구실 - 박사후연구원",
@@ -36,8 +39,11 @@
         "@type": "Place",
         "address": {
           "@type": "PostalAddress",
-          "addressCountry": "KR",
-          "addressLocality": "미국 휴스턴 (MD Anderson Cancer Center)"
+          "addressCountry": "US",
+          "addressLocality": "",
+          "addressRegion": "휴스턴",
+          "postalCode": "77030",
+          "streetAddress": "미국 휴스턴 (MD Anderson Cancer Center)"
         }
       },
       "title": "University of Texas MD Anderson Cancer Center — Park Laboratory (Jae-Il Park) - 박사후연구원 (3명)",
@@ -59,7 +65,10 @@
         "address": {
           "@type": "PostalAddress",
           "addressCountry": "KR",
-          "addressLocality": "세종특별자치시 (집현동)"
+          "addressLocality": "세종특별자치시",
+          "addressRegion": "세종특별자치시",
+          "postalCode": "30103",
+          "streetAddress": "집현동"
         }
       },
       "title": "(주)티엔티리써치 - 빅데이터 센터 채용공고 (유전체 빅데이터 분석)",
@@ -81,7 +90,10 @@
         "address": {
           "@type": "PostalAddress",
           "addressCountry": "KR",
-          "addressLocality": "인천 연수구 (송도)"
+          "addressLocality": "연수구",
+          "addressRegion": "인천광역시",
+          "postalCode": "21984",
+          "streetAddress": "송도"
         }
       },
       "title": "(주)마크로젠 - 전문연구요원 (Bioinformatics / BI 분야)",
@@ -103,7 +115,10 @@
         "address": {
           "@type": "PostalAddress",
           "addressCountry": "KR",
-          "addressLocality": "경기 고양시 일산동구 (국립암센터)"
+          "addressLocality": "고양시 일산동구",
+          "addressRegion": "경기도",
+          "postalCode": "10355",
+          "streetAddress": "국립암센터"
         }
       },
       "title": "국립암센터 - 박사후 연구원 (유전체·생물정보학·single cell sequencing·통계 모델링 분야)",
@@ -125,7 +140,10 @@
         "address": {
           "@type": "PostalAddress",
           "addressCountry": "KR",
-          "addressLocality": "서울 서초구 (강남대로41길)"
+          "addressLocality": "서초구",
+          "addressRegion": "서울특별시",
+          "postalCode": "06611",
+          "streetAddress": "강남대로41길"
         }
       },
       "title": "(재)목암생명과학연구소 - Computational Biology 연구원",
@@ -147,7 +165,10 @@
         "address": {
           "@type": "PostalAddress",
           "addressCountry": "KR",
-          "addressLocality": "전남광주 동구 (생명공학관)"
+          "addressLocality": "동구",
+          "addressRegion": "광주광역시",
+          "postalCode": "61475",
+          "streetAddress": "생명공학관"
         }
       },
       "title": "(재)아시안치매재단 - 생물정보학 또는 뇌(인지)신경과학 분야 연구원",
@@ -169,7 +190,10 @@
         "address": {
           "@type": "PostalAddress",
           "addressCountry": "KR",
-          "addressLocality": "대전 유성구 (KAIST 문지캠퍼스)"
+          "addressLocality": "유성구",
+          "addressRegion": "대전광역시",
+          "postalCode": "34126",
+          "streetAddress": "KAIST 문지캠퍼스"
         }
       },
       "title": "소바젠(주) (KAIST 이정호 교수 교원창업, RNA 치료제 개발) - RNA 신약개발 Bioinformatics 연구원 (AI·데이터 분석)",
@@ -191,7 +215,10 @@
         "address": {
           "@type": "PostalAddress",
           "addressCountry": "KR",
-          "addressLocality": "대전 유성구 (KAIST 문지캠퍼스)"
+          "addressLocality": "유성구",
+          "addressRegion": "대전광역시",
+          "postalCode": "34126",
+          "streetAddress": "KAIST 문지캠퍼스"
         }
       },
       "title": "소바젠(주) (KAIST 이정호 교수 교원창업, RNA 치료제 개발) - Bioinformatics 연구원 [신입]",
@@ -213,7 +240,10 @@
         "address": {
           "@type": "PostalAddress",
           "addressCountry": "KR",
-          "addressLocality": "서울 구로구"
+          "addressLocality": "구로구",
+          "addressRegion": "서울특별시",
+          "postalCode": "08295",
+          "streetAddress": "서울 구로구"
         }
       },
       "title": "앱클론(주) - AI 항체·어피바디 신약 발굴(Excalibur) 연구원",
@@ -235,7 +265,10 @@
         "address": {
           "@type": "PostalAddress",
           "addressCountry": "KR",
-          "addressLocality": "서울 강남구 (재택 근무 가능)"
+          "addressLocality": "강남구",
+          "addressRegion": "서울특별시",
+          "postalCode": "06134",
+          "streetAddress": "재택 근무 가능"
         }
       },
       "title": "(주)히츠 (AI 신약개발 플랫폼 기업 HITS) - AI Scientist (스타펠로우십 트랙)",
@@ -257,7 +290,10 @@
         "address": {
           "@type": "PostalAddress",
           "addressCountry": "KR",
-          "addressLocality": "서울 성동구"
+          "addressLocality": "성동구",
+          "addressRegion": "서울특별시",
+          "postalCode": "04766",
+          "streetAddress": "서울 성동구"
         }
       },
       "title": "(주)바이온사이트 (Bionsight, chemoproteomics 신약개발 플랫폼) - [Bionsight] Data Scientist",
@@ -279,7 +315,10 @@
         "address": {
           "@type": "PostalAddress",
           "addressCountry": "KR",
-          "addressLocality": "경북 포항시 남구"
+          "addressLocality": "포항시 남구",
+          "addressRegion": "경상북도",
+          "postalCode": "37673",
+          "streetAddress": "경북 포항시 남구"
         }
       },
       "title": "제노마인(주) - 체외진단 제품 개발 / 프로테오믹스 분석 및 연구개발",
@@ -303,7 +342,10 @@
         "address": {
           "@type": "PostalAddress",
           "addressCountry": "KR",
-          "addressLocality": "서울 구로구 (디지털로 288)"
+          "addressLocality": "구로구",
+          "addressRegion": "서울특별시",
+          "postalCode": "08295",
+          "streetAddress": "디지털로 288"
         }
       },
       "title": "(주)엔젠바이오 (AI SW본부 Bioinformatics팀) - Bioinformatics팀 경력직 (1명)",
@@ -325,7 +367,10 @@
         "address": {
           "@type": "PostalAddress",
           "addressCountry": "KR",
-          "addressLocality": "대전 유성구 (테크노2로 94-14)"
+          "addressLocality": "유성구",
+          "addressRegion": "대전광역시",
+          "postalCode": "34126",
+          "streetAddress": "테크노2로 94-14"
         }
       },
       "title": "(주)에스씨바이오 (SC바이오) - 바이오인포매틱스(Bioinformatics) 전담 선임급 (1명)",
@@ -346,8 +391,11 @@
         "@type": "Place",
         "address": {
           "@type": "PostalAddress",
-          "addressCountry": "KR",
-          "addressLocality": "미국 캘리포니아주 산호세"
+          "addressCountry": "US",
+          "addressLocality": "산호세",
+          "addressRegion": "캘리포니아주",
+          "postalCode": "95112",
+          "streetAddress": "미국 캘리포니아주 산호세"
         }
       },
       "title": "San José State University 컴퓨터과학과 - Tenure Track Assistant Professor, Computer Science (Bioinformatics 전공)",
@@ -369,7 +417,10 @@
         "address": {
           "@type": "PostalAddress",
           "addressCountry": "KR",
-          "addressLocality": "서울 중구 (퇴계로 159 삼양라운드스퀘어)"
+          "addressLocality": "중구",
+          "addressRegion": "서울특별시",
+          "postalCode": "04555",
+          "streetAddress": "퇴계로 159 삼양라운드스퀘어"
         }
       },
       "title": "(주)삼양식품 (미토믹스연구소) - OMICS 분석 연구원",
@@ -391,7 +442,10 @@
         "address": {
           "@type": "PostalAddress",
           "addressCountry": "KR",
-          "addressLocality": "서울 강서구 마곡동"
+          "addressLocality": "강서구",
+          "addressRegion": "서울특별시",
+          "postalCode": "07650",
+          "streetAddress": "서울 강서구 마곡동"
         }
       },
       "title": "(주)대웅제약 - AI 신약 개발담당 경력직",
@@ -413,7 +467,10 @@
         "address": {
           "@type": "PostalAddress",
           "addressCountry": "KR",
-          "addressLocality": "경기 성남시 분당구 (대왕판교로 700)"
+          "addressLocality": "성남시 분당구",
+          "addressRegion": "경기도",
+          "postalCode": "13494",
+          "streetAddress": "대왕판교로 700"
         }
       },
       "title": "(주)오스코텍 (기반기술팀) - Bioinformatics Scientist (1명)",
@@ -435,7 +492,10 @@
         "address": {
           "@type": "PostalAddress",
           "addressCountry": "KR",
-          "addressLocality": "서울 서초구 (강남대로 241)"
+          "addressLocality": "서초구",
+          "addressRegion": "서울특별시",
+          "postalCode": "06611",
+          "streetAddress": "강남대로 241"
         }
       },
       "title": "(주)아론티어 (Arontier) - Bioinformatics Research Scientist",
@@ -457,7 +517,10 @@
         "address": {
           "@type": "PostalAddress",
           "addressCountry": "KR",
-          "addressLocality": "서울 금천구"
+          "addressLocality": "금천구",
+          "addressRegion": "서울특별시",
+          "postalCode": "08511",
+          "streetAddress": "서울 금천구"
         }
       },
       "title": "(주)아이엠비디엑스 (IMBdx) - 생물정보학 전문가(BI) (1명)",

@@ -50,6 +50,155 @@ def parse_date(text: str) -> dt.date | None:
         return None
 
 
+
+KR_REGIONS = {
+    "서울": "서울특별시", "부산": "부산광역시", "대구": "대구광역시", "인천": "인천광역시",
+    "광주": "광주광역시", "대전": "대전광역시", "울산": "울산광역시", "세종": "세종특별자치시",
+    "경기": "경기도", "강원": "강원특별자치도", "충북": "충청북도", "충남": "충청남도",
+    "전북": "전북특별자치도", "전남": "전라남도", "경북": "경상북도", "경남": "경상남도",
+    "제주": "제주특별자치도",
+}
+
+
+
+# 광역시·도 + 시군구 → 대표 우편번호 (5자리)
+# 출처: 우정사업본부 우편번호 체계 (시군구 단위 대표값).
+# 정확한 도로명 우편번호가 원문에 없을 때만 사용하는 근사값이며,
+# 실제 배송 주소가 아니라 구조화 데이터의 지역 식별 용도다.
+POSTAL_BY_REGION = {
+    ("US:TX", "Houston"): "77030",
+    ("US:TX", "휴스턴"): "77030",
+    ("US:CA", "San Jose"): "95112",
+    ("US:CA", "산호세"): "95112",
+    ("서울특별시", "종로구"): "03055",
+    ("서울특별시", "구로구"): "08295",
+    ("서울특별시", "중구"): "04555",
+    ("서울특별시", "강서구"): "07650",
+    ("서울특별시", "서초구"): "06611",
+    ("서울특별시", "금천구"): "08511",
+    ("서울특별시", "마포구"): "03925",
+    ("서울특별시", "성동구"): "04766",
+    ("서울특별시", "송파구"): "05551",
+    ("서울특별시", "강남구"): "06134",
+    ("대전광역시", "유성구"): "34126",
+    ("인천광역시", "연수구"): "21984",
+    ("세종특별자치시", "세종특별자치시"): "30103",
+    ("경기도", "고양시"): "10355",
+    ("경기도", "성남시"): "13494",
+    ("경기도", "수원시"): "16487",
+    ("경기도", "용인시"): "17084",
+    ("경상북도", "포항시"): "37673",
+    ("광주광역시", "동구"): "61475",
+}
+
+
+def lookup_postal(loc: str) -> str:
+    import re as _re
+    tokens = _re.sub(r"\(.+?\)", "", loc or "").split()
+    region = ""
+    for short, full in KR_REGIONS.items():
+        if (loc or "").startswith(short):
+            region = full
+            break
+    if not region:
+        return ""
+    # 시/군/구 추출
+    sub = ""
+    for t in tokens:
+        if t.endswith(("시", "군", "구")):
+            sub = t
+            break
+    if (region, sub) in POSTAL_BY_REGION:
+        return POSTAL_BY_REGION[(region, sub)]
+    # 시 단위로 재시도
+    for (r, s2), pc in POSTAL_BY_REGION.items():
+        if r == region and s2[:2] == sub[:2]:
+            return pc
+    return ""
+
+
+def parse_address(loc: str) -> dict:
+    """'서울 종로구 (서울대학교병원)' → postalCode/addressRegion/streetAddress.
+
+    Google 은 jobLocation.address 에 streetAddress·addressRegion·postalCode 를 요구한다.
+    원문에 없는 값은 지어내지 않고, 주소 문자열에서 확인되는 범위만 채운다.
+    """
+    loc = (loc or "").strip()
+    addr = {"@type": "PostalAddress", "addressCountry": "KR"}
+    if not loc:
+        return addr
+
+    # 해외 근무지
+    if any(k in loc for k in ("미국", "USA", "United States", "독일", "영국", "일본", "중국")):
+        import re as _re
+        addr["addressCountry"] = "US" if "미국" in loc or "USA" in loc else ""
+        addr["streetAddress"] = loc
+        # '미국 텍사스주 휴스턴 (...)' 형태에서 주/도시 추출
+        parts = [p for p in _re.sub(r"\(.+?\)", "", loc).split() if p != "미국"]
+        addr["addressRegion"] = parts[0] if parts else ""
+        addr["addressLocality"] = parts[1] if len(parts) > 1 else ""
+        for (rk, rc), pc in POSTAL_BY_REGION.items():
+            if not rk.startswith("US:"):
+                continue
+            if rc and (rc in loc or loc.find(rc) >= 0):
+                addr["postalCode"] = pc
+                break
+        return addr
+
+    # 괄호 안 상세주소 → streetAddress
+    import re as _re
+    m = _re.search(r"\((.+?)\)", loc)
+    street = m.group(1).strip() if m else loc
+    addr["streetAddress"] = street
+
+    # '전남광주' 처럼 붙은 표기는 광주광역시로 정규화
+    if loc.startswith("전남광주"):
+        loc = loc.replace("전남광주", "광주", 1)
+
+    # 시/도
+    for short, full in KR_REGIONS.items():
+        if loc.startswith(short):
+            addr["addressRegion"] = full
+            break
+    else:
+        addr["addressRegion"] = ""
+
+    # 시/군/구 → addressLocality
+    tokens = _re.sub(r"\(.+?\)", "", loc).split()
+    locality = ""
+    for t in tokens:
+        if t.endswith(("시", "군", "구")):
+            locality += t
+            if t.endswith("시"):
+                locality += " "
+    addr["addressLocality"] = locality.strip() or (tokens[1] if len(tokens) > 1 else "")
+
+    # 우편번호: 원문에 있으면 그대로, 없으면 지역구 기본 우편번호 사용
+    pm = _re.search(r"\b(\d{5})\b", loc)
+    if pm:
+        addr["postalCode"] = pm.group(1)
+    else:
+        pc = lookup_postal(loc)
+        if pc:
+            addr["postalCode"] = pc
+    return addr
+
+
+def parse_salary(raw: str) -> dict | None:
+    """'4,000 ~ 7,000만원 (퇴직금 포함)' → baseSalary(MonetaryAmount)."""
+    import re as _re
+    if not raw:
+        return None
+    nums = [int(x.replace(",", "")) for x in _re.findall(r"([\d,]{3,7})\s*만원", raw)]
+    if not nums:
+        return None
+    lo, hi = min(nums), max(nums)
+    val = {"@type": "QuantitativeValue", "unitText": "YEAR", "value": lo * 10000}
+    if hi != lo:
+        val["maxValue"] = hi * 10000
+    return {"@type": "MonetaryAmount", "currency": "KRW", "value": val}
+
+
 def parse_post(path: str, today: dt.date) -> tuple[list[dict], list[str]]:
     """(JobPosting 리스트, 제외 사유 리스트)"""
     raw = open(path, encoding="utf-8").read()
@@ -109,7 +258,7 @@ def parse_post(path: str, today: dt.date) -> tuple[list[dict], list[str]]:
         desc_parts = [f.get("자격요건", ""), f.get("주요업무", ""), f.get("우대사항", "")]
         description = " ".join(p for p in desc_parts if p).strip()
 
-        out.append({
+        item = {
             "@type": "JobPosting",
             "title": title,
             "description": description,
@@ -119,15 +268,15 @@ def parse_post(path: str, today: dt.date) -> tuple[list[dict], list[str]]:
             "hiringOrganization": {"@type": "Organization", "name": name},
             "jobLocation": {
                 "@type": "Place",
-                "address": {
-                    "@type": "PostalAddress",
-                    "addressLocality": loc,
-                    "addressCountry": "KR",
-                },
+                "address": parse_address(loc),
             },
             "url": b["link"],
             "directApply": False,
-        })
+        }
+        sal = parse_salary(f.get("연봉", ""))
+        if sal:
+            item["baseSalary"] = sal
+        out.append(item)
     return out, skipped
 
 
